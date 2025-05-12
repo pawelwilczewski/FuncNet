@@ -17,4 +17,18 @@ public class UnionTests
 		var d = Union<string, float, int>.FromT0(Task.FromResult("async value"));
 		Assert.IsType<Task<Union<string, float, int>>>(d);
 	}
+	
+	[Fact]
+	public void AssignmentFromSmaller_Compiles()
+	{
+		Union<string, int> a = 12;
+
+		Union<string, int, float> b = a;
+		Assert.IsType<Union<string, int, float>>(b);
+
+		Union<string, int, float, DateTime> c = 13.43f;
+		c = b;
+		c = a;
+		Assert.IsType<Union<string, int, float, DateTime>>(c);
+	}
 }
