@@ -1,12 +1,10 @@
 
-
 using System;
 using System.Threading.Tasks;
 
 #nullable enable
 
 namespace FuncNet.Union;
-
 
 public readonly record struct Union<T0, T1, T2, T3, T4>
 {
@@ -59,7 +57,6 @@ public readonly record struct Union<T0, T1, T2, T3, T4>
 		}
 	}
 
-
 	public static implicit operator Union<T0, T1, T2, T3, T4>(T0 value) =>
 		new Union<T0, T1, T2, T3, T4>(0, value0: value);
 	public static implicit operator Union<T0, T1, T2, T3, T4>(T1 value) =>
@@ -92,4 +89,3 @@ public readonly record struct Union<T0, T1, T2, T3, T4>
 	public static async Task<Union<T0, T1, T2, T3, T4>> FromT3(Task<T3> value) => await value;
 	public static async Task<Union<T0, T1, T2, T3, T4>> FromT4(Task<T4> value) => await value;
 }
-

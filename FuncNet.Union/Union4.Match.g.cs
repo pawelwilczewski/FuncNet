@@ -1,5 +1,4 @@
 
-
 using System;
 using System.Threading.Tasks;
 
@@ -7,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace FuncNet.Union;
 
-
 public static class Union4Match
 {
+	
 	public static TResult Match<TResult, T0, T1, T2, T3>(
 		this Union<T0, T1, T2, T3> union,
 		Func<T0, TResult> t0,
@@ -20,18 +19,7 @@ public static class Union4Match
 		0 => t0(union.Value0),
 		1 => t1(union.Value1),
 		2 => t2(union.Value2),
-		3 => t3(union.Value3),
-		_ => throw new Unreachable()
-	};
-	
-	
-	public static TResult Match<TResult, T0, T1, T2, T3>(
-		this Union<T0, T1, T2, T3> union,
-		Func<T0, TResult> t0,
-		Func<Union<T1, T2, T3>, TResult> other) => union.Index switch
-	{
-		0 => t0(union.Value0),
-		_ => other(new Union<T1, T2, T3>(union.Value))
+		_ => t3(union.Value3)
 	};
 
 	
@@ -45,5 +33,14 @@ public static class Union4Match
 		1 => t1(union.Value1),
 		_ => other(new Union<T2, T3>(union.Value))
 	};
-}
 
+	
+	public static TResult Match<TResult, T0, T1, T2, T3>(
+		this Union<T0, T1, T2, T3> union,
+		Func<T0, TResult> t0,
+		Func<Union<T1, T2, T3>, TResult> other) => union.Index switch
+	{
+		0 => t0(union.Value0),
+		_ => other(new Union<T1, T2, T3>(union.Value))
+	};
+}

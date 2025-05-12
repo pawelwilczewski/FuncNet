@@ -5,42 +5,35 @@ using static CodeGenerationUtils;
 public static class MatchGenerator
 {
 	public static string GenerateMatchExtensionsFile(string @namespace, int unionSize) => $@"
-{GenerateMatchExtensionsHeader(@namespace)}
-{GenerateMatchExtensions(unionSize)}
-";
-
-	private static string GenerateMatchExtensionsHeader(string namespaceName) => $@"
 using System;
 using System.Threading.Tasks;
 
 #nullable enable
 
-namespace {namespaceName};
-";
+namespace {@namespace};
 
-	private static string GenerateMatchExtensions(int unionSize) => $@"
 public static class Union{unionSize}Match
 {{
-	public static TResult Match<TResult, {CommaSeparatedTs(unionSize)}>(
-		this Union<{CommaSeparatedTs(unionSize)}> union,
-		{JoinRangeToString(",\n\t\t", unionSize, i => $"Func<T{i}, TResult> t{i}")}) => union.Index switch
-	{{
-		{JoinRangeToString(",\n\t\t", unionSize, i => $"{i} => t{i}(union.Value{i})")},
-		_ => throw new Unreachable()
-	}};
-	
 	{GenerateOtherCaseAsUnionVariants(unionSize)}
 }}
 ";
 
 	private static string GenerateOtherCaseAsUnionVariants(int unionSize) =>
-		JoinRangeToString("\n\n\t", 2, unionSize - 2, otherCaseSize => $@"
+		JoinRangeToString("\n\n\t", 1, unionSize - 1, otherCaseSize => $@"
 	public static TResult Match<TResult, {CommaSeparatedTs(unionSize)}>(
 		this Union<{CommaSeparatedTs(unionSize)}> union,
-		{JoinRangeToString(",\n\t\t", otherCaseSize - 1, i => $"Func<T{i}, TResult> t{i}")},
-		Func<Union<{CommaSeparatedTs(otherCaseSize - 1, unionSize - otherCaseSize + 1)}>, TResult> other) => union.Index switch
+		{JoinRangeToString(",\n\t\t", unionSize - otherCaseSize, i => $"Func<T{i}, TResult> t{i}")},
+		{GenerateLastArgumentCode(unionSize, otherCaseSize)}) => union.Index switch
 	{{
-		{JoinRangeToString(",\n\t\t", otherCaseSize - 1, i => $"{i} => t{i}(union.Value{i})")},
-		_ => other(new Union<{CommaSeparatedTs(otherCaseSize - 1, unionSize - otherCaseSize + 1)}>(union.Value))
+		{JoinRangeToString(",\n\t\t", unionSize - otherCaseSize, i => $"{i} => t{i}(union.Value{i})")},
+		{GenerateLastSwitchCaseCode(unionSize, otherCaseSize)}
 	}};");
+
+	private static string GenerateLastArgumentCode(int unionSize, int caseSize) => caseSize <= 1
+		? $"Func<T{unionSize - 1}, TResult> t{unionSize - 1}"
+		: $"Func<Union<{CommaSeparatedTs(unionSize - caseSize, caseSize)}>, TResult> other";
+
+	private static string GenerateLastSwitchCaseCode(int unionSize, int caseSize) => caseSize <= 1
+		? $"_ => t{unionSize - 1}(union.Value{unionSize - 1})"
+		: $"_ => other(new Union<{CommaSeparatedTs(unionSize - caseSize, caseSize)}>(union.Value))";
 }

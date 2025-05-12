@@ -5,20 +5,13 @@ using static CodeGenerationUtils;
 public static class UnionGenerator
 {
 	public static string GenerateUnionFile(string @namespace, int unionSize) => $@"
-{GenerateUnionHeader(@namespace)}
-{GenerateUnionClass(unionSize)}
-";
-
-	private static string GenerateUnionHeader(string namespaceName) => $@"
 using System;
 using System.Threading.Tasks;
 
 #nullable enable
 
-namespace {namespaceName};
-";
+namespace {@namespace};
 
-	private static string GenerateUnionClass(int unionSize) => $@"
 public readonly record struct Union<{CommaSeparatedTs(unionSize)}>
 {{
 	{JoinRangeToString("\n\t", unionSize, i => $"internal T{i} Value{i} {{ get; init; }}")}

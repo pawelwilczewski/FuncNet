@@ -1,5 +1,4 @@
 
-
 using System;
 using System.Threading.Tasks;
 
@@ -7,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace FuncNet.Union;
 
-
 public static class Union3Match
 {
+	
 	public static TResult Match<TResult, T0, T1, T2>(
 		this Union<T0, T1, T2> union,
 		Func<T0, TResult> t0,
@@ -18,10 +17,9 @@ public static class Union3Match
 	{
 		0 => t0(union.Value0),
 		1 => t1(union.Value1),
-		2 => t2(union.Value2),
-		_ => throw new Unreachable()
+		_ => t2(union.Value2)
 	};
-	
+
 	
 	public static TResult Match<TResult, T0, T1, T2>(
 		this Union<T0, T1, T2> union,
@@ -32,4 +30,3 @@ public static class Union3Match
 		_ => other(new Union<T1, T2>(union.Value))
 	};
 }
-
