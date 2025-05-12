@@ -1,7 +1,16 @@
 ﻿using System.Reflection;
 using FuncNet.Union.Generator;
 
-var text = UnionGenerator.GenerateUnionFile("FuncNet.Union", 3);
-var path = Path.Join(Path.GetFullPath(Assembly.GetExecutingAssembly().Location), "/../../../../../FuncNet.Union", "Union3.g.cs");
+const int maxChoices = 8;
 
-File.WriteAllText(path, text);
+for (var i = 1; i < maxChoices + 1; ++i)
+{
+	var path = Path.Join(
+		Path.GetFullPath(Assembly.GetExecutingAssembly().Location),
+		"/../../../../../FuncNet.Union",
+		$"Union{i}.g.cs");
+
+	var code = UnionGenerator.GenerateUnionFile("FuncNet.Union", i);
+
+	File.WriteAllText(path, code);
+}
