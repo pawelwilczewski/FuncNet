@@ -2,7 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <WarningsAsErrors>8509</WarningsAsErrors>
+    </PropertyGroup>
 
+    <PropertyGroup>
         <PackageId>FuncNet</PackageId>
         <Version>1.0.0</Version>
         <Authors>Pawel Wilczewski</Authors>
