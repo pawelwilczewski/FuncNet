@@ -1,5 +1,7 @@
 namespace FuncNet.Union.Generator;
 
+using static CodeGenerationUtils;
+
 public static class UnionGenerator
 {
 	public static string GenerateUnionFile(string namespaceName, int choiceCount) => $@"
@@ -40,16 +42,4 @@ new Union<{CommaSeparatedTs(choiceCount)}>({i}, value{i}: value);")}
 {JoinRangeToString("\n", choiceCount, i => $"public static async Task<Union<{CommaSeparatedTs(choiceCount)}>> FromT{i}(Task<T{i}> value) => await value;")}
 }}
 ";
-
-	private static string JoinToString<T>(this IEnumerable<T> range, string separator, Func<T, string> toString) =>
-		string.Join(separator, range.Select(toString));
-
-	private static string JoinRangeToString(string separator, int start, int count, Func<int, string> toString) =>
-		JoinToString(Enumerable.Range(start, count), separator, toString);
-
-	private static string JoinRangeToString(string separator, int count, Func<int, string> toString) =>
-		JoinRangeToString(separator, 0, count, toString);
-
-	private static string CommaSeparatedTs(int count) =>
-		JoinRangeToString(", ", count, i => $"T{i}");
 }
