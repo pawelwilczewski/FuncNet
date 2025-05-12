@@ -31,4 +31,21 @@ public class UnionTests
 		c = a;
 		Assert.IsType<Union<string, int, float, DateTime>>(c);
 	}
+
+	[Fact]
+	public void BasicMatch_Works()
+	{
+		Union<string, int> a = 12;
+
+		var correct = a.Match(
+			t0 => false,
+			t1 => true);
+		Assert.True(correct);
+
+		a = "Hello!";
+		correct = a.Match(
+			t0 => true,
+			t1 => false);
+		Assert.True(correct);
+	}
 }

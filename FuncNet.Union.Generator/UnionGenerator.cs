@@ -4,8 +4,8 @@ using static CodeGenerationUtils;
 
 public static class UnionGenerator
 {
-	public static string GenerateUnionFile(string namespaceName, int unionSize) => $@"
-{GenerateUnionHeader(namespaceName)}
+	public static string GenerateUnionFile(string @namespace, int unionSize) => $@"
+{GenerateUnionHeader(@namespace)}
 {GenerateUnionClass(unionSize)}
 ";
 
