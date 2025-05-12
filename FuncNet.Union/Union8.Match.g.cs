@@ -21,6 +21,7 @@ public static class Union8Match
 		Func<T7, TResult> t7)
 	{
 		var u = union;
+		
 
 		return u.Index switch
 		{
@@ -47,6 +48,7 @@ public static class Union8Match
 		Func<Union<T6, T7>, TResult> other)
 	{
 		var u = union;
+		
 
 		return u.Index switch
 		{
@@ -71,6 +73,7 @@ public static class Union8Match
 		Func<Union<T5, T6, T7>, TResult> other)
 	{
 		var u = union;
+		
 
 		return u.Index switch
 		{
@@ -93,6 +96,7 @@ public static class Union8Match
 		Func<Union<T4, T5, T6, T7>, TResult> other)
 	{
 		var u = union;
+		
 
 		return u.Index switch
 		{
@@ -113,6 +117,7 @@ public static class Union8Match
 		Func<Union<T3, T4, T5, T6, T7>, TResult> other)
 	{
 		var u = union;
+		
 
 		return u.Index switch
 		{
@@ -131,6 +136,7 @@ public static class Union8Match
 		Func<Union<T2, T3, T4, T5, T6, T7>, TResult> other)
 	{
 		var u = union;
+		
 
 		return u.Index switch
 		{
@@ -147,6 +153,7 @@ public static class Union8Match
 		Func<Union<T1, T2, T3, T4, T5, T6, T7>, TResult> other)
 	{
 		var u = union;
+		
 
 		return u.Index switch
 		{

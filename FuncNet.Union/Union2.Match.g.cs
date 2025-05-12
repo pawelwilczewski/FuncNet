@@ -15,6 +15,7 @@ public static class Union2Match
 		Func<T1, TResult> t1)
 	{
 		var u = union;
+		
 
 		return u.Index switch
 		{

@@ -16,6 +16,7 @@ public static class Union3Match
 		Func<T2, TResult> t2)
 	{
 		var u = union;
+		
 
 		return u.Index switch
 		{
@@ -32,6 +33,7 @@ public static class Union3Match
 		Func<Union<T1, T2>, TResult> other)
 	{
 		var u = union;
+		
 
 		return u.Index switch
 		{

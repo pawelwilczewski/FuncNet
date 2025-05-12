@@ -14,24 +14,31 @@ namespace {@namespace};
 
 public static class Union{unionSize}Match
 {{
-	{GenerateOtherCaseAsUnionVariants(unionSize)}
+	{GenerateOtherCaseAsUnionVariants(unionSize, DontWrap, "", DontWrap, "", DontWrap)}
 }}
 ";
 
-	private static string GenerateOtherCaseAsUnionVariants(int unionSize) =>
+	private static string GenerateOtherCaseAsUnionVariants(
+		int unionSize,
+		WrapText wrapMethodResult,
+		string additionalArguments,
+		WrapText wrapUnionValue,
+		string additionalCodeAfterUnionAssignment,
+		WrapText wrapReturnValue) =>
 		JoinRangeToString("\n\n\t", 1, unionSize - 1, otherCaseSize => $@"
-	public static TResult Match<TResult, {CommaSeparatedTs(unionSize)}>(
+	public static {wrapMethodResult("TResult")} Match<TResult, {CommaSeparatedTs(unionSize)}>(
 		this Union<{CommaSeparatedTs(unionSize)}> union,
 		{JoinRangeToString(",\n\t\t", unionSize - otherCaseSize, i => $"Func<T{i}, TResult> t{i}")},
-		{GenerateLastArgumentCode(unionSize, otherCaseSize)})
+		{GenerateLastArgumentCode(unionSize, otherCaseSize)}{additionalArguments})
 	{{
-		var u = union;
+		var u = {wrapUnionValue("union")};
+		{additionalCodeAfterUnionAssignment}
 
-		return u.Index switch
+		return {wrapReturnValue($@"u.Index switch
 		{{
 			{JoinRangeToString(",\n\t\t\t", unionSize - otherCaseSize, i => $"{i} => t{i}(u.Value{i})")},
 			{GenerateLastSwitchCaseCode(unionSize, otherCaseSize)}
-		}};
+		}};")}
 	}}");
 
 	private static string GenerateLastArgumentCode(int unionSize, int caseSize) => caseSize <= 1

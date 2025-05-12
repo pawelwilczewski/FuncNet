@@ -17,4 +17,7 @@ public static class CodeGenerationUtils
 
 	public static string CommaSeparatedTs(int count) =>
 		CommaSeparatedTs(0, count);
+
+	public delegate string WrapText(string text);
+	public static string DontWrap(string text) => text;
 }
