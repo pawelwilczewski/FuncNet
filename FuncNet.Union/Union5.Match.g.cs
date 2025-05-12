@@ -25,5 +25,41 @@ public static class Union5Match
 		4 => t4(union.Value4),
 		_ => throw new Unreachable()
 	};
+	
+	
+	public static TResult Match<TResult, T0, T1, T2, T3, T4>(
+		this Union<T0, T1, T2, T3, T4> union,
+		Func<T0, TResult> t0,
+		Func<Union<T1, T2, T3, T4>, TResult> other) => union.Index switch
+	{
+		0 => t0(union.Value0),
+		_ => other(new Union<T1, T2, T3, T4>(union.Value))
+	};
+
+	
+	public static TResult Match<TResult, T0, T1, T2, T3, T4>(
+		this Union<T0, T1, T2, T3, T4> union,
+		Func<T0, TResult> t0,
+		Func<T1, TResult> t1,
+		Func<Union<T2, T3, T4>, TResult> other) => union.Index switch
+	{
+		0 => t0(union.Value0),
+		1 => t1(union.Value1),
+		_ => other(new Union<T2, T3, T4>(union.Value))
+	};
+
+	
+	public static TResult Match<TResult, T0, T1, T2, T3, T4>(
+		this Union<T0, T1, T2, T3, T4> union,
+		Func<T0, TResult> t0,
+		Func<T1, TResult> t1,
+		Func<T2, TResult> t2,
+		Func<Union<T3, T4>, TResult> other) => union.Index switch
+	{
+		0 => t0(union.Value0),
+		1 => t1(union.Value1),
+		2 => t2(union.Value2),
+		_ => other(new Union<T3, T4>(union.Value))
+	};
 }
 

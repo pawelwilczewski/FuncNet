@@ -28,6 +28,19 @@ public static class Union{unionSize}Match
 		{JoinRangeToString(",\n\t\t", unionSize, i => $"{i} => t{i}(union.Value{i})")},
 		_ => throw new Unreachable()
 	}};
+	
+	{GenerateOtherCaseAsUnionVariants(unionSize)}
 }}
 ";
+
+	private static string GenerateOtherCaseAsUnionVariants(int unionSize) =>
+		JoinRangeToString("\n\n\t", 2, unionSize - 2, otherCaseSize => $@"
+	public static TResult Match<TResult, {CommaSeparatedTs(unionSize)}>(
+		this Union<{CommaSeparatedTs(unionSize)}> union,
+		{JoinRangeToString(",\n\t\t", otherCaseSize - 1, i => $"Func<T{i}, TResult> t{i}")},
+		Func<Union<{CommaSeparatedTs(otherCaseSize - 1, unionSize - otherCaseSize + 1)}>, TResult> other) => union.Index switch
+	{{
+		{JoinRangeToString(",\n\t\t", otherCaseSize - 1, i => $"{i} => t{i}(union.Value{i})")},
+		_ => other(new Union<{CommaSeparatedTs(otherCaseSize - 1, unionSize - otherCaseSize + 1)}>(union.Value))
+	}};");
 }

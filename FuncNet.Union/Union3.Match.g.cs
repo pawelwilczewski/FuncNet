@@ -21,5 +21,15 @@ public static class Union3Match
 		2 => t2(union.Value2),
 		_ => throw new Unreachable()
 	};
+	
+	
+	public static TResult Match<TResult, T0, T1, T2>(
+		this Union<T0, T1, T2> union,
+		Func<T0, TResult> t0,
+		Func<Union<T1, T2>, TResult> other) => union.Index switch
+	{
+		0 => t0(union.Value0),
+		_ => other(new Union<T1, T2>(union.Value))
+	};
 }
 

@@ -16,6 +16,12 @@ public readonly record struct Union<T0>
 
 	public bool Is0 => Index == 0;
 
+	internal object? Value => Index switch
+	{
+		0 => Value0,
+		_ => throw new Unreachable()
+	};
+
 	public Union() => throw new InvalidOperationException();
 
 	private Union(int index, T0? value0 = default)
@@ -23,6 +29,16 @@ public readonly record struct Union<T0>
 		Index = index;
 		Value0 = value0!;
 	}
+
+	internal Union(object? value) : this(-1)
+	{
+		switch (value)
+		{
+			case T0 matchedValue: Value0 = matchedValue; Index = 0; break;
+			default: throw new Unreachable();
+		}
+	}
+
 
 	public static implicit operator Union<T0>(T0 value) =>
 		new Union<T0>(0, value0: value);

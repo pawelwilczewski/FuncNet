@@ -27,12 +27,27 @@ public readonly record struct Union<{CommaSeparatedTs(unionSize)}>
 
 	{JoinRangeToString("\n\t", unionSize, i => $"public bool Is{i} => Index == {i};")}
 
+	internal object? Value => Index switch
+	{{
+		{JoinRangeToString(",\n\t\t", unionSize, i => $"{i} => Value{i}")},
+		_ => throw new Unreachable()
+	}};
+
 	public Union() => throw new InvalidOperationException();
 
 	private Union(int index, {JoinRangeToString(", ", unionSize, i => $"T{i}? value{i} = default")})
 	{{
 		Index = index;
 		{JoinRangeToString("\n\t\t", unionSize, i => $"Value{i} = value{i}!;")}
+	}}
+
+	internal Union(object? value) : this(-1)
+	{{
+		switch (value)
+		{{
+			{JoinRangeToString("\n\t\t\t", unionSize, i => $"case T{i} matchedValue: Value{i} = matchedValue; Index = {i}; break;")}
+			default: throw new Unreachable();
+		}}
 	}}
 
 	{JoinRangeToString("\n\t", unionSize, i =>

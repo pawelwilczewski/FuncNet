@@ -48,4 +48,24 @@ public class UnionTests
 			t1 => false);
 		Assert.True(correct);
 	}
+
+	[Fact]
+	public void MatchWithOtherAsUnion_Works()
+	{
+		Union<string, int, double, DateTime> a = 12;
+
+		var correct = a.Match(
+			t0 => false,
+			other => true);
+		Assert.True(correct);
+
+		a = DateTime.Now;
+		correct = a.Match(
+			t0 => false,
+			t1 => false,
+			other => other.Match(
+				t0 => false,
+				t1 => true));
+		Assert.True(correct);
+	}
 }
