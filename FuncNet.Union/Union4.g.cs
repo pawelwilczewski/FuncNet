@@ -42,10 +42,18 @@ public readonly record struct Union<T0, T1, T2, T3>
 	public static implicit operator Union<T0, T1, T2, T3>(T3 value) =>
 		new Union<T0, T1, T2, T3>(3, value3: value);
 
+	public static implicit operator Union<T0, T1, T2, T3>(Union<T0> other) =>
+		new Union<T0, T1, T2, T3>(other.Index, other.Value0);
+	public static implicit operator Union<T0, T1, T2, T3>(Union<T0, T1> other) =>
+		new Union<T0, T1, T2, T3>(other.Index, other.Value0, other.Value1);
+	public static implicit operator Union<T0, T1, T2, T3>(Union<T0, T1, T2> other) =>
+		new Union<T0, T1, T2, T3>(other.Index, other.Value0, other.Value1, other.Value2);
+
 	public static Union<T0, T1, T2, T3> FromT0(T0 value) => value;
 	public static Union<T0, T1, T2, T3> FromT1(T1 value) => value;
 	public static Union<T0, T1, T2, T3> FromT2(T2 value) => value;
 	public static Union<T0, T1, T2, T3> FromT3(T3 value) => value;
+
 	public static async Task<Union<T0, T1, T2, T3>> FromT0(Task<T0> value) => await value;
 	public static async Task<Union<T0, T1, T2, T3>> FromT1(Task<T1> value) => await value;
 	public static async Task<Union<T0, T1, T2, T3>> FromT2(Task<T2> value) => await value;

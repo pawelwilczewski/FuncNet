@@ -27,7 +27,10 @@ public readonly record struct Union<T0>
 	public static implicit operator Union<T0>(T0 value) =>
 		new Union<T0>(0, value0: value);
 
+	
+
 	public static Union<T0> FromT0(T0 value) => value;
+
 	public static async Task<Union<T0>> FromT0(Task<T0> value) => await value;
 }
 

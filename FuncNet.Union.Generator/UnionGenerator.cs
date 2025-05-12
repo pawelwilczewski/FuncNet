@@ -4,9 +4,9 @@ using static CodeGenerationUtils;
 
 public static class UnionGenerator
 {
-	public static string GenerateUnionFile(string namespaceName, int choiceCount) => $@"
+	public static string GenerateUnionFile(string namespaceName, int unionSize) => $@"
 {GenerateUnionHeader(namespaceName)}
-{GenerateUnionClass(choiceCount)}
+{GenerateUnionClass(unionSize)}
 ";
 
 	private static string GenerateUnionHeader(string namespaceName) => $@"
@@ -18,31 +18,36 @@ using System.Threading.Tasks;
 namespace {namespaceName};
 ";
 
-	private static string GenerateUnionClass(int choiceCount) => $@"
-public readonly record struct Union<{CommaSeparatedTs(choiceCount)}>
+	private static string GenerateUnionClass(int unionSize) => $@"
+public readonly record struct Union<{CommaSeparatedTs(unionSize)}>
 {{
-	{JoinRangeToString("\n\t", choiceCount, i => $"internal T{i} Value{i} {{ get; init; }}")}
+	{JoinRangeToString("\n\t", unionSize, i => $"internal T{i} Value{i} {{ get; init; }}")}
 
 	internal int Index {{ get; init; }}
 
-	{JoinRangeToString("\n\t", choiceCount, i => $"public bool Is{i} => Index == {i};")}
+	{JoinRangeToString("\n\t", unionSize, i => $"public bool Is{i} => Index == {i};")}
 
 	public Union() => throw new InvalidOperationException();
 
-	private Union(int index, {JoinRangeToString(", ", choiceCount, i => $"T{i}? value{i} = default")})
+	private Union(int index, {JoinRangeToString(", ", unionSize, i => $"T{i}? value{i} = default")})
 	{{
 		Index = index;
-		{JoinRangeToString("\n\t\t", choiceCount, i => $"Value{i} = value{i}!;")}
+		{JoinRangeToString("\n\t\t", unionSize, i => $"Value{i} = value{i}!;")}
 	}}
 
-	{JoinRangeToString("\n\t", choiceCount, i =>
-		$@"public static implicit operator Union<{CommaSeparatedTs(choiceCount)}>(T{i} value) =>
-		new Union<{CommaSeparatedTs(choiceCount)}>({i}, value{i}: value);")}
+	{JoinRangeToString("\n\t", unionSize, i =>
+		$@"public static implicit operator Union<{CommaSeparatedTs(unionSize)}>(T{i} value) =>
+		new Union<{CommaSeparatedTs(unionSize)}>({i}, value{i}: value);")}
 
-	{JoinRangeToString("\n\t", choiceCount, i =>
-		$"public static Union<{CommaSeparatedTs(choiceCount)}> FromT{i}(T{i} value) => value;")}
-	{JoinRangeToString("\n\t", choiceCount, i =>
-		$"public static async Task<Union<{CommaSeparatedTs(choiceCount)}>> FromT{i}(Task<T{i}> value) => await value;")}
+	{JoinRangeToString("\n\t", 1, unionSize - 1, otherUnionSize =>
+		$@"public static implicit operator Union<{CommaSeparatedTs(unionSize)}>(Union<{CommaSeparatedTs(otherUnionSize)}> other) =>
+		new Union<{CommaSeparatedTs(unionSize)}>(other.Index, {JoinRangeToString(", ", otherUnionSize, i => $"other.Value{i}")});")}
+
+	{JoinRangeToString("\n\t", unionSize, i =>
+		$"public static Union<{CommaSeparatedTs(unionSize)}> FromT{i}(T{i} value) => value;")}
+
+	{JoinRangeToString("\n\t", unionSize, i =>
+		$"public static async Task<Union<{CommaSeparatedTs(unionSize)}>> FromT{i}(Task<T{i}> value) => await value;")}
 }}
 ";
 }

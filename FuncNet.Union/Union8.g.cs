@@ -62,6 +62,21 @@ public readonly record struct Union<T0, T1, T2, T3, T4, T5, T6, T7>
 	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6, T7>(T7 value) =>
 		new Union<T0, T1, T2, T3, T4, T5, T6, T7>(7, value7: value);
 
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6, T7>(Union<T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5, T6, T7>(other.Index, other.Value0);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6, T7>(Union<T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5, T6, T7>(other.Index, other.Value0, other.Value1);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6, T7>(Union<T0, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5, T6, T7>(other.Index, other.Value0, other.Value1, other.Value2);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6, T7>(Union<T0, T1, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5, T6, T7>(other.Index, other.Value0, other.Value1, other.Value2, other.Value3);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6, T7>(Union<T0, T1, T2, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5, T6, T7>(other.Index, other.Value0, other.Value1, other.Value2, other.Value3, other.Value4);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6, T7>(Union<T0, T1, T2, T3, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5, T6, T7>(other.Index, other.Value0, other.Value1, other.Value2, other.Value3, other.Value4, other.Value5);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6, T7>(Union<T0, T1, T2, T3, T4, T5, T6> other) =>
+		new Union<T0, T1, T2, T3, T4, T5, T6, T7>(other.Index, other.Value0, other.Value1, other.Value2, other.Value3, other.Value4, other.Value5, other.Value6);
+
 	public static Union<T0, T1, T2, T3, T4, T5, T6, T7> FromT0(T0 value) => value;
 	public static Union<T0, T1, T2, T3, T4, T5, T6, T7> FromT1(T1 value) => value;
 	public static Union<T0, T1, T2, T3, T4, T5, T6, T7> FromT2(T2 value) => value;
@@ -70,6 +85,7 @@ public readonly record struct Union<T0, T1, T2, T3, T4, T5, T6, T7>
 	public static Union<T0, T1, T2, T3, T4, T5, T6, T7> FromT5(T5 value) => value;
 	public static Union<T0, T1, T2, T3, T4, T5, T6, T7> FromT6(T6 value) => value;
 	public static Union<T0, T1, T2, T3, T4, T5, T6, T7> FromT7(T7 value) => value;
+
 	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6, T7>> FromT0(Task<T0> value) => await value;
 	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6, T7>> FromT1(Task<T1> value) => await value;
 	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6, T7>> FromT2(Task<T2> value) => await value;
