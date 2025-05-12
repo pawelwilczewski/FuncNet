@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+
+        <PackageId>FuncNet</PackageId>
+        <Version>1.0.0</Version>
+        <Authors>Pawel Wilczewski</Authors>
+        <Description>Library of functional utilities to use in C# with notably rich and easy-to-use adhoc unions</Description>
+
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://https://github.com/pawelwilczewski/FuncNet</RepositoryUrl>
+
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+</Project>
