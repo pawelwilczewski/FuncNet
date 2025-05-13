@@ -15,7 +15,7 @@ namespace {@namespace};
 
 public static class Union{unionSize}Bind
 {{
-	{GenerateBindMethod(
+	{GenerateBindMethods(
 		unionSize,
 		DontWrap,
 		DontWrap,
@@ -24,11 +24,11 @@ public static class Union{unionSize}Bind
 		DontWrap,
 		"",
 		@case => new SwitchCaseText(
-		@case.Variable,
-		GenerateSwitchReturnValue(@case)),
+			@case.Variable,
+			GenerateSwitchReturnValue(@case)),
 		DontWrap)}
 
-	{GenerateBindMethod(
+	{GenerateBindMethods(
 		unionSize,
 		WrapInAsyncTask,
 		WrapInTask,
@@ -37,13 +37,13 @@ public static class Union{unionSize}Bind
 		WrapInAwaitConfiguredFromArgument,
 		"cancellationToken.ThrowIfCancellationRequested();",
 		@case => new SwitchCaseText(
-		@case.Variable,
-		GenerateSwitchReturnValue(@case)
-			.WrapInTaskFromResultIfNotSpecial(@case)
-			.WrapInNewUnionFromTIfNotSpecial(@case, unionSize)),
+			@case.Variable,
+			GenerateSwitchReturnValue(@case)
+					.WrapInTaskFromResultIfNotSpecial(@case)
+					.WrapInNewUnionFromTIfNotSpecial(@case, unionSize)),
 		WrapInAwaitConfiguredFromArgument)}
 
-	{GenerateBindMethod(
+	{GenerateBindMethods(
 		unionSize,
 		WrapInAsyncTask,
 		DontWrap,
@@ -52,13 +52,13 @@ public static class Union{unionSize}Bind
 		DontWrap,
 		"cancellationToken.ThrowIfCancellationRequested();",
 		@case => new SwitchCaseText(
-		@case.Variable,
-		GenerateSwitchReturnValue(@case)
-			.WrapInTaskFromResultIfNotSpecial(@case)
-			.WrapInNewUnionFromTIfNotSpecial(@case, unionSize)),
+			@case.Variable,
+			GenerateSwitchReturnValue(@case)
+					.WrapInTaskFromResultIfNotSpecial(@case)
+					.WrapInNewUnionFromTIfNotSpecial(@case, unionSize)),
 		WrapInAwaitConfiguredFromArgument)}
 
-	{GenerateBindMethod(
+	{GenerateBindMethods(
 		unionSize,
 		WrapInAsyncTask,
 		WrapInTask,
@@ -67,14 +67,14 @@ public static class Union{unionSize}Bind
 		WrapInAwaitConfiguredFromArgument,
 		"cancellationToken.ThrowIfCancellationRequested();",
 		@case => new SwitchCaseText(
-		@case.Variable,
-		GenerateSwitchReturnValue(@case)
-			.WrapInNewUnionFromTIfNotSpecial(@case, unionSize)),
+			@case.Variable,
+			GenerateSwitchReturnValue(@case)
+					.WrapInNewUnionFromTIfNotSpecial(@case, unionSize)),
 		DontWrap)}
 }}
 ";
 
-	private static string GenerateBindMethod(
+	private static string GenerateBindMethods(
 		int unionSize,
 		WrapText wrapMethodResultType,
 		WrapText wrapUnionArgument,
@@ -100,18 +100,6 @@ public static class Union{unionSize}Bind
 				generateSwitchCase)))};
 	}}");
 
-	private static IEnumerable<string> TsWithSpecialReplacement(int count, int specialIndex, string specialReplacement) =>
-		Enumerable.Range(0, count).Select(i => i == specialIndex ? specialReplacement : $"T{i}");
-
-	private static string CommaSeparatedTsWithSpecialReplacement(int count, int specialIndex, string specialReplacement) =>
-		string.Join(", ", TsWithSpecialReplacement(count, specialIndex, specialReplacement));
-
-	private static string TsNew(int count, int specialIndex) =>
-		CommaSeparatedTsWithSpecialReplacement(count, specialIndex, $"T{specialIndex}New");
-
-	private static string TsOld(int count, int specialIndex) =>
-		CommaSeparatedTsWithSpecialReplacement(count, specialIndex, $"T{specialIndex}Old");
-
 	private static IEnumerable<SwitchCaseText> GenerateSwitchExpressionCases(
 		int unionSize, int specialIndex,
 		GenerateSwitchCaseOneSpecial generateCase) =>
@@ -126,13 +114,4 @@ public static class Union{unionSize}Bind
 		@case.Index == @case.SpecialIndex
 			? $"binding(u.Value{@case.Index})"
 			: $"u.Value{@case.Index}";
-
-	private static string WrapInNewUnionFromT(this string value, SwitchCaseOneSpecial @case, int unionSize) =>
-		$"Union<{TsNew(unionSize, @case.SpecialIndex)}>.FromT{@case.Index}({value})";
-
-	private static string WrapInNewUnionFromTIfNotSpecial(this string value, SwitchCaseOneSpecial @case, int unionSize) =>
-		@case.SpecialIndex == @case.Index ? value : value.WrapInNewUnionFromT(@case, unionSize);
-	
-	private static string WrapInTaskFromResultIfNotSpecial(this string value, SwitchCaseOneSpecial @case) =>
-		@case.Index == @case.SpecialIndex ? value : WrapInTaskFromResult(value);
 }

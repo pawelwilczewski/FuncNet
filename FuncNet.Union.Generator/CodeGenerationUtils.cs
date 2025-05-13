@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using System.Text;
 
 namespace FuncNet.Union.Generator;
 
@@ -26,6 +27,120 @@ public static class CodeGenerationUtils
 		{cases.JoinToString(",\n\t\t", @case => $"{@case.Left} => {@case.Right}")}
 	}}";
 
+	public sealed class SourceCodeFileBuilder
+	{
+		private const string DELIMITER = "\n\t\t";
+		
+		private readonly StringBuilder builder = new();
+
+		public SourceCodeFileBuilder(string header)
+		{
+			builder.Append(header).Append(DELIMITER);
+		}
+
+		public SourceCodeFileBuilder AddClass(ClassBuilder classBuilder)
+		{
+			builder.Append(classBuilder).Append(DELIMITER);
+			return this;
+		}
+
+		public override string ToString() => builder.ToString();
+	}
+
+	public sealed class ClassBuilder
+	{
+		private readonly string className;
+
+		private readonly List<MethodBuilder> methods = [];
+		
+		public ClassBuilder(string className)
+		{
+			this.className = className;
+		}
+
+		public ClassBuilder AddMethod(MethodBuilder method)
+		{
+			methods.Add(method);
+			return this;
+		}
+
+		public ClassBuilder AddMethods(IEnumerable<MethodBuilder> methods)
+		{
+			this.methods.AddRange(methods);
+			return this;
+		}
+
+		public override string ToString() => $"{className}\n{{{string.Join("\n\n\t", methods)}}}";
+	}
+
+	public sealed class StatementsBlockBuilder
+	{
+		private const string DELIMITER = "\n\t\t";
+		
+		private readonly StringBuilder builder = new();
+
+		public StatementsBlockBuilder AddStatement(string statement)
+		{
+			builder.Append(statement).Append(';').Append(DELIMITER).Append('\t');
+			return this;
+		}
+
+		public override string ToString() => $"{{{DELIMITER}{builder}{DELIMITER}}}";
+	}
+
+	public sealed class MethodBuilder
+	{
+		private readonly string name;
+		private readonly ArgumentListBuilder argumentList = new();
+		private readonly StatementsBlockBuilder body = new();
+
+		public MethodBuilder(string name)
+		{
+			this.name = name;
+		}
+
+		public MethodBuilder AddArgument(string argument)
+		{
+			argumentList.AddArgument(argument);
+			return this;
+		}
+
+		public MethodBuilder AddArguments(IEnumerable<string> arguments)
+		{
+			argumentList.AddArguments(arguments);
+			return this;
+		}
+
+		public MethodBuilder AddBodyStatement(string statement)
+		{
+			body.AddStatement(statement);
+			return this;
+		}
+
+		public override string ToString() => $"{name}{argumentList}{body}";
+	}
+	
+	public sealed class ArgumentListBuilder
+	{
+		private const string DELIMITER = ",\n\t\t";
+
+		private readonly List<string> arguments = [];
+
+		public ArgumentListBuilder AddArgument(string argument)
+		{
+			arguments.Add(argument);
+			return this;
+		}
+
+		public ArgumentListBuilder AddArguments(IEnumerable<string> arguments)
+		{
+			this.arguments.AddRange(arguments);
+			return this;
+		}
+
+		public override string ToString() => $"({string.Join(DELIMITER, arguments)})";
+	}
+	
 	public delegate string WrapText(string text);
 	public static string DontWrap(string text) => text;
 	public static string WrapInTask(string text) => $"Task<{text}>";
@@ -39,9 +154,11 @@ public static class CodeGenerationUtils
 		"CancellationToken cancellationToken = default",
 		"bool continueOnCapturedContext = true"
 	];
-	
+
 	public static readonly string asyncMethodAdditionalArgumentsJoined =
 		$",\n\t\t{string.Join(",\n\t\t", asyncMethodAdditionalArguments)}";
+
+	public const string THROW_IF_CANCELED = "cancellationToken.ThrowIfCancellationRequested()";
 
 	public readonly record struct SwitchCase(int Index, string Variable, string Value);
 	public readonly record struct SwitchCaseOneSpecial(int Index, string Variable, int SpecialIndex);
@@ -52,11 +169,29 @@ public static class CodeGenerationUtils
 	public static string GeneratePublicStaticMethod(
 		string returnType,
 		string name,
-		IEnumerable<string> arguments,
-		string body) => @$"
-	public static {returnType} {name}(
-		{string.Join(",\n\t\t", arguments)})
-	{{
-		{body}
-	}}";
+		ArgumentListBuilder argumentList,
+		StatementsBlockBuilder body) => @$"
+	public static {returnType} {name}{argumentList}
+	{body}";
+
+	public static IEnumerable<string> TsWithSpecialReplacement(int count, int specialIndex, string specialReplacement) =>
+		Enumerable.Range(0, count).Select(i => i == specialIndex ? specialReplacement : $"T{i}");
+
+	public static string CommaSeparatedTsWithSpecialReplacement(int count, int specialIndex, string specialReplacement) =>
+		string.Join(", ", TsWithSpecialReplacement(count, specialIndex, specialReplacement));
+
+	public static string TsNew(int count, int specialIndex) =>
+		CommaSeparatedTsWithSpecialReplacement(count, specialIndex, $"T{specialIndex}New");
+
+	public static string TsOld(int count, int specialIndex) =>
+		CommaSeparatedTsWithSpecialReplacement(count, specialIndex, $"T{specialIndex}Old");
+
+	public static string WrapInNewUnionFromT(this string value, SwitchCaseOneSpecial @case, int unionSize) =>
+		$"Union<{TsNew(unionSize, @case.SpecialIndex)}>.FromT{@case.Index}({value})";
+
+	public static string WrapInNewUnionFromTIfNotSpecial(this string value, SwitchCaseOneSpecial @case, int unionSize) =>
+		@case.SpecialIndex == @case.Index ? value : value.WrapInNewUnionFromT(@case, unionSize);
+
+	public static string WrapInTaskFromResultIfNotSpecial(this string value, SwitchCaseOneSpecial @case) =>
+		@case.Index == @case.SpecialIndex ? value : WrapInTaskFromResult(value);
 }
