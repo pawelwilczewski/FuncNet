@@ -14,81 +14,75 @@ using System.Threading.Tasks;
 
 namespace {@namespace};";
 
+	private static MapMethodGenerationParams[] Params(int unionSize) =>
+	[
+		new(unionSize,
+			DontWrap,
+			DontWrap,
+			DontWrap,
+			[],
+			DontWrap,
+			"",
+			@case => new SwitchCaseText(
+				@case.Variable,
+				GenerateSwitchReturnValue(@case)),
+			DontWrap),
+		new(unionSize,
+			WrapInAsyncTask,
+			WrapInTask,
+			WrapInTask,
+			asyncMethodAdditionalArguments,
+			WrapInAwaitConfiguredFromArgument,
+			THROW_IF_CANCELED,
+			@case => new SwitchCaseText(
+				@case.Variable,
+				GenerateSwitchReturnValue(@case)
+					.WrapInTaskFromResultIfNotSpecial(@case)
+					.WrapInNewUnionFromT(@case, unionSize)),
+			WrapInAwaitConfiguredFromArgument),
+		new(unionSize,
+			WrapInAsyncTask,
+			DontWrap,
+			WrapInTask,
+			asyncMethodAdditionalArguments,
+			DontWrap,
+			THROW_IF_CANCELED,
+			@case => new SwitchCaseText(
+				@case.Variable,
+				GenerateSwitchReturnValue(@case)
+					.WrapInTaskFromResultIfNotSpecial(@case)
+					.WrapInNewUnionFromT(@case, unionSize)),
+			WrapInAwaitConfiguredFromArgument),
+		new(unionSize,
+			WrapInAsyncTask,
+			WrapInTask,
+			DontWrap,
+			asyncMethodAdditionalArguments,
+			WrapInAwaitConfiguredFromArgument,
+			THROW_IF_CANCELED,
+			@case => new SwitchCaseText(
+				@case.Variable,
+				GenerateSwitchReturnValue(@case)
+					.WrapInNewUnionFromTIfNotSpecial(@case, unionSize)),
+			DontWrap)
+	];
+
 	public static string GenerateMapExtensionsFile(string @namespace, int unionSize) =>
 		new SourceCodeFileBuilder(Header(@namespace))
 			.AddClass(new ClassBuilder($"public static class Union{unionSize}Map")
-				.AddMethods(GenerateMapMethods(
-					unionSize,
-					DontWrap,
-					DontWrap,
-					DontWrap,
-					[],
-					DontWrap,
-					"",
-					@case => new SwitchCaseText(
-						@case.Variable,
-						GenerateSwitchReturnValue(@case)),
-					DontWrap))
-				.AddMethods(GenerateMapMethods(
-					unionSize,
-					WrapInAsyncTask,
-					WrapInTask,
-					WrapInTask,
-					asyncMethodAdditionalArguments,
-					WrapInAwaitConfiguredFromArgument,
-					THROW_IF_CANCELED,
-					@case => new SwitchCaseText(
-						@case.Variable,
-						GenerateSwitchReturnValue(@case)
-							.WrapInTaskFromResultIfNotSpecial(@case)
-							.WrapInNewUnionFromT(@case, unionSize)),
-					WrapInAwaitConfiguredFromArgument))
-				.AddMethods(GenerateMapMethods(
-					unionSize,
-					WrapInAsyncTask,
-					DontWrap,
-					WrapInTask,
-					asyncMethodAdditionalArguments,
-					DontWrap,
-					THROW_IF_CANCELED,
-					@case => new SwitchCaseText(
-						@case.Variable,
-						GenerateSwitchReturnValue(@case)
-							.WrapInTaskFromResultIfNotSpecial(@case)
-							.WrapInNewUnionFromT(@case, unionSize)),
-					WrapInAwaitConfiguredFromArgument))
-				.AddMethods(GenerateMapMethods(
-					unionSize,
-					WrapInAsyncTask,
-					WrapInTask,
-					DontWrap,
-					asyncMethodAdditionalArguments,
-					WrapInAwaitConfiguredFromArgument,
-					THROW_IF_CANCELED,
-					@case => new SwitchCaseText(
-						@case.Variable,
-						GenerateSwitchReturnValue(@case)
-							.WrapInNewUnionFromTIfNotSpecial(@case, unionSize)),
-					DontWrap))).ToString();
+				.AddMethods(Params(unionSize).SelectMany(GenerateMapMethods)))
+			.ToString();
 
-	private static IEnumerable<MethodBuilder> GenerateMapMethods(
-		int unionSize,
-		WrapText wrapMethodResultType,
-		WrapText wrapUnionArgument,
-		WrapText wrapBranchResultType,
-		IEnumerable<string> additionalArguments,
-		WrapText wrapUnionValue,
-		string additionalCodeAfterUnionAssignment,
-		GenerateSwitchCaseOneSpecial generateSwitchCase,
-		WrapText wrapReturnValue) => Enumerable.Range(0, unionSize).Select(mapIndex =>
-			new MethodBuilder($"public static {wrapMethodResultType($"Union<{TsNew(unionSize, mapIndex)}>")} Map{mapIndex}<T{mapIndex}New, {TsOld(unionSize, mapIndex)}>")
-				.AddArgument($"this {wrapUnionArgument($"Union<{TsOld(unionSize, mapIndex)}>")} union")
-				.AddArgument($"Func<T{mapIndex}Old, {wrapBranchResultType($"T{mapIndex}New")}> mapping")
-				.AddArguments(additionalArguments)
-				.AddBodyStatement($"var u = {wrapUnionValue("union")}")
-				.AddBodyStatement(additionalCodeAfterUnionAssignment)
-				.AddBodyStatement($@"return {wrapReturnValue(GenerateSwitchExpression(
-					"u.Index", GenerateSwitchExpressionCases(unionSize, mapIndex, generateSwitchCase)))}"));
+	private static IEnumerable<MethodBuilder> GenerateMapMethods(MapMethodGenerationParams p) =>
+		Enumerable.Range(0, p.UnionSize).Select(mapIndex =>
+			new MethodBuilder($"public static {p.WrapMethodResultType($"Union<{TsNew(p.UnionSize, mapIndex)}>")} Map{mapIndex}<T{mapIndex}New, {TsOld(p.UnionSize, mapIndex)}>")
+				.AddArgument($"this {p.WrapUnionArgument($"Union<{TsOld(p.UnionSize, mapIndex)}>")} union")
+				.AddArgument($"Func<T{mapIndex}Old, {p.WrapBranchResultType($"T{mapIndex}New")}> mapping")
+				.AddArguments(p.AdditionalArguments)
+				.AddBodyStatement($"var u = {p.WrapUnionValue("union")}")
+				.AddBodyStatement(p.AdditionalCodeAfterUnionAssignment)
+				.AddBodyStatement($@"return {p.WrapReturnValue(GenerateSwitchExpression(
+					"u.Index", GenerateSwitchExpressionCases(p.UnionSize, mapIndex, p.GenerateSwitchCase)))}"));
 
 	private static IEnumerable<SwitchCaseText> GenerateSwitchExpressionCases(
 		int unionSize, int specialIndex,
@@ -104,4 +98,15 @@ namespace {@namespace};";
 		@case.Index == @case.SpecialIndex
 			? $"mapping(u.Value{@case.Index})"
 			: $"u.Value{@case.Index}";
+
+	private sealed record class MapMethodGenerationParams(
+		int UnionSize,
+		WrapText WrapMethodResultType,
+		WrapText WrapUnionArgument,
+		WrapText WrapBranchResultType,
+		IEnumerable<string> AdditionalArguments,
+		WrapText WrapUnionValue,
+		string AdditionalCodeAfterUnionAssignment,
+		GenerateSwitchCaseOneSpecial GenerateSwitchCase,
+		WrapText WrapReturnValue);
 }
