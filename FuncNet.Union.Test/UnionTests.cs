@@ -99,4 +99,56 @@ public class UnionTests
 			t1 => Task.FromResult(t1));
 		Assert.Equal(3, r4);
 	}
+	
+	
+        [Fact]
+        public async Task MapVariants_Work()
+        {
+            var u = Union<int, string, float>.FromT0(42);
+            var mapped = u.Map0(i => $"Value is {i}");
+            var result = mapped.Match(
+                s  => s,
+                _  => throw new InvalidOperationException("Should not be here"),
+                _  => throw new InvalidOperationException("Should not be here")
+            );
+
+            Assert.Equal("Value is 42", result);
+			
+			var uTask = Task.FromResult<Union<string, int, double>>(7);
+			var mapped2 = await uTask.Map1(async i =>
+			{
+				await Task.Yield();   // simulate async work
+				return i * 3.0;
+			});
+
+			var result2 = mapped2.Match(
+				_  => throw new InvalidOperationException("Should not be here"),
+				d  => d,
+				_  => throw new InvalidOperationException("Should not be here")
+			);
+			Assert.Equal(21.0, result2);
+
+			Union<string, int, double> u0 = "hello";
+			var passThru = await u0.Map2<DateTime, string, int, double>(async d => new DateTime());
+			var passThruResult = passThru.Match(
+				s  => s,
+				_  => throw new InvalidOperationException("Should not be here"),
+				_  => throw new InvalidOperationException("Should not be here")
+			);
+			Assert.Equal("hello", passThruResult);
+
+			var u2Task = Task.FromResult<Union<string, int, double>>(4.2);
+			var mapped3 = await u2Task.Map2(async d =>
+			{
+				await Task.Yield();
+				return (d * 2).ToString("F1");
+			});
+
+			var mapped3Result = mapped3.Match(
+				_  => throw new InvalidOperationException("Should not be here"),
+				_  => throw new InvalidOperationException("Should not be here"),
+				s  => s
+			);
+			Assert.Equal("8.4", mapped3Result);
+        }
 }

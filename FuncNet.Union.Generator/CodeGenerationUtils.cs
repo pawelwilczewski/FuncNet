@@ -21,6 +21,7 @@ public static class CodeGenerationUtils
 	public delegate string WrapText(string text);
 	public static string DontWrap(string text) => text;
 	public static string WrapInTask(string text) => $"Task<{text}>";
+	public static string WrapInTaskFromResult(string text) => $"Task.FromResult({text})";
 	public static string WrapInAsyncTask(string text) => $"async {WrapInTask(text)}";
 	public static string WrapInAwaitConfiguredFromArgument(string text) =>
 		$"await ({text}).ConfigureAwait(continueOnCapturedContext)";

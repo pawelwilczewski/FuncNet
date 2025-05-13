@@ -47,7 +47,7 @@ public readonly record struct Union<{CommaSeparatedTs(unionSize)}>
 		$@"public static implicit operator Union<{CommaSeparatedTs(unionSize)}>(T{i} value) =>
 		new Union<{CommaSeparatedTs(unionSize)}>({i}, value{i}: value);")}
 
-	{JoinRangeToString("\n\t", 1, unionSize - 1, otherUnionSize =>
+	{JoinRangeToString("\n\t", 2, unionSize - 2, otherUnionSize =>
 		$@"public static implicit operator Union<{CommaSeparatedTs(unionSize)}>(Union<{CommaSeparatedTs(otherUnionSize)}> other) =>
 		new Union<{CommaSeparatedTs(unionSize)}>(other.Index, {JoinRangeToString(", ", otherUnionSize, i => $"other.Value{i}")});")}
 

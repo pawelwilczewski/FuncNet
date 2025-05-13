@@ -82,8 +82,6 @@ public readonly record struct Union<T0, T1, T2, T3, T4, T5, T6>
 	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6>(T6 value) =>
 		new Union<T0, T1, T2, T3, T4, T5, T6>(6, value6: value);
 
-	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6>(Union<T0> other) =>
-		new Union<T0, T1, T2, T3, T4, T5, T6>(other.Index, other.Value0);
 	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6>(Union<T0, T1> other) =>
 		new Union<T0, T1, T2, T3, T4, T5, T6>(other.Index, other.Value0, other.Value1);
 	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6>(Union<T0, T1, T2> other) =>
