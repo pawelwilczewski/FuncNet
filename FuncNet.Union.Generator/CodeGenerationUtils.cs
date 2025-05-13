@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+
 namespace FuncNet.Union.Generator;
 
 public static class CodeGenerationUtils
@@ -18,6 +20,12 @@ public static class CodeGenerationUtils
 	public static string CommaSeparatedTs(int count) =>
 		CommaSeparatedTs(0, count);
 
+	public static string GenerateSwitchExpression(string switchOn, IEnumerable<SwitchCaseText> cases) => $@"
+	{switchOn} switch
+	{{
+		{cases.JoinToString(",\n\t\t", @case => $"{@case.Left} => {@case.Right}")}
+	}}";
+
 	public delegate string WrapText(string text);
 	public static string DontWrap(string text) => text;
 	public static string WrapInTask(string text) => $"Task<{text}>";
@@ -28,4 +36,10 @@ public static class CodeGenerationUtils
 
 	public const string ASYNC_METHOD_ADDITIONAL_ARGUMENTS =
 		$",\n\t\tCancellationToken cancellationToken = default,\n\t\tbool continueOnCapturedContext = true";
+
+	public readonly record struct SwitchCase(int Index, string Variable, string Value);
+	public readonly record struct SwitchCaseOneSpecial(int Index, string Variable, int SpecialIndex);
+	public readonly record struct SwitchCaseText(string Left, string Right);
+
+	public delegate SwitchCaseText GenerateSwitchCaseOneSpecial(SwitchCaseOneSpecial @case);
 }
