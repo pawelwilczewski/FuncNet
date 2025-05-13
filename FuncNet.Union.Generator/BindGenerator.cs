@@ -33,7 +33,7 @@ public static class Union{unionSize}Bind
 		WrapInAsyncTask,
 		WrapInTask,
 		WrapInTask,
-		ASYNC_METHOD_ADDITIONAL_ARGUMENTS,
+		asyncMethodAdditionalArgumentsJoined,
 		WrapInAwaitConfiguredFromArgument,
 		"cancellationToken.ThrowIfCancellationRequested();",
 		@case => new SwitchCaseText(
@@ -48,7 +48,7 @@ public static class Union{unionSize}Bind
 		WrapInAsyncTask,
 		DontWrap,
 		WrapInTask,
-		ASYNC_METHOD_ADDITIONAL_ARGUMENTS,
+		asyncMethodAdditionalArgumentsJoined,
 		DontWrap,
 		"cancellationToken.ThrowIfCancellationRequested();",
 		@case => new SwitchCaseText(
@@ -63,7 +63,7 @@ public static class Union{unionSize}Bind
 		WrapInAsyncTask,
 		WrapInTask,
 		DontWrap,
-		ASYNC_METHOD_ADDITIONAL_ARGUMENTS,
+		asyncMethodAdditionalArgumentsJoined,
 		WrapInAwaitConfiguredFromArgument,
 		"cancellationToken.ThrowIfCancellationRequested();",
 		@case => new SwitchCaseText(

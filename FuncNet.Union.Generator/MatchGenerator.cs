@@ -30,7 +30,7 @@ public static class Union{unionSize}Match
 		WrapInAsyncTask,
 		WrapInTask,
 		WrapInTask,
-		ASYNC_METHOD_ADDITIONAL_ARGUMENTS,
+		asyncMethodAdditionalArgumentsJoined,
 		WrapInAwaitConfiguredFromArgument,
 		"cancellationToken.ThrowIfCancellationRequested();",
 		WrapInAwaitConfiguredFromArgument)}
@@ -40,7 +40,7 @@ public static class Union{unionSize}Match
 		WrapInAsyncTask,
 		DontWrap,
 		WrapInTask,
-		ASYNC_METHOD_ADDITIONAL_ARGUMENTS,
+		asyncMethodAdditionalArgumentsJoined,
 		DontWrap,
 		"cancellationToken.ThrowIfCancellationRequested();",
 		WrapInAwaitConfiguredFromArgument)}
@@ -50,7 +50,7 @@ public static class Union{unionSize}Match
 		WrapInAsyncTask,
 		WrapInTask,
 		DontWrap,
-		ASYNC_METHOD_ADDITIONAL_ARGUMENTS,
+		asyncMethodAdditionalArgumentsJoined,
 		WrapInAwaitConfiguredFromArgument,
 		"cancellationToken.ThrowIfCancellationRequested();",
 		DontWrap)}

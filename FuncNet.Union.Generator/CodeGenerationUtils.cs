@@ -34,12 +34,29 @@ public static class CodeGenerationUtils
 	public static string WrapInAwaitConfiguredFromArgument(string text) =>
 		$"await ({text}).ConfigureAwait(continueOnCapturedContext)";
 
-	public const string ASYNC_METHOD_ADDITIONAL_ARGUMENTS =
-		$",\n\t\tCancellationToken cancellationToken = default,\n\t\tbool continueOnCapturedContext = true";
+	public static readonly string[] asyncMethodAdditionalArguments =
+	[
+		"CancellationToken cancellationToken = default",
+		"bool continueOnCapturedContext = true"
+	];
+	
+	public static readonly string asyncMethodAdditionalArgumentsJoined =
+		$",\n\t\t{string.Join(",\n\t\t", asyncMethodAdditionalArguments)}";
 
 	public readonly record struct SwitchCase(int Index, string Variable, string Value);
 	public readonly record struct SwitchCaseOneSpecial(int Index, string Variable, int SpecialIndex);
 	public readonly record struct SwitchCaseText(string Left, string Right);
 
 	public delegate SwitchCaseText GenerateSwitchCaseOneSpecial(SwitchCaseOneSpecial @case);
+
+	public static string GeneratePublicStaticMethod(
+		string returnType,
+		string name,
+		IEnumerable<string> arguments,
+		string body) => @$"
+	public static {returnType} {name}(
+		{string.Join(",\n\t\t", arguments)})
+	{{
+		{body}
+	}}";
 }

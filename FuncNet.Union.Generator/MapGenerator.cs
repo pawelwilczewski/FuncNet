@@ -16,45 +16,45 @@ namespace {@namespace};
 
 public static class Union{unionSize}Map
 {{
-	{GenerateMapMethod(
+	{GenerateMapMethods(
 		unionSize,
 		DontWrap,
 		DontWrap,
 		DontWrap,
-		"",
+		[],
 		DontWrap,
 		"",
 		DontWrap,
 		DontWrap)}
 
-	{GenerateMapMethod(
+	{GenerateMapMethods(
 		unionSize,
 		WrapInAsyncTask,
 		WrapInTask,
 		WrapInTask,
-		ASYNC_METHOD_ADDITIONAL_ARGUMENTS,
+		asyncMethodAdditionalArguments,
 		WrapInAwaitConfiguredFromArgument,
 		"cancellationToken.ThrowIfCancellationRequested();",
 		WrapInTaskFromResult,
 		WrapInAwaitConfiguredFromArgument)}
 
-	{GenerateMapMethod(
+	{GenerateMapMethods(
 		unionSize,
 		WrapInAsyncTask,
 		DontWrap,
 		WrapInTask,
-		ASYNC_METHOD_ADDITIONAL_ARGUMENTS,
+		asyncMethodAdditionalArguments,
 		DontWrap,
 		"cancellationToken.ThrowIfCancellationRequested();",
 		WrapInTaskFromResult,
 		WrapInAwaitConfiguredFromArgument)}
 
-	{GenerateMapMethod(
+	{GenerateMapMethods(
 		unionSize,
 		WrapInAsyncTask,
 		WrapInTask,
 		DontWrap,
-		ASYNC_METHOD_ADDITIONAL_ARGUMENTS,
+		asyncMethodAdditionalArguments,
 		WrapInAwaitConfiguredFromArgument,
 		"cancellationToken.ThrowIfCancellationRequested();",
 		DontWrap,
@@ -62,27 +62,29 @@ public static class Union{unionSize}Map
 }}
 ";
 
-	private static string GenerateMapMethod(
+	private static string GenerateMapMethods(
 		int unionSize,
 		WrapText wrapMethodResultType,
 		WrapText wrapUnionArgument,
 		WrapText wrapBranchResultType,
-		string additionalArguments,
+		IEnumerable<string> additionalArguments,
 		WrapText wrapUnionValue,
 		string additionalCodeAfterUnionAssignment,
 		WrapText wrapRegularMatchCase,
 		WrapText wrapReturnValue) =>
 		JoinRangeToString("\n\n\t", unionSize, mapIndex => $@"
-	public static {wrapMethodResultType($"Union<{TsNew(unionSize, mapIndex)}>")} Map{mapIndex}<T{mapIndex}New, {TsOld(unionSize, mapIndex)}>(
-		this {wrapUnionArgument($"Union<{TsOld(unionSize, mapIndex)}>")} union,
-		Func<T{mapIndex}Old, {wrapBranchResultType($"T{mapIndex}New")}> mapping{additionalArguments})
-	{{
+		{GeneratePublicStaticMethod(
+			wrapMethodResultType($"Union<{TsNew(unionSize, mapIndex)}>"),
+			$"Map{mapIndex}<T{mapIndex}New, {TsOld(unionSize, mapIndex)}>",
+			new[] { $"this {wrapUnionArgument($"Union<{TsOld(unionSize, mapIndex)}>")} union",
+			$"Func<T{mapIndex}Old, {wrapBranchResultType($"T{mapIndex}New")}> mapping" }
+			.Concat(additionalArguments), @$"
 		var u = {wrapUnionValue("union")};
 		{additionalCodeAfterUnionAssignment}
 
 		return {wrapReturnValue($@"u.Match(
 			{string.Join(",\n\t\t\t", Enumerable.Range(0, unionSize).Select(i => GenerateMatchCase(i, mapIndex, unionSize, wrapRegularMatchCase)))})")};
-	}}");
+")}");
 
 	private static IEnumerable<string> TsWithSpecialReplacement(int count, int specialIndex, string specialReplacement) =>
 		Enumerable.Range(0, count).Select(i => i == specialIndex ? specialReplacement : $"T{i}");
