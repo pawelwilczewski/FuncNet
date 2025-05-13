@@ -15,9 +15,17 @@ namespace {@namespace};
 
 public static class Union{unionSize}Match
 {{
-	{GenerateOtherCaseAsUnionVariants(unionSize, DontWrap, DontWrap, DontWrap, "", DontWrap, "", DontWrap)}
+	{GenerateMatchMethod(
+		unionSize,
+		DontWrap,
+		DontWrap,
+		DontWrap,
+		"",
+		DontWrap,
+		"",
+		DontWrap)}
 
-	{GenerateOtherCaseAsUnionVariants(
+	{GenerateMatchMethod(
 		unionSize,
 		WrapInAsyncTask,
 		WrapInTask,
@@ -27,7 +35,7 @@ public static class Union{unionSize}Match
 		"cancellationToken.ThrowIfCancellationRequested();",
 		WrapInAwaitConfiguredFromArgument)}
 
-	{GenerateOtherCaseAsUnionVariants(
+	{GenerateMatchMethod(
 		unionSize,
 		WrapInAsyncTask,
 		DontWrap,
@@ -37,7 +45,7 @@ public static class Union{unionSize}Match
 		"cancellationToken.ThrowIfCancellationRequested();",
 		WrapInAwaitConfiguredFromArgument)}
 
-	{GenerateOtherCaseAsUnionVariants(
+	{GenerateMatchMethod(
 		unionSize,
 		WrapInAsyncTask,
 		WrapInTask,
@@ -49,7 +57,7 @@ public static class Union{unionSize}Match
 }}
 ";
 
-	private static string GenerateOtherCaseAsUnionVariants(
+	private static string GenerateMatchMethod(
 		int unionSize,
 		WrapText wrapMethodResultType,
 		WrapText wrapUnionArgument,
