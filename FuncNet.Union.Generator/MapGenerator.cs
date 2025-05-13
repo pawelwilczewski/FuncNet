@@ -2,6 +2,7 @@ namespace FuncNet.Union.Generator;
 
 using static CodeGenerationUtils;
 
+// TODO Pawel: logic is largely shared between Map and Bind - create an appropriate abstraction (this should use switch expression instead of Match)
 public static class MapGenerator
 {
 	public static string GenerateMapExtensionsFile(string @namespace, int unionSize) => $@"
