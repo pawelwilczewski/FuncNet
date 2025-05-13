@@ -21,7 +21,7 @@ for (var i = 2; i < maxChoices + 1; ++i)
 	File.WriteAllText(
 		Path.Join(basePath, $"Union{i}.Map.g.cs"),
 		MapGenerator.GenerateMapExtensionsFile(@namespace, i));
-	
+
 	File.WriteAllText(
 		Path.Join(basePath, $"Union{i}.Bind.g.cs"),
 		BindGenerator.GenerateBindExtensionsFile(@namespace, i));
