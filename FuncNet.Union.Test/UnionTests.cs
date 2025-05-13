@@ -68,4 +68,35 @@ public class UnionTests
 				t1 => true));
 		Assert.True(correct);
 	}
+
+	[Fact]
+	public async Task AsyncMatchVariants_Work()
+	{
+		Union<string, int, DateTime, Guid> u1 = 123;
+		var r1 = await u1.Match(
+			t0 => Task.FromResult(t0.Length),
+			t1 => Task.FromResult(t1 * 2),
+			t2 => Task.FromResult(420),
+			t3 => Task.FromResult(69));
+		Assert.Equal(246, r1);
+
+		var u2 = Task.FromResult<Union<string, int>>("four");
+		var r2 = await u2.Match(
+			t0 => t0.Length,
+			t1 => t1 * 2);
+		Assert.Equal(4, r2);
+
+		var u3 = Task.FromResult<Union<string, int, double>>(7);
+		var r3 = await u3.Match(
+			t0 => Task.FromResult(t0.Length),
+			t1 => Task.FromResult(t1 * 3),
+			t2 => Task.FromResult(924));
+		Assert.Equal(21, r3);
+
+		Union<string, int> u4 = "abc";
+		var r4 = await u4.Match(
+			t0 => Task.FromResult(t0.Length),
+			t1 => Task.FromResult(t1));
+		Assert.Equal(3, r4);
+	}
 }
