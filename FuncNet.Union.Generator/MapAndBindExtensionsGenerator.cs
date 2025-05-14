@@ -2,7 +2,7 @@ namespace FuncNet.Union.Generator;
 
 using static CodeGenerationUtils;
 
-internal static class UnionSwitchPatternMethodGenerator
+internal static class MapAndBindExtensionsGenerator
 {
 	public static string GenerateExtensionsFile(string @namespace, MethodGroupGenerationParams p) =>
 		new SourceCodeFileBuilder(Header(@namespace))

@@ -78,15 +78,15 @@ public static class Union{unionSize}Match
 		return {wrapReturnValue($@"u.Index switch
 		{{
 			{JoinRangeToString(",\n\t\t\t", unionSize - otherCaseSize, i => $"{i} => t{i}(u.Value{i})")},
-			{GenerateLastSwitchCaseCode(unionSize, otherCaseSize)}
+			{GenerateSwitchOtherCaseCode(unionSize, otherCaseSize)}
 		}}")};
 	}}");
 
-	private static string GenerateLastArgumentCode(int unionSize, int caseSize, WrapText wrapBranchResultType) => caseSize <= 1
+	private static string GenerateLastArgumentCode(int unionSize, int otherCaseSize, WrapText wrapBranchResultType) => otherCaseSize <= 1
 		? $"Func<T{unionSize - 1}, {wrapBranchResultType("TResult")}> t{unionSize - 1}"
-		: $"Func<{UnionOfTs(unionSize - caseSize, caseSize)}, {wrapBranchResultType("TResult")}> other";
+		: $"Func<{UnionOfTs(unionSize - otherCaseSize, otherCaseSize)}, {wrapBranchResultType("TResult")}> other";
 
-	private static string GenerateLastSwitchCaseCode(int unionSize, int caseSize) => caseSize <= 1
+	private static string GenerateSwitchOtherCaseCode(int unionSize, int otherCaseSize) => otherCaseSize <= 1
 		? $"_ => t{unionSize - 1}(u.Value{unionSize - 1})"
-		: $"_ => other(new {UnionOfTs(unionSize - caseSize, caseSize)}(u.Value))";
+		: $"_ => other(new {UnionOfTs(unionSize - otherCaseSize, otherCaseSize)}(u.Value))";
 }

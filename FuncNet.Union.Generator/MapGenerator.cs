@@ -1,6 +1,6 @@
 namespace FuncNet.Union.Generator;
 
-using static UnionSwitchPatternMethodGenerator;
+using static MapAndBindExtensionsGenerator;
 
 public static class MapGenerator
 {

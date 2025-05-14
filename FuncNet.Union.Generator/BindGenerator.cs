@@ -1,7 +1,7 @@
 namespace FuncNet.Union.Generator;
 
 using static CodeGenerationUtils;
-using static UnionSwitchPatternMethodGenerator;
+using static MapAndBindExtensionsGenerator;
 
 public static class BindGenerator
 {
