@@ -14,13 +14,13 @@ namespace FuncNet.Union;
 	u.Index switch
 	{
 		0 => binding(u.Value0),
-		1 => u.Value1,
-		2 => u.Value2,
-		3 => u.Value3,
-		4 => u.Value4,
-		5 => u.Value5,
-		6 => u.Value6,
-		_ => u.Value7
+		1 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT1(u.Value1),
+		2 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT2(u.Value2),
+		3 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT3(u.Value3),
+		4 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT4(u.Value4),
+		5 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT5(u.Value5),
+		6 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT6(u.Value6),
+		_ => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT7(u.Value7)
 	};
 			
 		}
@@ -32,14 +32,14 @@ namespace FuncNet.Union;
 			return 
 	u.Index switch
 	{
-		0 => u.Value0,
+		0 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT0(u.Value0),
 		1 => binding(u.Value1),
-		2 => u.Value2,
-		3 => u.Value3,
-		4 => u.Value4,
-		5 => u.Value5,
-		6 => u.Value6,
-		_ => u.Value7
+		2 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT2(u.Value2),
+		3 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT3(u.Value3),
+		4 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT4(u.Value4),
+		5 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT5(u.Value5),
+		6 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT6(u.Value6),
+		_ => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT7(u.Value7)
 	};
 			
 		}
@@ -51,14 +51,14 @@ namespace FuncNet.Union;
 			return 
 	u.Index switch
 	{
-		0 => u.Value0,
-		1 => u.Value1,
+		0 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT0(u.Value0),
+		1 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT1(u.Value1),
 		2 => binding(u.Value2),
-		3 => u.Value3,
-		4 => u.Value4,
-		5 => u.Value5,
-		6 => u.Value6,
-		_ => u.Value7
+		3 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT3(u.Value3),
+		4 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT4(u.Value4),
+		5 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT5(u.Value5),
+		6 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT6(u.Value6),
+		_ => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT7(u.Value7)
 	};
 			
 		}
@@ -70,14 +70,14 @@ namespace FuncNet.Union;
 			return 
 	u.Index switch
 	{
-		0 => u.Value0,
-		1 => u.Value1,
-		2 => u.Value2,
+		0 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT0(u.Value0),
+		1 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT1(u.Value1),
+		2 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT2(u.Value2),
 		3 => binding(u.Value3),
-		4 => u.Value4,
-		5 => u.Value5,
-		6 => u.Value6,
-		_ => u.Value7
+		4 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT4(u.Value4),
+		5 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT5(u.Value5),
+		6 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT6(u.Value6),
+		_ => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT7(u.Value7)
 	};
 			
 		}
@@ -89,14 +89,14 @@ namespace FuncNet.Union;
 			return 
 	u.Index switch
 	{
-		0 => u.Value0,
-		1 => u.Value1,
-		2 => u.Value2,
-		3 => u.Value3,
+		0 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT0(u.Value0),
+		1 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT1(u.Value1),
+		2 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT2(u.Value2),
+		3 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT3(u.Value3),
 		4 => binding(u.Value4),
-		5 => u.Value5,
-		6 => u.Value6,
-		_ => u.Value7
+		5 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT5(u.Value5),
+		6 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT6(u.Value6),
+		_ => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT7(u.Value7)
 	};
 			
 		}
@@ -108,14 +108,14 @@ namespace FuncNet.Union;
 			return 
 	u.Index switch
 	{
-		0 => u.Value0,
-		1 => u.Value1,
-		2 => u.Value2,
-		3 => u.Value3,
-		4 => u.Value4,
+		0 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT0(u.Value0),
+		1 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT1(u.Value1),
+		2 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT2(u.Value2),
+		3 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT3(u.Value3),
+		4 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT4(u.Value4),
 		5 => binding(u.Value5),
-		6 => u.Value6,
-		_ => u.Value7
+		6 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT6(u.Value6),
+		_ => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT7(u.Value7)
 	};
 			
 		}
@@ -127,14 +127,14 @@ namespace FuncNet.Union;
 			return 
 	u.Index switch
 	{
-		0 => u.Value0,
-		1 => u.Value1,
-		2 => u.Value2,
-		3 => u.Value3,
-		4 => u.Value4,
-		5 => u.Value5,
+		0 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT0(u.Value0),
+		1 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT1(u.Value1),
+		2 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT2(u.Value2),
+		3 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT3(u.Value3),
+		4 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT4(u.Value4),
+		5 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT5(u.Value5),
 		6 => binding(u.Value6),
-		_ => u.Value7
+		_ => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT7(u.Value7)
 	};
 			
 		}
@@ -146,13 +146,13 @@ namespace FuncNet.Union;
 			return 
 	u.Index switch
 	{
-		0 => u.Value0,
-		1 => u.Value1,
-		2 => u.Value2,
-		3 => u.Value3,
-		4 => u.Value4,
-		5 => u.Value5,
-		6 => u.Value6,
+		0 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT0(u.Value0),
+		1 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT1(u.Value1),
+		2 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT2(u.Value2),
+		3 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT3(u.Value3),
+		4 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT4(u.Value4),
+		5 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT5(u.Value5),
+		6 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT6(u.Value6),
 		_ => binding(u.Value7)
 	};
 			

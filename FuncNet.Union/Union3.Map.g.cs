@@ -13,9 +13,9 @@ namespace FuncNet.Union;
 			return 
 	u.Index switch
 	{
-		0 => mapping(u.Value0),
-		1 => u.Value1,
-		_ => u.Value2
+		0 => Union<T0New, T1, T2>.FromT0(mapping(u.Value0)),
+		1 => Union<T0New, T1, T2>.FromT1(u.Value1),
+		_ => Union<T0New, T1, T2>.FromT2(u.Value2)
 	};
 			
 		}
@@ -27,9 +27,9 @@ namespace FuncNet.Union;
 			return 
 	u.Index switch
 	{
-		0 => u.Value0,
-		1 => mapping(u.Value1),
-		_ => u.Value2
+		0 => Union<T0, T1New, T2>.FromT0(u.Value0),
+		1 => Union<T0, T1New, T2>.FromT1(mapping(u.Value1)),
+		_ => Union<T0, T1New, T2>.FromT2(u.Value2)
 	};
 			
 		}
@@ -41,9 +41,9 @@ namespace FuncNet.Union;
 			return 
 	u.Index switch
 	{
-		0 => u.Value0,
-		1 => u.Value1,
-		_ => mapping(u.Value2)
+		0 => Union<T0, T1, T2New>.FromT0(u.Value0),
+		1 => Union<T0, T1, T2New>.FromT1(u.Value1),
+		_ => Union<T0, T1, T2New>.FromT2(mapping(u.Value2))
 	};
 			
 		}
@@ -153,7 +153,7 @@ namespace FuncNet.Union;
 			return 
 	u.Index switch
 	{
-		0 => mapping(u.Value0),
+		0 => Union<T0New, T1, T2>.FromT0(mapping(u.Value0)),
 		1 => Union<T0New, T1, T2>.FromT1(u.Value1),
 		_ => Union<T0New, T1, T2>.FromT2(u.Value2)
 	};
@@ -170,7 +170,7 @@ namespace FuncNet.Union;
 	u.Index switch
 	{
 		0 => Union<T0, T1New, T2>.FromT0(u.Value0),
-		1 => mapping(u.Value1),
+		1 => Union<T0, T1New, T2>.FromT1(mapping(u.Value1)),
 		_ => Union<T0, T1New, T2>.FromT2(u.Value2)
 	};
 			
@@ -187,7 +187,7 @@ namespace FuncNet.Union;
 	{
 		0 => Union<T0, T1, T2New>.FromT0(u.Value0),
 		1 => Union<T0, T1, T2New>.FromT1(u.Value1),
-		_ => mapping(u.Value2)
+		_ => Union<T0, T1, T2New>.FromT2(mapping(u.Value2))
 	};
 			
 		}}

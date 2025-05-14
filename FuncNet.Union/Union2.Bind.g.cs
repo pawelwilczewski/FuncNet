@@ -14,7 +14,7 @@ namespace FuncNet.Union;
 	u.Index switch
 	{
 		0 => binding(u.Value0),
-		_ => u.Value1
+		_ => Union<T0New, T1>.FromT1(u.Value1)
 	};
 			
 		}
@@ -26,7 +26,7 @@ namespace FuncNet.Union;
 			return 
 	u.Index switch
 	{
-		0 => u.Value0,
+		0 => Union<T0, T1New>.FromT0(u.Value0),
 		_ => binding(u.Value1)
 	};
 			
