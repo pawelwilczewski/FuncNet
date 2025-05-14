@@ -200,6 +200,14 @@ internal static class CodeGenerationUtils
 	public static string UnionOfTsOneOld(int unionSize, int oldIndex) =>
 		UnionOfTsOneSpecial(unionSize, oldIndex, $"T{oldIndex}Old");
 
+	public static readonly UnionMethodAsyncConfig[] allPossibleAsyncMethodConfigs =
+	[
+		UnionMethodAsyncConfig.None,
+		UnionMethodAsyncConfig.All,
+		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.AppliedMethodReturnType,
+		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.InputUnion
+	];
+
 	[Flags]
 	public enum UnionMethodAsyncConfig
 	{

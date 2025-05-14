@@ -27,16 +27,8 @@ using System.Threading.Tasks;
 
 namespace {@namespace};";
 
-	private static readonly UnionMethodAsyncConfig[] allPossibleAsyncConfigs =
-	[
-		UnionMethodAsyncConfig.None,
-		UnionMethodAsyncConfig.All,
-		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.AppliedMethodReturnType,
-		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.InputUnion
-	];
-
 	private static IEnumerable<MapOrBindMethodGenerationParams> CreateAllMethodsGenerationParams(MapOrBindMethodsGenerationParams p) =>
-		from asyncConfig in allPossibleAsyncConfigs
+		from asyncConfig in allPossibleAsyncMethodConfigs
 		from specialIndex in Enumerable.Range(0, p.UnionSize)
 		select new MapOrBindMethodGenerationParams(p, asyncConfig, specialIndex);
 
