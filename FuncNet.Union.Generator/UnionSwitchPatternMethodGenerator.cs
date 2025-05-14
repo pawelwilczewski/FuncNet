@@ -33,8 +33,8 @@ namespace {@namespace};";
 		select new SingleMethodGenerationParams(p, asyncConfig, specialIndex);
 
 	private static MethodBuilder GenerateMethod(SingleMethodGenerationParams p) =>
-		new MethodBuilder($"public static {$"Union<{TsNew(p.UnionSize, p.SpecialIndex)}>".WrapInAsyncTaskIf(p.IsAsync(MethodAsyncConfig.ReturnType))} {p.MethodNameOnly}{p.SpecialIndex}<T{p.SpecialIndex}New, {TsOld(p.UnionSize, p.SpecialIndex)}>")
-			.AddArgument($"this {$"Union<{TsOld(p.UnionSize, p.SpecialIndex)}>".WrapInTaskIf(p.IsAsync(MethodAsyncConfig.InputUnion))} union")
+		new MethodBuilder($"public static {$"{UnionOfTsOneNew(p.UnionSize, p.SpecialIndex)}".WrapInAsyncTaskIf(p.IsAsync(MethodAsyncConfig.ReturnType))} {p.MethodNameOnly}{p.SpecialIndex}<T{p.SpecialIndex}New, {TsOld(p.UnionSize, p.SpecialIndex)}>")
+			.AddArgument($"this {$"{UnionOfTsOneOld(p.UnionSize, p.SpecialIndex)}".WrapInTaskIf(p.IsAsync(MethodAsyncConfig.InputUnion))} union")
 			.AddArgument($"Func<T{p.SpecialIndex}Old, {p.AppliedMethodReturnType(p.SpecialIndex).WrapInTaskIf(p.IsAsync(MethodAsyncConfig.AppliedMethodReturnType))}> {p.AppliedMethodParameterName}")
 			.AddArguments(p.IsAsync(MethodAsyncConfig.ReturnType) ? asyncMethodAdditionalArguments : [])
 			.AddBodyStatement($"var u = {"union".WrapInAwaitConfiguredFromParameterIf(p.IsAsync(MethodAsyncConfig.InputUnion))}")

@@ -176,24 +176,27 @@ public static class CodeGenerationUtils
 	public readonly record struct SwitchCaseOneSpecial(int Index, string Variable, int SpecialIndex);
 	public readonly record struct SwitchCaseText(string Left, string Right);
 
-	public static IEnumerable<string> TsWithSpecialReplacement(int count, int specialIndex, string specialReplacement) =>
+	private static IEnumerable<string> TsWithSpecialReplacement(int count, int specialIndex, string specialReplacement) =>
 		Enumerable.Range(0, count).Select(i => i == specialIndex ? specialReplacement : $"T{i}");
 
-	public static string CommaSeparatedTsWithSpecialReplacement(int count, int specialIndex, string specialReplacement) =>
+	private static string CommaSeparatedTsWithSpecialReplacement(int count, int specialIndex, string specialReplacement) =>
 		string.Join(", ", TsWithSpecialReplacement(count, specialIndex, specialReplacement));
-
-	public static string TsNew(int count, int specialIndex) =>
-		CommaSeparatedTsWithSpecialReplacement(count, specialIndex, $"T{specialIndex}New");
 
 	public static string TsOld(int count, int specialIndex) =>
 		CommaSeparatedTsWithSpecialReplacement(count, specialIndex, $"T{specialIndex}Old");
 
 	public static string WrapInNewUnionFromT(this string value, SwitchCaseOneSpecial @case, int unionSize) =>
-		$"Union<{TsNew(unionSize, @case.SpecialIndex)}>.FromT{@case.Index}({value})";
+		$"{UnionOfTsOneNew(unionSize, @case.SpecialIndex)}.FromT{@case.Index}({value})";
 
 	public static string WrapInNewUnionFromTIfNotSpecial(this string value, SwitchCaseOneSpecial @case, int unionSize) =>
 		@case.SpecialIndex == @case.Index ? value : value.WrapInNewUnionFromT(@case, unionSize);
 
-	public static string WrapInTaskFromResultIfNotSpecial(this string value, SwitchCaseOneSpecial @case) =>
-		@case.Index == @case.SpecialIndex ? value : WrapInTaskFromResult(value);
+	public static string UnionOfTs(int unionSize) => $"Union<{CommaSeparatedTs(unionSize)}>";
+	public static string UnionOfTs(int start, int count) => $"Union<{CommaSeparatedTs(start, count)}>";
+	private static string UnionOfTsOneSpecial(int unionSize, int specialIndex, string specialReplacement) =>
+		$"Union<{CommaSeparatedTsWithSpecialReplacement(unionSize, specialIndex, specialReplacement)}>";
+	public static string UnionOfTsOneNew(int unionSize, int newIndex) =>
+		UnionOfTsOneSpecial(unionSize, newIndex, $"T{newIndex}New");
+	public static string UnionOfTsOneOld(int unionSize, int oldIndex) =>
+		UnionOfTsOneSpecial(unionSize, oldIndex, $"T{oldIndex}Old");
 }

@@ -68,7 +68,7 @@ public static class Union{unionSize}Match
 		WrapText wrapReturnValue) =>
 		JoinRangeToString("\n\n\t", 1, unionSize - 1, otherCaseSize => $@"
 	public static {wrapMethodResultType("TResult")} Match<TResult, {CommaSeparatedTs(unionSize)}>(
-		this {wrapUnionArgument($"Union<{CommaSeparatedTs(unionSize)}>")} union,
+		this {wrapUnionArgument(UnionOfTs(unionSize))} union,
 		{JoinRangeToString(",\n\t\t", unionSize - otherCaseSize, i => $"Func<T{i}, {wrapBranchResultType("TResult")}> t{i}")},
 		{GenerateLastArgumentCode(unionSize, otherCaseSize, wrapBranchResultType)}{additionalArguments})
 	{{
@@ -84,9 +84,9 @@ public static class Union{unionSize}Match
 
 	private static string GenerateLastArgumentCode(int unionSize, int caseSize, WrapText wrapBranchResultType) => caseSize <= 1
 		? $"Func<T{unionSize - 1}, {wrapBranchResultType("TResult")}> t{unionSize - 1}"
-		: $"Func<Union<{CommaSeparatedTs(unionSize - caseSize, caseSize)}>, {wrapBranchResultType("TResult")}> other";
+		: $"Func<{UnionOfTs(unionSize - caseSize, caseSize)}, {wrapBranchResultType("TResult")}> other";
 
 	private static string GenerateLastSwitchCaseCode(int unionSize, int caseSize) => caseSize <= 1
 		? $"_ => t{unionSize - 1}(u.Value{unionSize - 1})"
-		: $"_ => other(new Union<{CommaSeparatedTs(unionSize - caseSize, caseSize)}>(u.Value))";
+		: $"_ => other(new {UnionOfTs(unionSize - caseSize, caseSize)}(u.Value))";
 }

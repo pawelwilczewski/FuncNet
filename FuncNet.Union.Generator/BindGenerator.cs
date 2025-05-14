@@ -11,7 +11,7 @@ public static class BindGenerator
 			new MethodGroupGenerationParams(
 				"Bind",
 				unionSize,
-				bindIndex => $"Union<{CommaSeparatedTsWithSpecialReplacement(unionSize, bindIndex, $"T{bindIndex}New")}>",
+				bindIndex => UnionOfTsOneNew(unionSize, bindIndex),
 				"binding"))
 		.ToString();
 }

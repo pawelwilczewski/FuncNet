@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace {@namespace};
 
-public readonly record struct Union<{CommaSeparatedTs(unionSize)}>
+public readonly record struct {UnionOfTs(unionSize)}
 {{
 	{JoinRangeToString("\n\t", unionSize, i => $"internal T{i} Value{i} {{ get; init; }}")}
 
@@ -44,18 +44,18 @@ public readonly record struct Union<{CommaSeparatedTs(unionSize)}>
 	}}
 
 	{JoinRangeToString("\n\t", unionSize, i =>
-		$@"public static implicit operator Union<{CommaSeparatedTs(unionSize)}>(T{i} value) =>
-		new Union<{CommaSeparatedTs(unionSize)}>({i}, value{i}: value);")}
+		$@"public static implicit operator {UnionOfTs(unionSize)}(T{i} value) =>
+		new {UnionOfTs(unionSize)}({i}, value{i}: value);")}
 
 	{JoinRangeToString("\n\t", 2, unionSize - 2, otherUnionSize =>
-		$@"public static implicit operator Union<{CommaSeparatedTs(unionSize)}>(Union<{CommaSeparatedTs(otherUnionSize)}> other) =>
-		new Union<{CommaSeparatedTs(unionSize)}>(other.Index, {JoinRangeToString(", ", otherUnionSize, i => $"other.Value{i}")});")}
+		$@"public static implicit operator {UnionOfTs(unionSize)}({UnionOfTs(otherUnionSize)} other) =>
+		new {UnionOfTs(unionSize)}(other.Index, {JoinRangeToString(", ", otherUnionSize, i => $"other.Value{i}")});")}
 
 	{JoinRangeToString("\n\t", unionSize, i =>
-		$"public static Union<{CommaSeparatedTs(unionSize)}> FromT{i}(T{i} value) => value;")}
+		$"public static {UnionOfTs(unionSize)} FromT{i}(T{i} value) => value;")}
 
 	{JoinRangeToString("\n\t", unionSize, i =>
-		$"public static async Task<Union<{CommaSeparatedTs(unionSize)}>> FromT{i}(Task<T{i}> value) => await value;")}
+		$"public static async Task<{UnionOfTs(unionSize)}> FromT{i}(Task<T{i}> value) => await value;")}
 }}
 ";
 }
