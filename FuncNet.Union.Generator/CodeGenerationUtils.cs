@@ -3,9 +3,9 @@ using System.Text;
 
 namespace FuncNet.Union.Generator;
 
-public static class CodeGenerationUtils
+internal static class CodeGenerationUtils
 {
-	public static string JoinToString<T>(this IEnumerable<T> range, string separator, Func<T, string> toString) =>
+	private static string JoinToString<T>(this IEnumerable<T> range, string separator, Func<T, string> toString) =>
 		string.Join(separator, range.Select(toString));
 
 	public static string JoinRangeToString(string separator, int start, int count, Func<int, string> toString) =>
@@ -199,4 +199,14 @@ public static class CodeGenerationUtils
 		UnionOfTsOneSpecial(unionSize, newIndex, $"T{newIndex}New");
 	public static string UnionOfTsOneOld(int unionSize, int oldIndex) =>
 		UnionOfTsOneSpecial(unionSize, oldIndex, $"T{oldIndex}Old");
+
+	[Flags]
+	public enum UnionMethodAsyncConfig
+	{
+		None = 0,
+		All = ~0,
+		ReturnType = 1 << 0,
+		InputUnion = 1 << 1,
+		AppliedMethodReturnType = 1 << 2,
+	}
 }
