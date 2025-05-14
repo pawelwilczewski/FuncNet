@@ -4,7 +4,13 @@ using static CodeGenerationUtils;
 
 internal static class UnionSwitchPatternMethodGenerator
 {
-	public static string Header(string @namespace) =>
+	public static string GenerateExtensionsFile(string @namespace, MethodGroupGenerationParams p) =>
+		new SourceCodeFileBuilder(Header(@namespace))
+			.AddClass(new ClassBuilder($"public static class Union{p.UnionSize}{p.MethodNameOnly}")
+				.AddMethods(CreateMethodGenerationParams(p).SelectMany(GenerateMethods)))
+			.ToString();
+
+	private static string Header(string @namespace) =>
 $@"using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,28 +27,23 @@ namespace {@namespace};";
 		MethodAsyncConfig.ReturnType | MethodAsyncConfig.InputUnion
 	];
 
-	public static IEnumerable<MethodGenerationParams> CreateMethodGenerationParams(
-		string methodNameOnly,
-		int unionSize,
-		GenerateAppliedMethodReturnType generateAppliedMethodReturnType,
-		string appliedMethodParameterName) =>
+	private static IEnumerable<SingleMethodGenerationParams> CreateMethodGenerationParams(MethodGroupGenerationParams p) =>
 		allPossibleAsyncConfigs
-			.Select(asyncConfig => new MethodGenerationParams(
-				methodNameOnly, unionSize, generateAppliedMethodReturnType, appliedMethodParameterName, asyncConfig));
+			.Select(asyncConfig => new SingleMethodGenerationParams(p, asyncConfig));
 
-	public static IEnumerable<MethodBuilder> GenerateMethods(MethodGenerationParams p) =>
-		Enumerable.Range(0, p.UnionSize).Select(mapIndex =>
-			new MethodBuilder($"public static {$"Union<{TsNew(p.UnionSize, mapIndex)}>".WrapInAsyncTaskIf(p.IsAsync(MethodAsyncConfig.ReturnType))} {p.MethodNameOnly}{mapIndex}<T{mapIndex}New, {TsOld(p.UnionSize, mapIndex)}>")
-				.AddArgument($"this {$"Union<{TsOld(p.UnionSize, mapIndex)}>".WrapInTaskIf(p.IsAsync(MethodAsyncConfig.InputUnion))} union")
-				.AddArgument($"Func<T{mapIndex}Old, {p.AppliedMethodReturnType(mapIndex).WrapInTaskIf(p.IsAsync(MethodAsyncConfig.AppliedMethodReturnType))}> {p.AppliedMethodParameterName}")
+	private static IEnumerable<MethodBuilder> GenerateMethods(SingleMethodGenerationParams p) =>
+		Enumerable.Range(0, p.UnionSize).Select(specialIndex =>
+			new MethodBuilder($"public static {$"Union<{TsNew(p.UnionSize, specialIndex)}>".WrapInAsyncTaskIf(p.IsAsync(MethodAsyncConfig.ReturnType))} {p.MethodNameOnly}{specialIndex}<T{specialIndex}New, {TsOld(p.UnionSize, specialIndex)}>")
+				.AddArgument($"this {$"Union<{TsOld(p.UnionSize, specialIndex)}>".WrapInTaskIf(p.IsAsync(MethodAsyncConfig.InputUnion))} union")
+				.AddArgument($"Func<T{specialIndex}Old, {p.AppliedMethodReturnType(specialIndex).WrapInTaskIf(p.IsAsync(MethodAsyncConfig.AppliedMethodReturnType))}> {p.AppliedMethodParameterName}")
 				.AddArguments(p.IsAsync(MethodAsyncConfig.ReturnType) ? asyncMethodAdditionalArguments : [])
 				.AddBodyStatement($"var u = {"union".WrapInAwaitConfiguredFromParameterIf(p.IsAsync(MethodAsyncConfig.InputUnion))}")
 				.AddBodyStatement(p.IsAsync(MethodAsyncConfig.ReturnType) ? THROW_IF_CANCELED : "")
 				.AddBodyStatement($@"return {GenerateSwitchExpression(
-					"u.Index", GenerateSwitchExpressionCases(p, mapIndex)).WrapInAwaitConfiguredFromParameterIf(p.IsAsync(MethodAsyncConfig.AppliedMethodReturnType))}"));
+					"u.Index", GenerateSwitchExpressionCases(p, specialIndex)).WrapInAwaitConfiguredFromParameterIf(p.IsAsync(MethodAsyncConfig.AppliedMethodReturnType))}"));
 
 	private static IEnumerable<SwitchCaseText> GenerateSwitchExpressionCases(
-		MethodGenerationParams p, int specialIndex) =>
+		SingleMethodGenerationParams p, int specialIndex) =>
 		Enumerable.Range(0, p.UnionSize)
 			.Select(i =>
 			{
@@ -52,7 +53,7 @@ namespace {@namespace};";
 					GenerateSwitchCaseReturnValue(new SwitchCaseOneSpecial(i, variable, specialIndex), p));
 			});
 
-	private static string GenerateSwitchCaseReturnValue(SwitchCaseOneSpecial @case, MethodGenerationParams p) =>
+	private static string GenerateSwitchCaseReturnValue(SwitchCaseOneSpecial @case, SingleMethodGenerationParams p) =>
 		(@case.Index == @case.SpecialIndex
 			? $"{p.AppliedMethodParameterName}(u.Value{@case.Index})"
 			: $"u.Value{@case.Index}")
@@ -60,25 +61,33 @@ namespace {@namespace};";
 		.WrapInNewUnionFromTAccordingly(@case, p);
 
 	private static string WrapInNewUnionFromTAccordingly(
-		this string value, SwitchCaseOneSpecial @case, MethodGenerationParams p) =>
+		this string value, SwitchCaseOneSpecial @case, SingleMethodGenerationParams p) =>
 		p.AppliedMethodParameterName.Contains("bind", StringComparison.OrdinalIgnoreCase)
 			? value.WrapInNewUnionFromTIfNotSpecial(@case, p.UnionSize)
 			: value.WrapInNewUnionFromT(@case, p.UnionSize);
 
-	public sealed record class MethodGenerationParams(
+	public sealed record class MethodGroupGenerationParams(
 		string MethodNameOnly,
 		int UnionSize,
 		GenerateAppliedMethodReturnType AppliedMethodReturnType,
-		string AppliedMethodParameterName,
+		string AppliedMethodParameterName);
+
+	private sealed record class SingleMethodGenerationParams(
+		MethodGroupGenerationParams Params,
 		MethodAsyncConfig MethodAsyncConfig)
 	{
+		public string MethodNameOnly => Params.MethodNameOnly;
+		public int UnionSize => Params.UnionSize;
+		public GenerateAppliedMethodReturnType AppliedMethodReturnType => Params.AppliedMethodReturnType;
+		public string AppliedMethodParameterName => Params.AppliedMethodParameterName;
+		
 		public bool IsAsync(MethodAsyncConfig asyncConfig) => (asyncConfig & MethodAsyncConfig) != 0;
 	}
 
-	public delegate string GenerateAppliedMethodReturnType(int specialIndex);
+	public delegate string GenerateAppliedMethodReturnType(int index);
 
 	[Flags]
-	public enum MethodAsyncConfig
+	private enum MethodAsyncConfig
 	{
 		None = 0,
 		All = ~0,

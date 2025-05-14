@@ -1,13 +1,16 @@
 namespace FuncNet.Union.Generator;
 
-using static CodeGenerationUtils;
 using static UnionSwitchPatternMethodGenerator;
 
 public static class MapGenerator
 {
 	public static string GenerateMapExtensionsFile(string @namespace, int unionSize) =>
-		new SourceCodeFileBuilder(Header(@namespace))
-			.AddClass(new ClassBuilder($"public static class Union{unionSize}Map")
-				.AddMethods(CreateMethodGenerationParams("Map", unionSize, mapIndex => $"T{mapIndex}New", "mapping").SelectMany(GenerateMethods)))
+		GenerateExtensionsFile(
+				@namespace,
+				new MethodGroupGenerationParams(
+					"Map",
+					unionSize,
+					index => $"T{index}New",
+					"mapping"))
 			.ToString();
 }
