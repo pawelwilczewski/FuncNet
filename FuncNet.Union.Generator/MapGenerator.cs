@@ -7,7 +7,7 @@ public static class MapGenerator
 	public static string GenerateMapExtensionsFile(string @namespace, int unionSize) =>
 		GenerateExtensionsFile(
 				@namespace,
-				new UnionMethodGroupGenerationParams(
+				new MapOrBindMethodsGenerationParams(
 					"Map",
 					unionSize,
 					index => $"T{index}New",

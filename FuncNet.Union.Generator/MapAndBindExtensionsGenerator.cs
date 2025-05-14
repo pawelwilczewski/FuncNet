@@ -4,7 +4,15 @@ using static CodeGenerationUtils;
 
 internal static class MapAndBindExtensionsGenerator
 {
-	public static string GenerateExtensionsFile(string @namespace, UnionMethodGroupGenerationParams p) =>
+	public sealed record class MapOrBindMethodsGenerationParams(
+		string MethodNameOnly,
+		int UnionSize,
+		GenerateAppliedMethodReturnType AppliedMethodReturnType,
+		string AppliedMethodParameterName);
+
+	public delegate string GenerateAppliedMethodReturnType(int index);
+
+	public static string GenerateExtensionsFile(string @namespace, MapOrBindMethodsGenerationParams p) =>
 		new SourceCodeFileBuilder(Header(@namespace))
 			.AddClass(new ClassBuilder($"public static class Union{p.UnionSize}{p.MethodNameOnly}")
 				.AddMethods(CreateAllMethodsGenerationParams(p).Select(GenerateMethod)))
@@ -27,7 +35,7 @@ namespace {@namespace};";
 		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.InputUnion
 	];
 
-	private static IEnumerable<MapOrBindMethodGenerationParams> CreateAllMethodsGenerationParams(UnionMethodGroupGenerationParams p) =>
+	private static IEnumerable<MapOrBindMethodGenerationParams> CreateAllMethodsGenerationParams(MapOrBindMethodsGenerationParams p) =>
 		from asyncConfig in allPossibleAsyncConfigs
 		from specialIndex in Enumerable.Range(0, p.UnionSize)
 		select new MapOrBindMethodGenerationParams(p, asyncConfig, specialIndex);
@@ -66,14 +74,8 @@ namespace {@namespace};";
 			? value.WrapInNewUnionFromTIfNotSpecial(@case, p.UnionSize)
 			: value.WrapInNewUnionFromT(@case, p.UnionSize);
 
-	public sealed record class UnionMethodGroupGenerationParams(
-		string MethodNameOnly,
-		int UnionSize,
-		GenerateAppliedMethodReturnType AppliedMethodReturnType,
-		string AppliedMethodParameterName);
-
 	private sealed record class MapOrBindMethodGenerationParams(
-		UnionMethodGroupGenerationParams Params,
+		MapOrBindMethodsGenerationParams Params,
 		UnionMethodAsyncConfig MethodAsyncConfig,
 		int SpecialIndex)
 	{
@@ -84,6 +86,4 @@ namespace {@namespace};";
 
 		public bool IsAsync(UnionMethodAsyncConfig asyncConfig) => (asyncConfig & MethodAsyncConfig) != 0;
 	}
-
-	public delegate string GenerateAppliedMethodReturnType(int index);
 }
