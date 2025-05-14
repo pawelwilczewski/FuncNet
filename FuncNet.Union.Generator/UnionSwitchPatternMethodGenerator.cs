@@ -13,33 +13,22 @@ using System.Threading.Tasks;
 
 namespace {@namespace};";
 
-	public static MethodGenerationParams[] Params(
+	private static readonly MethodAsyncConfig[] allPossibleAsyncConfigs =
+	[
+		MethodAsyncConfig.None,
+		MethodAsyncConfig.All,
+		MethodAsyncConfig.ReturnType | MethodAsyncConfig.AppliedMethodReturnType,
+		MethodAsyncConfig.ReturnType | MethodAsyncConfig.InputUnion
+	];
+
+	public static IEnumerable<MethodGenerationParams> CreateMethodGenerationParams(
 		string methodNameOnly,
 		int unionSize,
 		GenerateAppliedMethodReturnType generateAppliedMethodReturnType,
 		string appliedMethodParameterName) =>
-	[
-		new(methodNameOnly,
-			unionSize,
-			MethodAsyncConfig.None,
-			generateAppliedMethodReturnType,
-			appliedMethodParameterName),
-		new(methodNameOnly,
-			unionSize,
-			MethodAsyncConfig.All,
-			generateAppliedMethodReturnType,
-			appliedMethodParameterName),
-		new(methodNameOnly,
-			unionSize,
-			MethodAsyncConfig.ReturnType | MethodAsyncConfig.AppliedMethodReturnType,
-			generateAppliedMethodReturnType,
-			appliedMethodParameterName),
-		new(methodNameOnly,
-			unionSize,
-			MethodAsyncConfig.ReturnType | MethodAsyncConfig.InputUnion,
-			generateAppliedMethodReturnType,
-			appliedMethodParameterName)
-	];
+		allPossibleAsyncConfigs
+			.Select(asyncConfig => new MethodGenerationParams(
+				methodNameOnly, unionSize, generateAppliedMethodReturnType, appliedMethodParameterName, asyncConfig));
 
 	public static IEnumerable<MethodBuilder> GenerateMethods(MethodGenerationParams p) =>
 		Enumerable.Range(0, p.UnionSize).Select(mapIndex =>
@@ -79,14 +68,14 @@ namespace {@namespace};";
 	public sealed record class MethodGenerationParams(
 		string MethodNameOnly,
 		int UnionSize,
-		MethodAsyncConfig MethodAsyncConfig,
 		GenerateAppliedMethodReturnType AppliedMethodReturnType,
-		string AppliedMethodParameterName)
+		string AppliedMethodParameterName,
+		MethodAsyncConfig MethodAsyncConfig)
 	{
 		public bool IsAsync(MethodAsyncConfig asyncConfig) => (asyncConfig & MethodAsyncConfig) != 0;
 	}
 
-	public delegate string GenerateAppliedMethodReturnType(int index);
+	public delegate string GenerateAppliedMethodReturnType(int specialIndex);
 
 	[Flags]
 	public enum MethodAsyncConfig
