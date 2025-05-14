@@ -146,9 +146,21 @@ public static class CodeGenerationUtils
 	public static string WrapInTask(string text) => $"Task<{text}>";
 	public static string WrapInTaskFromResult(string text) => $"Task.FromResult({text})";
 	public static string WrapInAsyncTask(string text) => $"async {WrapInTask(text)}";
-	public static string WrapInAwaitConfiguredFromArgument(string text) =>
+	public static string WrapInAwaitConfiguredFromParameter(string text) =>
 		$"await ({text}).ConfigureAwait(continueOnCapturedContext)";
+	
+	public static string WrapInTaskIf(this string text, bool shouldWrap) =>
+		shouldWrap ? WrapInTask(text) : text;
 
+	public static string WrapInTaskFromResultIf(this string text, bool shouldWrap) =>
+		shouldWrap ? WrapInTaskFromResult(text) : text;
+	
+	public static string WrapInAsyncTaskIf(this string text, bool shouldWrap) =>
+		shouldWrap ? WrapInAsyncTask(text) : text;
+
+	public static string WrapInAwaitConfiguredFromParameterIf(this string text, bool shouldWrap) =>
+		shouldWrap ? WrapInAwaitConfiguredFromParameter(text) : text;
+	
 	public static readonly string[] asyncMethodAdditionalArguments =
 	[
 		"CancellationToken cancellationToken = default",

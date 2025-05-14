@@ -31,9 +31,9 @@ public static class Union{unionSize}Match
 		WrapInTask,
 		WrapInTask,
 		asyncMethodAdditionalArgumentsJoined,
-		WrapInAwaitConfiguredFromArgument,
+		WrapInAwaitConfiguredFromParameter,
 		"cancellationToken.ThrowIfCancellationRequested();",
-		WrapInAwaitConfiguredFromArgument)}
+		WrapInAwaitConfiguredFromParameter)}
 
 	{GenerateMatchMethod(
 		unionSize,
@@ -43,7 +43,7 @@ public static class Union{unionSize}Match
 		asyncMethodAdditionalArgumentsJoined,
 		DontWrap,
 		"cancellationToken.ThrowIfCancellationRequested();",
-		WrapInAwaitConfiguredFromArgument)}
+		WrapInAwaitConfiguredFromParameter)}
 
 	{GenerateMatchMethod(
 		unionSize,
@@ -51,7 +51,7 @@ public static class Union{unionSize}Match
 		WrapInTask,
 		DontWrap,
 		asyncMethodAdditionalArgumentsJoined,
-		WrapInAwaitConfiguredFromArgument,
+		WrapInAwaitConfiguredFromParameter,
 		"cancellationToken.ThrowIfCancellationRequested();",
 		DontWrap)}
 }}
