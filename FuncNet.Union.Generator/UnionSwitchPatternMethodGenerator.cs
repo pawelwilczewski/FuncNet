@@ -24,8 +24,6 @@ namespace {@namespace};";
 			MethodAsyncConfig.None,
 			generateAppliedMethodReturnType,
 			appliedMethodArgumentName,
-			[],
-			"",
 			@case => new SwitchCaseText(
 				@case.Variable,
 				GenerateSwitchReturnValue(@case, appliedMethodArgumentName))),
@@ -34,8 +32,6 @@ namespace {@namespace};";
 			MethodAsyncConfig.All,
 			generateAppliedMethodReturnType,
 			appliedMethodArgumentName,
-			asyncMethodAdditionalArguments,
-			THROW_IF_CANCELED,
 			@case => new SwitchCaseText(
 				@case.Variable,
 				GenerateSwitchReturnValue(@case, appliedMethodArgumentName)
@@ -46,8 +42,6 @@ namespace {@namespace};";
 			MethodAsyncConfig.ReturnType | MethodAsyncConfig.AppliedMethodReturnType,
 			generateAppliedMethodReturnType,
 			appliedMethodArgumentName,
-			asyncMethodAdditionalArguments,
-			THROW_IF_CANCELED,
 			@case => new SwitchCaseText(
 				@case.Variable,
 				GenerateSwitchReturnValue(@case, appliedMethodArgumentName)
@@ -58,8 +52,6 @@ namespace {@namespace};";
 			MethodAsyncConfig.ReturnType | MethodAsyncConfig.InputUnion,
 			generateAppliedMethodReturnType,
 			appliedMethodArgumentName,
-			asyncMethodAdditionalArguments,
-			THROW_IF_CANCELED,
 			@case => new SwitchCaseText(
 				@case.Variable,
 				GenerateSwitchReturnValue(@case, appliedMethodArgumentName)
@@ -71,9 +63,9 @@ namespace {@namespace};";
 			new MethodBuilder($"public static {$"Union<{TsNew(p.UnionSize, mapIndex)}>".WrapInAsyncTaskIf(p.IsAsync(MethodAsyncConfig.ReturnType))} {p.MethodNameOnly}{mapIndex}<T{mapIndex}New, {TsOld(p.UnionSize, mapIndex)}>")
 				.AddArgument($"this {$"Union<{TsOld(p.UnionSize, mapIndex)}>".WrapInTaskIf(p.IsAsync(MethodAsyncConfig.InputUnion))} union")
 				.AddArgument($"Func<T{mapIndex}Old, {p.AppliedMethodReturnType(mapIndex).WrapInTaskIf(p.IsAsync(MethodAsyncConfig.AppliedMethodReturnType))}> {p.AppliedMethodArgumentName}")
-				.AddArguments(p.AdditionalArguments)
+				.AddArguments(p.IsAsync(MethodAsyncConfig.ReturnType) ? asyncMethodAdditionalArguments : [])
 				.AddBodyStatement($"var u = {"union".WrapInAwaitConfiguredFromParameterIf(p.IsAsync(MethodAsyncConfig.InputUnion))}")
-				.AddBodyStatement(p.AdditionalCodeAfterUnionAssignment)
+				.AddBodyStatement(p.IsAsync(MethodAsyncConfig.ReturnType) ? THROW_IF_CANCELED : "")
 				.AddBodyStatement($@"return {GenerateSwitchExpression(
 					"u.Index", GenerateSwitchExpressionCases(p.UnionSize, mapIndex, p.GenerateSwitchCase)).WrapInAwaitConfiguredFromParameterIf(p.IsAsync(MethodAsyncConfig.AppliedMethodReturnType))}"));
 
@@ -104,8 +96,6 @@ namespace {@namespace};";
 		MethodAsyncConfig MethodAsyncConfig,
 		GenerateAppliedMethodReturnType AppliedMethodReturnType,
 		string AppliedMethodArgumentName,
-		IEnumerable<string> AdditionalArguments,
-		string AdditionalCodeAfterUnionAssignment,
 		GenerateSwitchCaseOneSpecial GenerateSwitchCase)
 	{
 		public bool IsAsync(MethodAsyncConfig asyncConfig) => (asyncConfig & MethodAsyncConfig) != 0;
