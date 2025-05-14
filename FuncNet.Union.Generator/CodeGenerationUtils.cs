@@ -176,16 +176,6 @@ public static class CodeGenerationUtils
 	public readonly record struct SwitchCaseOneSpecial(int Index, string Variable, int SpecialIndex);
 	public readonly record struct SwitchCaseText(string Left, string Right);
 
-	public delegate SwitchCaseText GenerateSwitchCaseOneSpecial(SwitchCaseOneSpecial @case);
-
-	public static string GeneratePublicStaticMethod(
-		string returnType,
-		string name,
-		ArgumentListBuilder argumentList,
-		StatementsBlockBuilder body) => @$"
-	public static {returnType} {name}{argumentList}
-	{body}";
-
 	public static IEnumerable<string> TsWithSpecialReplacement(int count, int specialIndex, string specialReplacement) =>
 		Enumerable.Range(0, count).Select(i => i == specialIndex ? specialReplacement : $"T{i}");
 
