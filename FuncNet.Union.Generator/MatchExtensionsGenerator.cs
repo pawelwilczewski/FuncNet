@@ -10,12 +10,6 @@ internal static class MatchExtensionsGenerator
 				.AddMethods(CreateAllMethodsGenerationParams(p).Select(GenerateMethod)))
 			.ToString();
 
-	private static IEnumerable<MatchMethodGenerationParams> CreateAllMethodsGenerationParams(
-		ExtensionsFileGenerationParams p) =>
-		from asyncConfig in allPossibleAsyncMethodConfigs
-		from otherCaseSize in Enumerable.Range(1, p.UnionSize - 1)
-		select new MatchMethodGenerationParams(p.MethodNameOnly, p.UnionSize, asyncConfig, otherCaseSize);
-
 	private static string Header(string @namespace) =>
 $@"using System;
 using System.Threading;
@@ -24,6 +18,12 @@ using System.Threading.Tasks;
 #nullable enable
 
 namespace {@namespace};";
+
+	private static IEnumerable<MatchMethodGenerationParams> CreateAllMethodsGenerationParams(
+		ExtensionsFileGenerationParams p) =>
+		from asyncConfig in allPossibleAsyncMethodConfigs
+		from otherCaseSize in Enumerable.Range(1, p.UnionSize - 1)
+		select new MatchMethodGenerationParams(p.MethodNameOnly, p.UnionSize, asyncConfig, otherCaseSize);
 
 	private static MethodBuilder GenerateMethod(MatchMethodGenerationParams p) =>
 		new MethodBuilder($"public static {"TResult".WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}<TResult, {CommaSeparatedTs(p.UnionSize)}>")

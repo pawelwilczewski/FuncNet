@@ -49,9 +49,7 @@ namespace {@namespace};";
 			});
 
 	private static string GenerateSwitchCaseReturnValue(SwitchCaseOneSpecial @case, BindMethodGenerationParams p) =>
-		(@case.Index == p.SpecialIndex
-			? $"binding(u.Value{@case.Index})"
-			: $"u.Value{@case.Index}")
+		(@case.Index == p.SpecialIndex ? $"binding(u.Value{@case.Index})" : $"u.Value{@case.Index}")
 		.WrapInTaskFromResultIf(@case.Index != p.SpecialIndex && p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))
 		.WrapInNewUnionFromTIfNotSpecial(@case, p.UnionSize);
 
