@@ -2,27 +2,16 @@ namespace FuncNet.Union.Generator;
 
 using static CodeGenerationUtils;
 
-internal static class MatchGenerator
+internal static class MatchExtensionsGenerator
 {
-	public sealed record class MatchExtensionsFileGenerationParams(
-		string Namespace,
-		string MethodNameOnly,
-		int UnionSize);
-
-	private sealed record class MatchMethodGenerationParams(
-		string MethodNameOnly,
-		int UnionSize,
-		UnionMethodAsyncConfig AsyncConfig,
-		int OtherCaseSize) : MethodGenerationParams(MethodNameOnly, UnionSize, AsyncConfig);
-
-	public static string GenerateMatchExtensionsFile(MatchExtensionsFileGenerationParams p) =>
+	public static string GenerateMatchExtensionsFile(ExtensionsFileGenerationParams p) =>
 		new SourceCodeFileBuilder(Header(p.Namespace))
 			.AddClass(new ClassBuilder($"public static class Union{p.UnionSize}{p.MethodNameOnly}")
 				.AddMethods(CreateAllMethodsGenerationParams(p).Select(GenerateMethod)))
 			.ToString();
 
 	private static IEnumerable<MatchMethodGenerationParams> CreateAllMethodsGenerationParams(
-		MatchExtensionsFileGenerationParams p) =>
+		ExtensionsFileGenerationParams p) =>
 		from asyncConfig in allPossibleAsyncMethodConfigs
 		from otherCaseSize in Enumerable.Range(1, p.UnionSize - 1)
 		select new MatchMethodGenerationParams(p.MethodNameOnly, p.UnionSize, asyncConfig, otherCaseSize);
@@ -48,7 +37,7 @@ namespace {@namespace};";
 				.AddCases(Enumerable.Range(0, p.UnionSize - p.OtherCaseSize)
 					.Select(i => new SwitchCaseText(i.ToString(), $"t{i}(u.Value{i})")))
 				.AddCase(GenerateOtherSwitchCase(p))
-				.ToString()!
+				.ToString()
 				.WrapInAwaitConfiguredFromParameterIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}");
 
 	private static string GenerateLastArgumentCode(MatchMethodGenerationParams p)
@@ -62,4 +51,10 @@ namespace {@namespace};";
 	private static SwitchCaseText GenerateOtherSwitchCase(MatchMethodGenerationParams p) => p.OtherCaseSize <= 1
 		? new SwitchCaseText("_", $"t{p.UnionSize - 1}(u.Value{p.UnionSize - 1})")
 		: new SwitchCaseText("_",$"other(new {UnionOfTs(p.UnionSize - p.OtherCaseSize, p.OtherCaseSize)}(u.Value))");
+
+	private sealed record class MatchMethodGenerationParams(
+		string MethodNameOnly,
+		int UnionSize,
+		UnionMethodAsyncConfig AsyncConfig,
+		int OtherCaseSize) : MethodGenerationParams(MethodNameOnly, UnionSize, AsyncConfig);
 }

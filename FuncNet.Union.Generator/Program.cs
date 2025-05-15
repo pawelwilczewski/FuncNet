@@ -19,16 +19,18 @@ for (var i = 2; i < maxChoices + 1; ++i)
 
 	File.WriteAllText(
 		Path.Join(basePath, $"Union{i}.Match.g.cs"),
-		MatchGenerator.GenerateMatchExtensionsFile(
-			new MatchGenerator.MatchExtensionsFileGenerationParams(@namespace, "Match", i)));
+		MatchExtensionsGenerator.GenerateMatchExtensionsFile(
+			new ExtensionsFileGenerationParams(@namespace, "Match", i)));
 
 	File.WriteAllText(
 		Path.Join(basePath, $"Union{i}.Map.g.cs"),
-		MapGenerator.GenerateMapExtensionsFile(@namespace, i));
+		MapExtensionsGenerator.GenerateMapExtensionsFile(
+			new ExtensionsFileGenerationParams(@namespace, "Map", i)));
 
 	File.WriteAllText(
 		Path.Join(basePath, $"Union{i}.Bind.g.cs"),
-		BindGenerator.GenerateBindExtensionsFile(@namespace, i));
+		BindExtensionsGenerator.GenerateBindExtensionsFile(
+			new ExtensionsFileGenerationParams(@namespace, "Bind", i)));
 }
 
 Console.WriteLine($"Generated in {Stopwatch.GetElapsedTime(startTime)}");

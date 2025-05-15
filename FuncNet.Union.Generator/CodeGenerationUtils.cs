@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using System.Text;
 
 namespace FuncNet.Union.Generator;
@@ -46,9 +45,6 @@ internal static class CodeGenerationUtils
 		"CancellationToken cancellationToken = default",
 		"bool continueOnCapturedContext = true"
 	];
-
-	public static readonly string asyncMethodAdditionalArgumentsJoined =
-		$",\n\t\t{string.Join(",\n\t\t", asyncMethodAdditionalArguments)}";
 
 	public const string THROW_IF_CANCELED = "cancellationToken.ThrowIfCancellationRequested()";
 
@@ -241,6 +237,11 @@ public static class MethodBuilderExtensions
 	public static MethodBuilder AddThrowIfCanceledStatementIfNeeded(this MethodBuilder methodBuilder, MethodGenerationParams p) =>
 		methodBuilder.AddBodyStatement(p.IsAsync(UnionMethodAsyncConfig.ReturnType) ? CodeGenerationUtils.THROW_IF_CANCELED : "");
 }
+
+public sealed record class ExtensionsFileGenerationParams(
+	string Namespace,
+	string MethodNameOnly,
+	int UnionSize);
 
 public record class MethodGenerationParams(
 	string MethodNameOnly,
