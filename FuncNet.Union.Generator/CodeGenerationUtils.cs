@@ -8,8 +8,7 @@ internal static class CodeGenerationUtils
 		string.Join(separator, range.Select(toString));
 
 	public static string JoinRangeToString(string separator, int start, int count, Func<int, string> toString) =>
-		count < 0 ? string.Empty
-			: JoinToString(Enumerable.Range(start, count), separator, toString);
+		count < 0 ? string.Empty : JoinToString(Enumerable.Range(start, count), separator, toString);
 
 	public static string JoinRangeToString(string separator, int count, Func<int, string> toString) =>
 		JoinRangeToString(separator, 0, count, toString);
@@ -238,17 +237,23 @@ public static class MethodBuilderExtensions
 		methodBuilder.AddBodyStatement(p.IsAsync(UnionMethodAsyncConfig.ReturnType) ? CodeGenerationUtils.THROW_IF_CANCELED : "");
 }
 
-public sealed record class ExtensionsFileGenerationParams(
+internal sealed record class UnionExtensionMethodsFileGenerationParams(
 	string Namespace,
 	string MethodNameOnly,
-	int UnionSize);
+	int UnionSize,
+	GenerateAllMethods GenerateAllMethods)
+{
+	public string FileName => $"Union{UnionSize}.{MethodNameOnly}.g.cs";
+}
+
+internal delegate IEnumerable<MethodBuilder> GenerateAllMethods(UnionExtensionMethodsFileGenerationParams p);
 
 public record class MethodGenerationParams(
 	string MethodNameOnly,
 	int UnionSize,
 	UnionMethodAsyncConfig AsyncConfig)
 {
-	public bool IsAsync(UnionMethodAsyncConfig asyncConfig) => (asyncConfig & AsyncConfig) != 0;
+	public bool IsAsync(UnionMethodAsyncConfig typeToCheck) => (typeToCheck & AsyncConfig) != 0;
 }
 
 [Flags]

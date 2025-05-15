@@ -2,25 +2,18 @@ namespace FuncNet.Union.Generator;
 
 using static CodeGenerationUtils;
 
+internal sealed record class MapMethodGenerationParams(
+	string MethodNameOnly,
+	int UnionSize,
+	UnionMethodAsyncConfig AsyncConfig,
+	int SpecialIndex) : MethodGenerationParams(MethodNameOnly, UnionSize, AsyncConfig);
+
 internal static class MapExtensionsGenerator
 {
-	public static string GenerateMapExtensionsFile(ExtensionsFileGenerationParams p) =>
-		new SourceCodeFileBuilder(Header(p.Namespace))
-			.AddClass(new ClassBuilder($"public static class Union{p.UnionSize}{p.MethodNameOnly}")
-				.AddMethods(CreateAllMethodsGenerationParams(p).Select(GenerateMethod)))
-			.ToString();
+	public static IEnumerable<MethodBuilder> GenerateMethods(UnionExtensionMethodsFileGenerationParams p) =>
+		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
 
-	private static string Header(string @namespace) =>
-$@"using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-#nullable enable
-
-namespace {@namespace};";
-
-	private static IEnumerable<MapMethodGenerationParams> CreateAllMethodsGenerationParams(
-		ExtensionsFileGenerationParams p) =>
+	private static IEnumerable<MapMethodGenerationParams> CreateAllMethodsGenerationParams(UnionExtensionMethodsFileGenerationParams p) =>
 		from asyncConfig in allPossibleAsyncMethodConfigs
 		from specialIndex in Enumerable.Range(0, p.UnionSize)
 		select new MapMethodGenerationParams(p.MethodNameOnly, p.UnionSize, asyncConfig, specialIndex);
@@ -37,8 +30,7 @@ namespace {@namespace};";
 				.ToString()
 				.WrapInAwaitConfiguredFromParameterIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}");
 
-	private static IEnumerable<SwitchCaseText> GenerateSwitchExpressionCases(
-		MapMethodGenerationParams p) =>
+	private static IEnumerable<SwitchCaseText> GenerateSwitchExpressionCases(MapMethodGenerationParams p) =>
 		Enumerable.Range(0, p.UnionSize)
 			.Select(i =>
 			{
@@ -52,10 +44,4 @@ namespace {@namespace};";
 		(@case.Index == p.SpecialIndex ? $"mapping(u.Value{@case.Index})" : $"u.Value{@case.Index}")
 		.WrapInTaskFromResultIf(@case.Index != p.SpecialIndex && p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))
 		.WrapInNewUnionFromT(@case, p.UnionSize);
-
-	private sealed record class MapMethodGenerationParams(
-		string MethodNameOnly,
-		int UnionSize,
-		UnionMethodAsyncConfig AsyncConfig,
-		int SpecialIndex) : MethodGenerationParams(MethodNameOnly, UnionSize, AsyncConfig);
 }

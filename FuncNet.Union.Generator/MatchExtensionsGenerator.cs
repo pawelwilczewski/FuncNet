@@ -2,25 +2,18 @@ namespace FuncNet.Union.Generator;
 
 using static CodeGenerationUtils;
 
+internal sealed record class MatchMethodGenerationParams(
+	string MethodNameOnly,
+	int UnionSize,
+	UnionMethodAsyncConfig AsyncConfig,
+	int OtherCaseSize) : MethodGenerationParams(MethodNameOnly, UnionSize, AsyncConfig);
+
 internal static class MatchExtensionsGenerator
 {
-	public static string GenerateMatchExtensionsFile(ExtensionsFileGenerationParams p) =>
-		new SourceCodeFileBuilder(Header(p.Namespace))
-			.AddClass(new ClassBuilder($"public static class Union{p.UnionSize}{p.MethodNameOnly}")
-				.AddMethods(CreateAllMethodsGenerationParams(p).Select(GenerateMethod)))
-			.ToString();
+	public static IEnumerable<MethodBuilder> GenerateMethods(UnionExtensionMethodsFileGenerationParams p) =>
+		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
 
-	private static string Header(string @namespace) =>
-$@"using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-#nullable enable
-
-namespace {@namespace};";
-
-	private static IEnumerable<MatchMethodGenerationParams> CreateAllMethodsGenerationParams(
-		ExtensionsFileGenerationParams p) =>
+	private static IEnumerable<MatchMethodGenerationParams> CreateAllMethodsGenerationParams(UnionExtensionMethodsFileGenerationParams p) =>
 		from asyncConfig in allPossibleAsyncMethodConfigs
 		from otherCaseSize in Enumerable.Range(1, p.UnionSize - 1)
 		select new MatchMethodGenerationParams(p.MethodNameOnly, p.UnionSize, asyncConfig, otherCaseSize);
@@ -51,10 +44,4 @@ namespace {@namespace};";
 	private static SwitchCaseText GenerateOtherSwitchCase(MatchMethodGenerationParams p) => p.OtherCaseSize <= 1
 		? new SwitchCaseText("_", $"t{p.UnionSize - 1}(u.Value{p.UnionSize - 1})")
 		: new SwitchCaseText("_",$"other(new {UnionOfTs(p.UnionSize - p.OtherCaseSize, p.OtherCaseSize)}(u.Value))");
-
-	private sealed record class MatchMethodGenerationParams(
-		string MethodNameOnly,
-		int UnionSize,
-		UnionMethodAsyncConfig AsyncConfig,
-		int OtherCaseSize) : MethodGenerationParams(MethodNameOnly, UnionSize, AsyncConfig);
 }

@@ -17,20 +17,19 @@ for (var i = 2; i < maxChoices + 1; ++i)
 		Path.Join(basePath, $"Union{i}.g.cs"),
 		UnionGenerator.GenerateUnionFile(@namespace, i));
 
-	File.WriteAllText(
-		Path.Join(basePath, $"Union{i}.Match.g.cs"),
-		MatchExtensionsGenerator.GenerateMatchExtensionsFile(
-			new ExtensionsFileGenerationParams(@namespace, "Match", i)));
+	UnionExtensionMethodsFileGenerationParams[] generationParams =
+	[
+		new(@namespace, "Map", i, MapExtensionsGenerator.GenerateMethods),
+		new(@namespace, "Bind", i, BindExtensionsGenerator.GenerateMethods),
+		new(@namespace, "Match", i, MatchExtensionsGenerator.GenerateMethods)
+	];
 
-	File.WriteAllText(
-		Path.Join(basePath, $"Union{i}.Map.g.cs"),
-		MapExtensionsGenerator.GenerateMapExtensionsFile(
-			new ExtensionsFileGenerationParams(@namespace, "Map", i)));
-
-	File.WriteAllText(
-		Path.Join(basePath, $"Union{i}.Bind.g.cs"),
-		BindExtensionsGenerator.GenerateBindExtensionsFile(
-			new ExtensionsFileGenerationParams(@namespace, "Bind", i)));
+	foreach (var p in generationParams)
+	{
+		File.WriteAllText(
+			Path.Join(basePath, p.FileName),
+			UnionExtensionMethodsFileGenerator.GenerateExtensionsFile(p));
+	}
 }
 
 Console.WriteLine($"Generated in {Stopwatch.GetElapsedTime(startTime)}");

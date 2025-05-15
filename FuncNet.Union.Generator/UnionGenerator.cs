@@ -4,8 +4,8 @@ using static CodeGenerationUtils;
 
 public static class UnionGenerator
 {
-	public static string GenerateUnionFile(string @namespace, int unionSize) => $@"
-using System;
+	public static string GenerateUnionFile(string @namespace, int unionSize) =>
+$@"using System;
 using System.Threading.Tasks;
 
 #nullable enable
@@ -56,6 +56,5 @@ public readonly record struct {UnionOfTs(unionSize)}
 
 	{JoinRangeToString("\n\t", unionSize, i =>
 		$"public static async Task<{UnionOfTs(unionSize)}> FromT{i}(Task<T{i}> value) => await value;")}
-}}
-";
+}}";
 }

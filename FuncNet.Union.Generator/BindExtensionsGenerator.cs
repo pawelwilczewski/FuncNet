@@ -2,25 +2,18 @@ namespace FuncNet.Union.Generator;
 
 using static CodeGenerationUtils;
 
+internal sealed record class BindMethodGenerationParams(
+	string MethodNameOnly,
+	int UnionSize,
+	UnionMethodAsyncConfig AsyncConfig,
+	int SpecialIndex) : MethodGenerationParams(MethodNameOnly, UnionSize, AsyncConfig);
+
 internal static class BindExtensionsGenerator
 {
-	public static string GenerateBindExtensionsFile(ExtensionsFileGenerationParams p) =>
-		new SourceCodeFileBuilder(Header(p.Namespace))
-			.AddClass(new ClassBuilder($"public static class Union{p.UnionSize}{p.MethodNameOnly}")
-				.AddMethods(CreateAllMethodsGenerationParams(p).Select(GenerateMethod)))
-			.ToString();
+	public static IEnumerable<MethodBuilder> GenerateMethods(UnionExtensionMethodsFileGenerationParams p) =>
+		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
 
-	private static string Header(string @namespace) =>
-$@"using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-#nullable enable
-
-namespace {@namespace};";
-
-	private static IEnumerable<BindMethodGenerationParams> CreateAllMethodsGenerationParams(
-		ExtensionsFileGenerationParams p) =>
+	private static IEnumerable<BindMethodGenerationParams> CreateAllMethodsGenerationParams(UnionExtensionMethodsFileGenerationParams p) =>
 		from asyncConfig in allPossibleAsyncMethodConfigs
 		from specialIndex in Enumerable.Range(0, p.UnionSize)
 		select new BindMethodGenerationParams(p.MethodNameOnly, p.UnionSize, asyncConfig, specialIndex);
@@ -34,11 +27,10 @@ namespace {@namespace};";
 			.AddThrowIfCanceledStatementIfNeeded(p)
 			.AddBodyStatement($"return {new SwitchExpressionBuilder("u.Index")
 				.AddCases(GenerateSwitchExpressionCases(p))
-				.ToString()!
+				.ToString()
 				.WrapInAwaitConfiguredFromParameterIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}");
 
-	private static IEnumerable<SwitchCaseText> GenerateSwitchExpressionCases(
-		BindMethodGenerationParams p) =>
+	private static IEnumerable<SwitchCaseText> GenerateSwitchExpressionCases(BindMethodGenerationParams p) =>
 		Enumerable.Range(0, p.UnionSize)
 			.Select(i =>
 			{
@@ -52,10 +44,4 @@ namespace {@namespace};";
 		(@case.Index == p.SpecialIndex ? $"binding(u.Value{@case.Index})" : $"u.Value{@case.Index}")
 		.WrapInTaskFromResultIf(@case.Index != p.SpecialIndex && p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))
 		.WrapInNewUnionFromTIfNotSpecial(@case, p.UnionSize);
-
-	private sealed record class BindMethodGenerationParams(
-		string MethodNameOnly,
-		int UnionSize,
-		UnionMethodAsyncConfig AsyncConfig,
-		int SpecialIndex) : MethodGenerationParams(MethodNameOnly, UnionSize, AsyncConfig);
 }
