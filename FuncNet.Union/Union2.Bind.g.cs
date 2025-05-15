@@ -10,12 +10,11 @@ namespace FuncNet.Union;
 		Func<T0Old, Union<T0New, T1>> binding){
 		var u = union;
 			;
-			return 
-	u.Index switch
-	{
-		0 => binding(u.Value0),
-		_ => Union<T0New, T1>.FromT1(u.Value1)
-	};
+			return u.Index switch
+		{
+			0 => binding(u.Value0),
+			_ => Union<T0New, T1>.FromT1(u.Value1),
+			};
 			
 		}
 
@@ -23,12 +22,11 @@ namespace FuncNet.Union;
 		Func<T1Old, Union<T0, T1New>> binding){
 		var u = union;
 			;
-			return 
-	u.Index switch
-	{
-		0 => Union<T0, T1New>.FromT0(u.Value0),
-		_ => binding(u.Value1)
-	};
+			return u.Index switch
+		{
+			0 => Union<T0, T1New>.FromT0(u.Value0),
+			_ => binding(u.Value1),
+			};
 			
 		}
 
@@ -38,12 +36,11 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = await (union).ConfigureAwait(continueOnCapturedContext);
 			cancellationToken.ThrowIfCancellationRequested();
-			return await (
-	u.Index switch
-	{
-		0 => binding(u.Value0),
-		_ => Union<T0New, T1>.FromT1(Task.FromResult(u.Value1))
-	}).ConfigureAwait(continueOnCapturedContext);
+			return await (u.Index switch
+		{
+			0 => binding(u.Value0),
+			_ => Union<T0New, T1>.FromT1(Task.FromResult(u.Value1)),
+			}).ConfigureAwait(continueOnCapturedContext);
 			
 		}
 
@@ -53,12 +50,11 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = await (union).ConfigureAwait(continueOnCapturedContext);
 			cancellationToken.ThrowIfCancellationRequested();
-			return await (
-	u.Index switch
-	{
-		0 => Union<T0, T1New>.FromT0(Task.FromResult(u.Value0)),
-		_ => binding(u.Value1)
-	}).ConfigureAwait(continueOnCapturedContext);
+			return await (u.Index switch
+		{
+			0 => Union<T0, T1New>.FromT0(Task.FromResult(u.Value0)),
+			_ => binding(u.Value1),
+			}).ConfigureAwait(continueOnCapturedContext);
 			
 		}
 
@@ -68,12 +64,11 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = union;
 			cancellationToken.ThrowIfCancellationRequested();
-			return await (
-	u.Index switch
-	{
-		0 => binding(u.Value0),
-		_ => Union<T0New, T1>.FromT1(Task.FromResult(u.Value1))
-	}).ConfigureAwait(continueOnCapturedContext);
+			return await (u.Index switch
+		{
+			0 => binding(u.Value0),
+			_ => Union<T0New, T1>.FromT1(Task.FromResult(u.Value1)),
+			}).ConfigureAwait(continueOnCapturedContext);
 			
 		}
 
@@ -83,12 +78,11 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = union;
 			cancellationToken.ThrowIfCancellationRequested();
-			return await (
-	u.Index switch
-	{
-		0 => Union<T0, T1New>.FromT0(Task.FromResult(u.Value0)),
-		_ => binding(u.Value1)
-	}).ConfigureAwait(continueOnCapturedContext);
+			return await (u.Index switch
+		{
+			0 => Union<T0, T1New>.FromT0(Task.FromResult(u.Value0)),
+			_ => binding(u.Value1),
+			}).ConfigureAwait(continueOnCapturedContext);
 			
 		}
 
@@ -98,12 +92,11 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = await (union).ConfigureAwait(continueOnCapturedContext);
 			cancellationToken.ThrowIfCancellationRequested();
-			return 
-	u.Index switch
-	{
-		0 => binding(u.Value0),
-		_ => Union<T0New, T1>.FromT1(u.Value1)
-	};
+			return u.Index switch
+		{
+			0 => binding(u.Value0),
+			_ => Union<T0New, T1>.FromT1(u.Value1),
+			};
 			
 		}
 
@@ -113,12 +106,11 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = await (union).ConfigureAwait(continueOnCapturedContext);
 			cancellationToken.ThrowIfCancellationRequested();
-			return 
-	u.Index switch
-	{
-		0 => Union<T0, T1New>.FromT0(u.Value0),
-		_ => binding(u.Value1)
-	};
+			return u.Index switch
+		{
+			0 => Union<T0, T1New>.FromT0(u.Value0),
+			_ => binding(u.Value1),
+			};
 			
 		}}
 		

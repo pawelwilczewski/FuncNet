@@ -7,8 +7,8 @@ public static class BindGenerator
 {
 	public static string GenerateBindExtensionsFile(string @namespace, int unionSize) =>
 		GenerateExtensionsFile(
-			@namespace,
 			new MapOrBindMethodsGenerationParams(
+				@namespace,
 				"Bind",
 				unionSize,
 				bindIndex => UnionOfTsOneNew(unionSize, bindIndex),

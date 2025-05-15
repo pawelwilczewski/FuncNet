@@ -19,7 +19,8 @@ for (var i = 2; i < maxChoices + 1; ++i)
 
 	File.WriteAllText(
 		Path.Join(basePath, $"Union{i}.Match.g.cs"),
-		MatchGenerator.GenerateMatchExtensionsFile(@namespace, i));
+		MatchGenerator.GenerateMatchExtensionsFile(
+			new MatchGenerator.MatchExtensionsFileGenerationParams(@namespace, "Match", i)));
 
 	File.WriteAllText(
 		Path.Join(basePath, $"Union{i}.Map.g.cs"),

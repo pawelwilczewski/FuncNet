@@ -2,91 +2,64 @@ namespace FuncNet.Union.Generator;
 
 using static CodeGenerationUtils;
 
-public static class MatchGenerator
+internal static class MatchGenerator
 {
-	public static string GenerateMatchExtensionsFile(string @namespace, int unionSize) => $@"
-using System;
+	public sealed record class MatchExtensionsFileGenerationParams(
+		string Namespace,
+		string MethodNameOnly,
+		int UnionSize);
+
+	private sealed record class MatchMethodGenerationParams(
+		string MethodNameOnly,
+		int UnionSize,
+		UnionMethodAsyncConfig AsyncConfig,
+		int OtherCaseSize) : MethodGenerationParams(MethodNameOnly, UnionSize, AsyncConfig);
+
+	public static string GenerateMatchExtensionsFile(MatchExtensionsFileGenerationParams p) =>
+		new SourceCodeFileBuilder(Header(p.Namespace))
+			.AddClass(new ClassBuilder($"public static class Union{p.UnionSize}{p.MethodNameOnly}")
+				.AddMethods(CreateAllMethodsGenerationParams(p).Select(GenerateMethod)))
+			.ToString();
+
+	private static IEnumerable<MatchMethodGenerationParams> CreateAllMethodsGenerationParams(
+		MatchExtensionsFileGenerationParams p) =>
+		from asyncConfig in allPossibleAsyncMethodConfigs
+		from otherCaseSize in Enumerable.Range(1, p.UnionSize - 1)
+		select new MatchMethodGenerationParams(p.MethodNameOnly, p.UnionSize, asyncConfig, otherCaseSize);
+
+	private static string Header(string @namespace) =>
+$@"using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 #nullable enable
 
-namespace {@namespace};
+namespace {@namespace};";
 
-public static class Union{unionSize}Match
-{{
-	{GenerateMatchMethod(
-		unionSize,
-		DontWrap,
-		DontWrap,
-		DontWrap,
-		"",
-		DontWrap,
-		"",
-		DontWrap)}
+	private static MethodBuilder GenerateMethod(MatchMethodGenerationParams p) =>
+		new MethodBuilder($"public static {"TResult".WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}<TResult, {CommaSeparatedTs(p.UnionSize)}>")
+			.AddArgument($"this {UnionOfTs(p.UnionSize).WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} union")
+			.AddArguments(Enumerable.Range(0, p.UnionSize - p.OtherCaseSize).Select(i => $"Func<T{i}, {"TResult".WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> t{i}"))
+			.AddArgument(GenerateLastArgumentCode(p))
+			.AddAsyncArgumentsIfNeeded(p)
+			.AddBodyStatement($"var u = {"union".WrapInAwaitConfiguredFromParameterIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}")
+			.AddThrowIfCanceledStatementIfNeeded(p)
+			.AddBodyStatement($"return {new SwitchExpressionBuilder("u.Index")
+				.AddCases(Enumerable.Range(0, p.UnionSize - p.OtherCaseSize)
+					.Select(i => new SwitchCaseText(i.ToString(), $"t{i}(u.Value{i})")))
+				.AddCase(GenerateOtherSwitchCase(p))
+				.ToString()!
+				.WrapInAwaitConfiguredFromParameterIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}");
 
-	{GenerateMatchMethod(
-		unionSize,
-		WrapInAsyncTask,
-		WrapInTask,
-		WrapInTask,
-		asyncMethodAdditionalArgumentsJoined,
-		WrapInAwaitConfiguredFromParameter,
-		"cancellationToken.ThrowIfCancellationRequested();",
-		WrapInAwaitConfiguredFromParameter)}
+	private static string GenerateLastArgumentCode(MatchMethodGenerationParams p)
+	{
+		var tResultWrapped = "TResult".WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType));
+		return p.OtherCaseSize <= 1
+			? $"Func<T{p.UnionSize - 1}, {tResultWrapped}> t{p.UnionSize - 1}"
+			: $"Func<{UnionOfTs(p.UnionSize - p.OtherCaseSize, p.OtherCaseSize)}, {tResultWrapped}> other";
+	}
 
-	{GenerateMatchMethod(
-		unionSize,
-		WrapInAsyncTask,
-		DontWrap,
-		WrapInTask,
-		asyncMethodAdditionalArgumentsJoined,
-		DontWrap,
-		"cancellationToken.ThrowIfCancellationRequested();",
-		WrapInAwaitConfiguredFromParameter)}
-
-	{GenerateMatchMethod(
-		unionSize,
-		WrapInAsyncTask,
-		WrapInTask,
-		DontWrap,
-		asyncMethodAdditionalArgumentsJoined,
-		WrapInAwaitConfiguredFromParameter,
-		"cancellationToken.ThrowIfCancellationRequested();",
-		DontWrap)}
-}}
-";
-
-	private static string GenerateMatchMethod(
-		int unionSize,
-		WrapText wrapMethodResultType,
-		WrapText wrapUnionArgument,
-		WrapText wrapBranchResultType,
-		string additionalArguments,
-		WrapText wrapUnionValue,
-		string additionalCodeAfterUnionAssignment,
-		WrapText wrapReturnValue) =>
-		JoinRangeToString("\n\n\t", 1, unionSize - 1, otherCaseSize => $@"
-	public static {wrapMethodResultType("TResult")} Match<TResult, {CommaSeparatedTs(unionSize)}>(
-		this {wrapUnionArgument(UnionOfTs(unionSize))} union,
-		{JoinRangeToString(",\n\t\t", unionSize - otherCaseSize, i => $"Func<T{i}, {wrapBranchResultType("TResult")}> t{i}")},
-		{GenerateLastArgumentCode(unionSize, otherCaseSize, wrapBranchResultType)}{additionalArguments})
-	{{
-		var u = {wrapUnionValue("union")};
-		{additionalCodeAfterUnionAssignment}
-
-		return {wrapReturnValue($@"u.Index switch
-		{{
-			{JoinRangeToString(",\n\t\t\t", unionSize - otherCaseSize, i => $"{i} => t{i}(u.Value{i})")},
-			{GenerateSwitchOtherCaseCode(unionSize, otherCaseSize)}
-		}}")};
-	}}");
-
-	private static string GenerateLastArgumentCode(int unionSize, int otherCaseSize, WrapText wrapBranchResultType) => otherCaseSize <= 1
-		? $"Func<T{unionSize - 1}, {wrapBranchResultType("TResult")}> t{unionSize - 1}"
-		: $"Func<{UnionOfTs(unionSize - otherCaseSize, otherCaseSize)}, {wrapBranchResultType("TResult")}> other";
-
-	private static string GenerateSwitchOtherCaseCode(int unionSize, int otherCaseSize) => otherCaseSize <= 1
-		? $"_ => t{unionSize - 1}(u.Value{unionSize - 1})"
-		: $"_ => other(new {UnionOfTs(unionSize - otherCaseSize, otherCaseSize)}(u.Value))";
+	private static SwitchCaseText GenerateOtherSwitchCase(MatchMethodGenerationParams p) => p.OtherCaseSize <= 1
+		? new SwitchCaseText("_", $"t{p.UnionSize - 1}(u.Value{p.UnionSize - 1})")
+		: new SwitchCaseText("_",$"other(new {UnionOfTs(p.UnionSize - p.OtherCaseSize, p.OtherCaseSize)}(u.Value))");
 }

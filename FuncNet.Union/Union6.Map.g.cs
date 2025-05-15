@@ -10,16 +10,15 @@ namespace FuncNet.Union;
 		Func<T0Old, T0New> mapping){
 		var u = union;
 			;
-			return 
-	u.Index switch
-	{
-		0 => Union<T0New, T1, T2, T3, T4, T5>.FromT0(mapping(u.Value0)),
-		1 => Union<T0New, T1, T2, T3, T4, T5>.FromT1(u.Value1),
-		2 => Union<T0New, T1, T2, T3, T4, T5>.FromT2(u.Value2),
-		3 => Union<T0New, T1, T2, T3, T4, T5>.FromT3(u.Value3),
-		4 => Union<T0New, T1, T2, T3, T4, T5>.FromT4(u.Value4),
-		_ => Union<T0New, T1, T2, T3, T4, T5>.FromT5(u.Value5)
-	};
+			return u.Index switch
+		{
+			0 => Union<T0New, T1, T2, T3, T4, T5>.FromT0(mapping(u.Value0)),
+			1 => Union<T0New, T1, T2, T3, T4, T5>.FromT1(u.Value1),
+			2 => Union<T0New, T1, T2, T3, T4, T5>.FromT2(u.Value2),
+			3 => Union<T0New, T1, T2, T3, T4, T5>.FromT3(u.Value3),
+			4 => Union<T0New, T1, T2, T3, T4, T5>.FromT4(u.Value4),
+			_ => Union<T0New, T1, T2, T3, T4, T5>.FromT5(u.Value5),
+			};
 			
 		}
 
@@ -27,16 +26,15 @@ namespace FuncNet.Union;
 		Func<T1Old, T1New> mapping){
 		var u = union;
 			;
-			return 
-	u.Index switch
-	{
-		0 => Union<T0, T1New, T2, T3, T4, T5>.FromT0(u.Value0),
-		1 => Union<T0, T1New, T2, T3, T4, T5>.FromT1(mapping(u.Value1)),
-		2 => Union<T0, T1New, T2, T3, T4, T5>.FromT2(u.Value2),
-		3 => Union<T0, T1New, T2, T3, T4, T5>.FromT3(u.Value3),
-		4 => Union<T0, T1New, T2, T3, T4, T5>.FromT4(u.Value4),
-		_ => Union<T0, T1New, T2, T3, T4, T5>.FromT5(u.Value5)
-	};
+			return u.Index switch
+		{
+			0 => Union<T0, T1New, T2, T3, T4, T5>.FromT0(u.Value0),
+			1 => Union<T0, T1New, T2, T3, T4, T5>.FromT1(mapping(u.Value1)),
+			2 => Union<T0, T1New, T2, T3, T4, T5>.FromT2(u.Value2),
+			3 => Union<T0, T1New, T2, T3, T4, T5>.FromT3(u.Value3),
+			4 => Union<T0, T1New, T2, T3, T4, T5>.FromT4(u.Value4),
+			_ => Union<T0, T1New, T2, T3, T4, T5>.FromT5(u.Value5),
+			};
 			
 		}
 
@@ -44,16 +42,15 @@ namespace FuncNet.Union;
 		Func<T2Old, T2New> mapping){
 		var u = union;
 			;
-			return 
-	u.Index switch
-	{
-		0 => Union<T0, T1, T2New, T3, T4, T5>.FromT0(u.Value0),
-		1 => Union<T0, T1, T2New, T3, T4, T5>.FromT1(u.Value1),
-		2 => Union<T0, T1, T2New, T3, T4, T5>.FromT2(mapping(u.Value2)),
-		3 => Union<T0, T1, T2New, T3, T4, T5>.FromT3(u.Value3),
-		4 => Union<T0, T1, T2New, T3, T4, T5>.FromT4(u.Value4),
-		_ => Union<T0, T1, T2New, T3, T4, T5>.FromT5(u.Value5)
-	};
+			return u.Index switch
+		{
+			0 => Union<T0, T1, T2New, T3, T4, T5>.FromT0(u.Value0),
+			1 => Union<T0, T1, T2New, T3, T4, T5>.FromT1(u.Value1),
+			2 => Union<T0, T1, T2New, T3, T4, T5>.FromT2(mapping(u.Value2)),
+			3 => Union<T0, T1, T2New, T3, T4, T5>.FromT3(u.Value3),
+			4 => Union<T0, T1, T2New, T3, T4, T5>.FromT4(u.Value4),
+			_ => Union<T0, T1, T2New, T3, T4, T5>.FromT5(u.Value5),
+			};
 			
 		}
 
@@ -61,16 +58,15 @@ namespace FuncNet.Union;
 		Func<T3Old, T3New> mapping){
 		var u = union;
 			;
-			return 
-	u.Index switch
-	{
-		0 => Union<T0, T1, T2, T3New, T4, T5>.FromT0(u.Value0),
-		1 => Union<T0, T1, T2, T3New, T4, T5>.FromT1(u.Value1),
-		2 => Union<T0, T1, T2, T3New, T4, T5>.FromT2(u.Value2),
-		3 => Union<T0, T1, T2, T3New, T4, T5>.FromT3(mapping(u.Value3)),
-		4 => Union<T0, T1, T2, T3New, T4, T5>.FromT4(u.Value4),
-		_ => Union<T0, T1, T2, T3New, T4, T5>.FromT5(u.Value5)
-	};
+			return u.Index switch
+		{
+			0 => Union<T0, T1, T2, T3New, T4, T5>.FromT0(u.Value0),
+			1 => Union<T0, T1, T2, T3New, T4, T5>.FromT1(u.Value1),
+			2 => Union<T0, T1, T2, T3New, T4, T5>.FromT2(u.Value2),
+			3 => Union<T0, T1, T2, T3New, T4, T5>.FromT3(mapping(u.Value3)),
+			4 => Union<T0, T1, T2, T3New, T4, T5>.FromT4(u.Value4),
+			_ => Union<T0, T1, T2, T3New, T4, T5>.FromT5(u.Value5),
+			};
 			
 		}
 
@@ -78,16 +74,15 @@ namespace FuncNet.Union;
 		Func<T4Old, T4New> mapping){
 		var u = union;
 			;
-			return 
-	u.Index switch
-	{
-		0 => Union<T0, T1, T2, T3, T4New, T5>.FromT0(u.Value0),
-		1 => Union<T0, T1, T2, T3, T4New, T5>.FromT1(u.Value1),
-		2 => Union<T0, T1, T2, T3, T4New, T5>.FromT2(u.Value2),
-		3 => Union<T0, T1, T2, T3, T4New, T5>.FromT3(u.Value3),
-		4 => Union<T0, T1, T2, T3, T4New, T5>.FromT4(mapping(u.Value4)),
-		_ => Union<T0, T1, T2, T3, T4New, T5>.FromT5(u.Value5)
-	};
+			return u.Index switch
+		{
+			0 => Union<T0, T1, T2, T3, T4New, T5>.FromT0(u.Value0),
+			1 => Union<T0, T1, T2, T3, T4New, T5>.FromT1(u.Value1),
+			2 => Union<T0, T1, T2, T3, T4New, T5>.FromT2(u.Value2),
+			3 => Union<T0, T1, T2, T3, T4New, T5>.FromT3(u.Value3),
+			4 => Union<T0, T1, T2, T3, T4New, T5>.FromT4(mapping(u.Value4)),
+			_ => Union<T0, T1, T2, T3, T4New, T5>.FromT5(u.Value5),
+			};
 			
 		}
 
@@ -95,16 +90,15 @@ namespace FuncNet.Union;
 		Func<T5Old, T5New> mapping){
 		var u = union;
 			;
-			return 
-	u.Index switch
-	{
-		0 => Union<T0, T1, T2, T3, T4, T5New>.FromT0(u.Value0),
-		1 => Union<T0, T1, T2, T3, T4, T5New>.FromT1(u.Value1),
-		2 => Union<T0, T1, T2, T3, T4, T5New>.FromT2(u.Value2),
-		3 => Union<T0, T1, T2, T3, T4, T5New>.FromT3(u.Value3),
-		4 => Union<T0, T1, T2, T3, T4, T5New>.FromT4(u.Value4),
-		_ => Union<T0, T1, T2, T3, T4, T5New>.FromT5(mapping(u.Value5))
-	};
+			return u.Index switch
+		{
+			0 => Union<T0, T1, T2, T3, T4, T5New>.FromT0(u.Value0),
+			1 => Union<T0, T1, T2, T3, T4, T5New>.FromT1(u.Value1),
+			2 => Union<T0, T1, T2, T3, T4, T5New>.FromT2(u.Value2),
+			3 => Union<T0, T1, T2, T3, T4, T5New>.FromT3(u.Value3),
+			4 => Union<T0, T1, T2, T3, T4, T5New>.FromT4(u.Value4),
+			_ => Union<T0, T1, T2, T3, T4, T5New>.FromT5(mapping(u.Value5)),
+			};
 			
 		}
 
@@ -114,16 +108,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = await (union).ConfigureAwait(continueOnCapturedContext);
 			cancellationToken.ThrowIfCancellationRequested();
-			return await (
-	u.Index switch
-	{
-		0 => Union<T0New, T1, T2, T3, T4, T5>.FromT0(mapping(u.Value0)),
-		1 => Union<T0New, T1, T2, T3, T4, T5>.FromT1(Task.FromResult(u.Value1)),
-		2 => Union<T0New, T1, T2, T3, T4, T5>.FromT2(Task.FromResult(u.Value2)),
-		3 => Union<T0New, T1, T2, T3, T4, T5>.FromT3(Task.FromResult(u.Value3)),
-		4 => Union<T0New, T1, T2, T3, T4, T5>.FromT4(Task.FromResult(u.Value4)),
-		_ => Union<T0New, T1, T2, T3, T4, T5>.FromT5(Task.FromResult(u.Value5))
-	}).ConfigureAwait(continueOnCapturedContext);
+			return await (u.Index switch
+		{
+			0 => Union<T0New, T1, T2, T3, T4, T5>.FromT0(mapping(u.Value0)),
+			1 => Union<T0New, T1, T2, T3, T4, T5>.FromT1(Task.FromResult(u.Value1)),
+			2 => Union<T0New, T1, T2, T3, T4, T5>.FromT2(Task.FromResult(u.Value2)),
+			3 => Union<T0New, T1, T2, T3, T4, T5>.FromT3(Task.FromResult(u.Value3)),
+			4 => Union<T0New, T1, T2, T3, T4, T5>.FromT4(Task.FromResult(u.Value4)),
+			_ => Union<T0New, T1, T2, T3, T4, T5>.FromT5(Task.FromResult(u.Value5)),
+			}).ConfigureAwait(continueOnCapturedContext);
 			
 		}
 
@@ -133,16 +126,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = await (union).ConfigureAwait(continueOnCapturedContext);
 			cancellationToken.ThrowIfCancellationRequested();
-			return await (
-	u.Index switch
-	{
-		0 => Union<T0, T1New, T2, T3, T4, T5>.FromT0(Task.FromResult(u.Value0)),
-		1 => Union<T0, T1New, T2, T3, T4, T5>.FromT1(mapping(u.Value1)),
-		2 => Union<T0, T1New, T2, T3, T4, T5>.FromT2(Task.FromResult(u.Value2)),
-		3 => Union<T0, T1New, T2, T3, T4, T5>.FromT3(Task.FromResult(u.Value3)),
-		4 => Union<T0, T1New, T2, T3, T4, T5>.FromT4(Task.FromResult(u.Value4)),
-		_ => Union<T0, T1New, T2, T3, T4, T5>.FromT5(Task.FromResult(u.Value5))
-	}).ConfigureAwait(continueOnCapturedContext);
+			return await (u.Index switch
+		{
+			0 => Union<T0, T1New, T2, T3, T4, T5>.FromT0(Task.FromResult(u.Value0)),
+			1 => Union<T0, T1New, T2, T3, T4, T5>.FromT1(mapping(u.Value1)),
+			2 => Union<T0, T1New, T2, T3, T4, T5>.FromT2(Task.FromResult(u.Value2)),
+			3 => Union<T0, T1New, T2, T3, T4, T5>.FromT3(Task.FromResult(u.Value3)),
+			4 => Union<T0, T1New, T2, T3, T4, T5>.FromT4(Task.FromResult(u.Value4)),
+			_ => Union<T0, T1New, T2, T3, T4, T5>.FromT5(Task.FromResult(u.Value5)),
+			}).ConfigureAwait(continueOnCapturedContext);
 			
 		}
 
@@ -152,16 +144,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = await (union).ConfigureAwait(continueOnCapturedContext);
 			cancellationToken.ThrowIfCancellationRequested();
-			return await (
-	u.Index switch
-	{
-		0 => Union<T0, T1, T2New, T3, T4, T5>.FromT0(Task.FromResult(u.Value0)),
-		1 => Union<T0, T1, T2New, T3, T4, T5>.FromT1(Task.FromResult(u.Value1)),
-		2 => Union<T0, T1, T2New, T3, T4, T5>.FromT2(mapping(u.Value2)),
-		3 => Union<T0, T1, T2New, T3, T4, T5>.FromT3(Task.FromResult(u.Value3)),
-		4 => Union<T0, T1, T2New, T3, T4, T5>.FromT4(Task.FromResult(u.Value4)),
-		_ => Union<T0, T1, T2New, T3, T4, T5>.FromT5(Task.FromResult(u.Value5))
-	}).ConfigureAwait(continueOnCapturedContext);
+			return await (u.Index switch
+		{
+			0 => Union<T0, T1, T2New, T3, T4, T5>.FromT0(Task.FromResult(u.Value0)),
+			1 => Union<T0, T1, T2New, T3, T4, T5>.FromT1(Task.FromResult(u.Value1)),
+			2 => Union<T0, T1, T2New, T3, T4, T5>.FromT2(mapping(u.Value2)),
+			3 => Union<T0, T1, T2New, T3, T4, T5>.FromT3(Task.FromResult(u.Value3)),
+			4 => Union<T0, T1, T2New, T3, T4, T5>.FromT4(Task.FromResult(u.Value4)),
+			_ => Union<T0, T1, T2New, T3, T4, T5>.FromT5(Task.FromResult(u.Value5)),
+			}).ConfigureAwait(continueOnCapturedContext);
 			
 		}
 
@@ -171,16 +162,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = await (union).ConfigureAwait(continueOnCapturedContext);
 			cancellationToken.ThrowIfCancellationRequested();
-			return await (
-	u.Index switch
-	{
-		0 => Union<T0, T1, T2, T3New, T4, T5>.FromT0(Task.FromResult(u.Value0)),
-		1 => Union<T0, T1, T2, T3New, T4, T5>.FromT1(Task.FromResult(u.Value1)),
-		2 => Union<T0, T1, T2, T3New, T4, T5>.FromT2(Task.FromResult(u.Value2)),
-		3 => Union<T0, T1, T2, T3New, T4, T5>.FromT3(mapping(u.Value3)),
-		4 => Union<T0, T1, T2, T3New, T4, T5>.FromT4(Task.FromResult(u.Value4)),
-		_ => Union<T0, T1, T2, T3New, T4, T5>.FromT5(Task.FromResult(u.Value5))
-	}).ConfigureAwait(continueOnCapturedContext);
+			return await (u.Index switch
+		{
+			0 => Union<T0, T1, T2, T3New, T4, T5>.FromT0(Task.FromResult(u.Value0)),
+			1 => Union<T0, T1, T2, T3New, T4, T5>.FromT1(Task.FromResult(u.Value1)),
+			2 => Union<T0, T1, T2, T3New, T4, T5>.FromT2(Task.FromResult(u.Value2)),
+			3 => Union<T0, T1, T2, T3New, T4, T5>.FromT3(mapping(u.Value3)),
+			4 => Union<T0, T1, T2, T3New, T4, T5>.FromT4(Task.FromResult(u.Value4)),
+			_ => Union<T0, T1, T2, T3New, T4, T5>.FromT5(Task.FromResult(u.Value5)),
+			}).ConfigureAwait(continueOnCapturedContext);
 			
 		}
 
@@ -190,16 +180,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = await (union).ConfigureAwait(continueOnCapturedContext);
 			cancellationToken.ThrowIfCancellationRequested();
-			return await (
-	u.Index switch
-	{
-		0 => Union<T0, T1, T2, T3, T4New, T5>.FromT0(Task.FromResult(u.Value0)),
-		1 => Union<T0, T1, T2, T3, T4New, T5>.FromT1(Task.FromResult(u.Value1)),
-		2 => Union<T0, T1, T2, T3, T4New, T5>.FromT2(Task.FromResult(u.Value2)),
-		3 => Union<T0, T1, T2, T3, T4New, T5>.FromT3(Task.FromResult(u.Value3)),
-		4 => Union<T0, T1, T2, T3, T4New, T5>.FromT4(mapping(u.Value4)),
-		_ => Union<T0, T1, T2, T3, T4New, T5>.FromT5(Task.FromResult(u.Value5))
-	}).ConfigureAwait(continueOnCapturedContext);
+			return await (u.Index switch
+		{
+			0 => Union<T0, T1, T2, T3, T4New, T5>.FromT0(Task.FromResult(u.Value0)),
+			1 => Union<T0, T1, T2, T3, T4New, T5>.FromT1(Task.FromResult(u.Value1)),
+			2 => Union<T0, T1, T2, T3, T4New, T5>.FromT2(Task.FromResult(u.Value2)),
+			3 => Union<T0, T1, T2, T3, T4New, T5>.FromT3(Task.FromResult(u.Value3)),
+			4 => Union<T0, T1, T2, T3, T4New, T5>.FromT4(mapping(u.Value4)),
+			_ => Union<T0, T1, T2, T3, T4New, T5>.FromT5(Task.FromResult(u.Value5)),
+			}).ConfigureAwait(continueOnCapturedContext);
 			
 		}
 
@@ -209,16 +198,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = await (union).ConfigureAwait(continueOnCapturedContext);
 			cancellationToken.ThrowIfCancellationRequested();
-			return await (
-	u.Index switch
-	{
-		0 => Union<T0, T1, T2, T3, T4, T5New>.FromT0(Task.FromResult(u.Value0)),
-		1 => Union<T0, T1, T2, T3, T4, T5New>.FromT1(Task.FromResult(u.Value1)),
-		2 => Union<T0, T1, T2, T3, T4, T5New>.FromT2(Task.FromResult(u.Value2)),
-		3 => Union<T0, T1, T2, T3, T4, T5New>.FromT3(Task.FromResult(u.Value3)),
-		4 => Union<T0, T1, T2, T3, T4, T5New>.FromT4(Task.FromResult(u.Value4)),
-		_ => Union<T0, T1, T2, T3, T4, T5New>.FromT5(mapping(u.Value5))
-	}).ConfigureAwait(continueOnCapturedContext);
+			return await (u.Index switch
+		{
+			0 => Union<T0, T1, T2, T3, T4, T5New>.FromT0(Task.FromResult(u.Value0)),
+			1 => Union<T0, T1, T2, T3, T4, T5New>.FromT1(Task.FromResult(u.Value1)),
+			2 => Union<T0, T1, T2, T3, T4, T5New>.FromT2(Task.FromResult(u.Value2)),
+			3 => Union<T0, T1, T2, T3, T4, T5New>.FromT3(Task.FromResult(u.Value3)),
+			4 => Union<T0, T1, T2, T3, T4, T5New>.FromT4(Task.FromResult(u.Value4)),
+			_ => Union<T0, T1, T2, T3, T4, T5New>.FromT5(mapping(u.Value5)),
+			}).ConfigureAwait(continueOnCapturedContext);
 			
 		}
 
@@ -228,16 +216,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = union;
 			cancellationToken.ThrowIfCancellationRequested();
-			return await (
-	u.Index switch
-	{
-		0 => Union<T0New, T1, T2, T3, T4, T5>.FromT0(mapping(u.Value0)),
-		1 => Union<T0New, T1, T2, T3, T4, T5>.FromT1(Task.FromResult(u.Value1)),
-		2 => Union<T0New, T1, T2, T3, T4, T5>.FromT2(Task.FromResult(u.Value2)),
-		3 => Union<T0New, T1, T2, T3, T4, T5>.FromT3(Task.FromResult(u.Value3)),
-		4 => Union<T0New, T1, T2, T3, T4, T5>.FromT4(Task.FromResult(u.Value4)),
-		_ => Union<T0New, T1, T2, T3, T4, T5>.FromT5(Task.FromResult(u.Value5))
-	}).ConfigureAwait(continueOnCapturedContext);
+			return await (u.Index switch
+		{
+			0 => Union<T0New, T1, T2, T3, T4, T5>.FromT0(mapping(u.Value0)),
+			1 => Union<T0New, T1, T2, T3, T4, T5>.FromT1(Task.FromResult(u.Value1)),
+			2 => Union<T0New, T1, T2, T3, T4, T5>.FromT2(Task.FromResult(u.Value2)),
+			3 => Union<T0New, T1, T2, T3, T4, T5>.FromT3(Task.FromResult(u.Value3)),
+			4 => Union<T0New, T1, T2, T3, T4, T5>.FromT4(Task.FromResult(u.Value4)),
+			_ => Union<T0New, T1, T2, T3, T4, T5>.FromT5(Task.FromResult(u.Value5)),
+			}).ConfigureAwait(continueOnCapturedContext);
 			
 		}
 
@@ -247,16 +234,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = union;
 			cancellationToken.ThrowIfCancellationRequested();
-			return await (
-	u.Index switch
-	{
-		0 => Union<T0, T1New, T2, T3, T4, T5>.FromT0(Task.FromResult(u.Value0)),
-		1 => Union<T0, T1New, T2, T3, T4, T5>.FromT1(mapping(u.Value1)),
-		2 => Union<T0, T1New, T2, T3, T4, T5>.FromT2(Task.FromResult(u.Value2)),
-		3 => Union<T0, T1New, T2, T3, T4, T5>.FromT3(Task.FromResult(u.Value3)),
-		4 => Union<T0, T1New, T2, T3, T4, T5>.FromT4(Task.FromResult(u.Value4)),
-		_ => Union<T0, T1New, T2, T3, T4, T5>.FromT5(Task.FromResult(u.Value5))
-	}).ConfigureAwait(continueOnCapturedContext);
+			return await (u.Index switch
+		{
+			0 => Union<T0, T1New, T2, T3, T4, T5>.FromT0(Task.FromResult(u.Value0)),
+			1 => Union<T0, T1New, T2, T3, T4, T5>.FromT1(mapping(u.Value1)),
+			2 => Union<T0, T1New, T2, T3, T4, T5>.FromT2(Task.FromResult(u.Value2)),
+			3 => Union<T0, T1New, T2, T3, T4, T5>.FromT3(Task.FromResult(u.Value3)),
+			4 => Union<T0, T1New, T2, T3, T4, T5>.FromT4(Task.FromResult(u.Value4)),
+			_ => Union<T0, T1New, T2, T3, T4, T5>.FromT5(Task.FromResult(u.Value5)),
+			}).ConfigureAwait(continueOnCapturedContext);
 			
 		}
 
@@ -266,16 +252,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = union;
 			cancellationToken.ThrowIfCancellationRequested();
-			return await (
-	u.Index switch
-	{
-		0 => Union<T0, T1, T2New, T3, T4, T5>.FromT0(Task.FromResult(u.Value0)),
-		1 => Union<T0, T1, T2New, T3, T4, T5>.FromT1(Task.FromResult(u.Value1)),
-		2 => Union<T0, T1, T2New, T3, T4, T5>.FromT2(mapping(u.Value2)),
-		3 => Union<T0, T1, T2New, T3, T4, T5>.FromT3(Task.FromResult(u.Value3)),
-		4 => Union<T0, T1, T2New, T3, T4, T5>.FromT4(Task.FromResult(u.Value4)),
-		_ => Union<T0, T1, T2New, T3, T4, T5>.FromT5(Task.FromResult(u.Value5))
-	}).ConfigureAwait(continueOnCapturedContext);
+			return await (u.Index switch
+		{
+			0 => Union<T0, T1, T2New, T3, T4, T5>.FromT0(Task.FromResult(u.Value0)),
+			1 => Union<T0, T1, T2New, T3, T4, T5>.FromT1(Task.FromResult(u.Value1)),
+			2 => Union<T0, T1, T2New, T3, T4, T5>.FromT2(mapping(u.Value2)),
+			3 => Union<T0, T1, T2New, T3, T4, T5>.FromT3(Task.FromResult(u.Value3)),
+			4 => Union<T0, T1, T2New, T3, T4, T5>.FromT4(Task.FromResult(u.Value4)),
+			_ => Union<T0, T1, T2New, T3, T4, T5>.FromT5(Task.FromResult(u.Value5)),
+			}).ConfigureAwait(continueOnCapturedContext);
 			
 		}
 
@@ -285,16 +270,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = union;
 			cancellationToken.ThrowIfCancellationRequested();
-			return await (
-	u.Index switch
-	{
-		0 => Union<T0, T1, T2, T3New, T4, T5>.FromT0(Task.FromResult(u.Value0)),
-		1 => Union<T0, T1, T2, T3New, T4, T5>.FromT1(Task.FromResult(u.Value1)),
-		2 => Union<T0, T1, T2, T3New, T4, T5>.FromT2(Task.FromResult(u.Value2)),
-		3 => Union<T0, T1, T2, T3New, T4, T5>.FromT3(mapping(u.Value3)),
-		4 => Union<T0, T1, T2, T3New, T4, T5>.FromT4(Task.FromResult(u.Value4)),
-		_ => Union<T0, T1, T2, T3New, T4, T5>.FromT5(Task.FromResult(u.Value5))
-	}).ConfigureAwait(continueOnCapturedContext);
+			return await (u.Index switch
+		{
+			0 => Union<T0, T1, T2, T3New, T4, T5>.FromT0(Task.FromResult(u.Value0)),
+			1 => Union<T0, T1, T2, T3New, T4, T5>.FromT1(Task.FromResult(u.Value1)),
+			2 => Union<T0, T1, T2, T3New, T4, T5>.FromT2(Task.FromResult(u.Value2)),
+			3 => Union<T0, T1, T2, T3New, T4, T5>.FromT3(mapping(u.Value3)),
+			4 => Union<T0, T1, T2, T3New, T4, T5>.FromT4(Task.FromResult(u.Value4)),
+			_ => Union<T0, T1, T2, T3New, T4, T5>.FromT5(Task.FromResult(u.Value5)),
+			}).ConfigureAwait(continueOnCapturedContext);
 			
 		}
 
@@ -304,16 +288,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = union;
 			cancellationToken.ThrowIfCancellationRequested();
-			return await (
-	u.Index switch
-	{
-		0 => Union<T0, T1, T2, T3, T4New, T5>.FromT0(Task.FromResult(u.Value0)),
-		1 => Union<T0, T1, T2, T3, T4New, T5>.FromT1(Task.FromResult(u.Value1)),
-		2 => Union<T0, T1, T2, T3, T4New, T5>.FromT2(Task.FromResult(u.Value2)),
-		3 => Union<T0, T1, T2, T3, T4New, T5>.FromT3(Task.FromResult(u.Value3)),
-		4 => Union<T0, T1, T2, T3, T4New, T5>.FromT4(mapping(u.Value4)),
-		_ => Union<T0, T1, T2, T3, T4New, T5>.FromT5(Task.FromResult(u.Value5))
-	}).ConfigureAwait(continueOnCapturedContext);
+			return await (u.Index switch
+		{
+			0 => Union<T0, T1, T2, T3, T4New, T5>.FromT0(Task.FromResult(u.Value0)),
+			1 => Union<T0, T1, T2, T3, T4New, T5>.FromT1(Task.FromResult(u.Value1)),
+			2 => Union<T0, T1, T2, T3, T4New, T5>.FromT2(Task.FromResult(u.Value2)),
+			3 => Union<T0, T1, T2, T3, T4New, T5>.FromT3(Task.FromResult(u.Value3)),
+			4 => Union<T0, T1, T2, T3, T4New, T5>.FromT4(mapping(u.Value4)),
+			_ => Union<T0, T1, T2, T3, T4New, T5>.FromT5(Task.FromResult(u.Value5)),
+			}).ConfigureAwait(continueOnCapturedContext);
 			
 		}
 
@@ -323,16 +306,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = union;
 			cancellationToken.ThrowIfCancellationRequested();
-			return await (
-	u.Index switch
-	{
-		0 => Union<T0, T1, T2, T3, T4, T5New>.FromT0(Task.FromResult(u.Value0)),
-		1 => Union<T0, T1, T2, T3, T4, T5New>.FromT1(Task.FromResult(u.Value1)),
-		2 => Union<T0, T1, T2, T3, T4, T5New>.FromT2(Task.FromResult(u.Value2)),
-		3 => Union<T0, T1, T2, T3, T4, T5New>.FromT3(Task.FromResult(u.Value3)),
-		4 => Union<T0, T1, T2, T3, T4, T5New>.FromT4(Task.FromResult(u.Value4)),
-		_ => Union<T0, T1, T2, T3, T4, T5New>.FromT5(mapping(u.Value5))
-	}).ConfigureAwait(continueOnCapturedContext);
+			return await (u.Index switch
+		{
+			0 => Union<T0, T1, T2, T3, T4, T5New>.FromT0(Task.FromResult(u.Value0)),
+			1 => Union<T0, T1, T2, T3, T4, T5New>.FromT1(Task.FromResult(u.Value1)),
+			2 => Union<T0, T1, T2, T3, T4, T5New>.FromT2(Task.FromResult(u.Value2)),
+			3 => Union<T0, T1, T2, T3, T4, T5New>.FromT3(Task.FromResult(u.Value3)),
+			4 => Union<T0, T1, T2, T3, T4, T5New>.FromT4(Task.FromResult(u.Value4)),
+			_ => Union<T0, T1, T2, T3, T4, T5New>.FromT5(mapping(u.Value5)),
+			}).ConfigureAwait(continueOnCapturedContext);
 			
 		}
 
@@ -342,16 +324,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = await (union).ConfigureAwait(continueOnCapturedContext);
 			cancellationToken.ThrowIfCancellationRequested();
-			return 
-	u.Index switch
-	{
-		0 => Union<T0New, T1, T2, T3, T4, T5>.FromT0(mapping(u.Value0)),
-		1 => Union<T0New, T1, T2, T3, T4, T5>.FromT1(u.Value1),
-		2 => Union<T0New, T1, T2, T3, T4, T5>.FromT2(u.Value2),
-		3 => Union<T0New, T1, T2, T3, T4, T5>.FromT3(u.Value3),
-		4 => Union<T0New, T1, T2, T3, T4, T5>.FromT4(u.Value4),
-		_ => Union<T0New, T1, T2, T3, T4, T5>.FromT5(u.Value5)
-	};
+			return u.Index switch
+		{
+			0 => Union<T0New, T1, T2, T3, T4, T5>.FromT0(mapping(u.Value0)),
+			1 => Union<T0New, T1, T2, T3, T4, T5>.FromT1(u.Value1),
+			2 => Union<T0New, T1, T2, T3, T4, T5>.FromT2(u.Value2),
+			3 => Union<T0New, T1, T2, T3, T4, T5>.FromT3(u.Value3),
+			4 => Union<T0New, T1, T2, T3, T4, T5>.FromT4(u.Value4),
+			_ => Union<T0New, T1, T2, T3, T4, T5>.FromT5(u.Value5),
+			};
 			
 		}
 
@@ -361,16 +342,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = await (union).ConfigureAwait(continueOnCapturedContext);
 			cancellationToken.ThrowIfCancellationRequested();
-			return 
-	u.Index switch
-	{
-		0 => Union<T0, T1New, T2, T3, T4, T5>.FromT0(u.Value0),
-		1 => Union<T0, T1New, T2, T3, T4, T5>.FromT1(mapping(u.Value1)),
-		2 => Union<T0, T1New, T2, T3, T4, T5>.FromT2(u.Value2),
-		3 => Union<T0, T1New, T2, T3, T4, T5>.FromT3(u.Value3),
-		4 => Union<T0, T1New, T2, T3, T4, T5>.FromT4(u.Value4),
-		_ => Union<T0, T1New, T2, T3, T4, T5>.FromT5(u.Value5)
-	};
+			return u.Index switch
+		{
+			0 => Union<T0, T1New, T2, T3, T4, T5>.FromT0(u.Value0),
+			1 => Union<T0, T1New, T2, T3, T4, T5>.FromT1(mapping(u.Value1)),
+			2 => Union<T0, T1New, T2, T3, T4, T5>.FromT2(u.Value2),
+			3 => Union<T0, T1New, T2, T3, T4, T5>.FromT3(u.Value3),
+			4 => Union<T0, T1New, T2, T3, T4, T5>.FromT4(u.Value4),
+			_ => Union<T0, T1New, T2, T3, T4, T5>.FromT5(u.Value5),
+			};
 			
 		}
 
@@ -380,16 +360,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = await (union).ConfigureAwait(continueOnCapturedContext);
 			cancellationToken.ThrowIfCancellationRequested();
-			return 
-	u.Index switch
-	{
-		0 => Union<T0, T1, T2New, T3, T4, T5>.FromT0(u.Value0),
-		1 => Union<T0, T1, T2New, T3, T4, T5>.FromT1(u.Value1),
-		2 => Union<T0, T1, T2New, T3, T4, T5>.FromT2(mapping(u.Value2)),
-		3 => Union<T0, T1, T2New, T3, T4, T5>.FromT3(u.Value3),
-		4 => Union<T0, T1, T2New, T3, T4, T5>.FromT4(u.Value4),
-		_ => Union<T0, T1, T2New, T3, T4, T5>.FromT5(u.Value5)
-	};
+			return u.Index switch
+		{
+			0 => Union<T0, T1, T2New, T3, T4, T5>.FromT0(u.Value0),
+			1 => Union<T0, T1, T2New, T3, T4, T5>.FromT1(u.Value1),
+			2 => Union<T0, T1, T2New, T3, T4, T5>.FromT2(mapping(u.Value2)),
+			3 => Union<T0, T1, T2New, T3, T4, T5>.FromT3(u.Value3),
+			4 => Union<T0, T1, T2New, T3, T4, T5>.FromT4(u.Value4),
+			_ => Union<T0, T1, T2New, T3, T4, T5>.FromT5(u.Value5),
+			};
 			
 		}
 
@@ -399,16 +378,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = await (union).ConfigureAwait(continueOnCapturedContext);
 			cancellationToken.ThrowIfCancellationRequested();
-			return 
-	u.Index switch
-	{
-		0 => Union<T0, T1, T2, T3New, T4, T5>.FromT0(u.Value0),
-		1 => Union<T0, T1, T2, T3New, T4, T5>.FromT1(u.Value1),
-		2 => Union<T0, T1, T2, T3New, T4, T5>.FromT2(u.Value2),
-		3 => Union<T0, T1, T2, T3New, T4, T5>.FromT3(mapping(u.Value3)),
-		4 => Union<T0, T1, T2, T3New, T4, T5>.FromT4(u.Value4),
-		_ => Union<T0, T1, T2, T3New, T4, T5>.FromT5(u.Value5)
-	};
+			return u.Index switch
+		{
+			0 => Union<T0, T1, T2, T3New, T4, T5>.FromT0(u.Value0),
+			1 => Union<T0, T1, T2, T3New, T4, T5>.FromT1(u.Value1),
+			2 => Union<T0, T1, T2, T3New, T4, T5>.FromT2(u.Value2),
+			3 => Union<T0, T1, T2, T3New, T4, T5>.FromT3(mapping(u.Value3)),
+			4 => Union<T0, T1, T2, T3New, T4, T5>.FromT4(u.Value4),
+			_ => Union<T0, T1, T2, T3New, T4, T5>.FromT5(u.Value5),
+			};
 			
 		}
 
@@ -418,16 +396,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = await (union).ConfigureAwait(continueOnCapturedContext);
 			cancellationToken.ThrowIfCancellationRequested();
-			return 
-	u.Index switch
-	{
-		0 => Union<T0, T1, T2, T3, T4New, T5>.FromT0(u.Value0),
-		1 => Union<T0, T1, T2, T3, T4New, T5>.FromT1(u.Value1),
-		2 => Union<T0, T1, T2, T3, T4New, T5>.FromT2(u.Value2),
-		3 => Union<T0, T1, T2, T3, T4New, T5>.FromT3(u.Value3),
-		4 => Union<T0, T1, T2, T3, T4New, T5>.FromT4(mapping(u.Value4)),
-		_ => Union<T0, T1, T2, T3, T4New, T5>.FromT5(u.Value5)
-	};
+			return u.Index switch
+		{
+			0 => Union<T0, T1, T2, T3, T4New, T5>.FromT0(u.Value0),
+			1 => Union<T0, T1, T2, T3, T4New, T5>.FromT1(u.Value1),
+			2 => Union<T0, T1, T2, T3, T4New, T5>.FromT2(u.Value2),
+			3 => Union<T0, T1, T2, T3, T4New, T5>.FromT3(u.Value3),
+			4 => Union<T0, T1, T2, T3, T4New, T5>.FromT4(mapping(u.Value4)),
+			_ => Union<T0, T1, T2, T3, T4New, T5>.FromT5(u.Value5),
+			};
 			
 		}
 
@@ -437,16 +414,15 @@ namespace FuncNet.Union;
 		bool continueOnCapturedContext = true){
 		var u = await (union).ConfigureAwait(continueOnCapturedContext);
 			cancellationToken.ThrowIfCancellationRequested();
-			return 
-	u.Index switch
-	{
-		0 => Union<T0, T1, T2, T3, T4, T5New>.FromT0(u.Value0),
-		1 => Union<T0, T1, T2, T3, T4, T5New>.FromT1(u.Value1),
-		2 => Union<T0, T1, T2, T3, T4, T5New>.FromT2(u.Value2),
-		3 => Union<T0, T1, T2, T3, T4, T5New>.FromT3(u.Value3),
-		4 => Union<T0, T1, T2, T3, T4, T5New>.FromT4(u.Value4),
-		_ => Union<T0, T1, T2, T3, T4, T5New>.FromT5(mapping(u.Value5))
-	};
+			return u.Index switch
+		{
+			0 => Union<T0, T1, T2, T3, T4, T5New>.FromT0(u.Value0),
+			1 => Union<T0, T1, T2, T3, T4, T5New>.FromT1(u.Value1),
+			2 => Union<T0, T1, T2, T3, T4, T5New>.FromT2(u.Value2),
+			3 => Union<T0, T1, T2, T3, T4, T5New>.FromT3(u.Value3),
+			4 => Union<T0, T1, T2, T3, T4, T5New>.FromT4(u.Value4),
+			_ => Union<T0, T1, T2, T3, T4, T5New>.FromT5(mapping(u.Value5)),
+			};
 			
 		}}
 		
