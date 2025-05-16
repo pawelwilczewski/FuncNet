@@ -47,53 +47,49 @@ namespace FuncNet.Union;
 
 	public static async Task<Union<T0New, T1, T2>> Bind0<T0New, T0Old, T1, T2>(this Task<Union<T0Old, T1, T2>> union,
 		Func<T0Old, Task<Union<T0New, T1, T2>>> binding,
-		CancellationToken cancellationToken = default,
-		bool continueOnCapturedContext = true){
-		var u = await (union).ConfigureAwait(continueOnCapturedContext);
+		CancellationToken cancellationToken = default){
+		var u = await (union).ConfigureAwait(false);
 			cancellationToken.ThrowIfCancellationRequested();
 			return await (u.Index switch
 		{
 			0 => binding(u.Value0),
 			1 => Union<T0New, T1, T2>.FromT1(Task.FromResult(u.Value1)),
 			_ => Union<T0New, T1, T2>.FromT2(Task.FromResult(u.Value2)),
-			}).ConfigureAwait(continueOnCapturedContext);
+			}).ConfigureAwait(false);
 			
 		}
 
 	public static async Task<Union<T0, T1New, T2>> Bind1<T1New, T0, T1Old, T2>(this Task<Union<T0, T1Old, T2>> union,
 		Func<T1Old, Task<Union<T0, T1New, T2>>> binding,
-		CancellationToken cancellationToken = default,
-		bool continueOnCapturedContext = true){
-		var u = await (union).ConfigureAwait(continueOnCapturedContext);
+		CancellationToken cancellationToken = default){
+		var u = await (union).ConfigureAwait(false);
 			cancellationToken.ThrowIfCancellationRequested();
 			return await (u.Index switch
 		{
 			0 => Union<T0, T1New, T2>.FromT0(Task.FromResult(u.Value0)),
 			1 => binding(u.Value1),
 			_ => Union<T0, T1New, T2>.FromT2(Task.FromResult(u.Value2)),
-			}).ConfigureAwait(continueOnCapturedContext);
+			}).ConfigureAwait(false);
 			
 		}
 
 	public static async Task<Union<T0, T1, T2New>> Bind2<T2New, T0, T1, T2Old>(this Task<Union<T0, T1, T2Old>> union,
 		Func<T2Old, Task<Union<T0, T1, T2New>>> binding,
-		CancellationToken cancellationToken = default,
-		bool continueOnCapturedContext = true){
-		var u = await (union).ConfigureAwait(continueOnCapturedContext);
+		CancellationToken cancellationToken = default){
+		var u = await (union).ConfigureAwait(false);
 			cancellationToken.ThrowIfCancellationRequested();
 			return await (u.Index switch
 		{
 			0 => Union<T0, T1, T2New>.FromT0(Task.FromResult(u.Value0)),
 			1 => Union<T0, T1, T2New>.FromT1(Task.FromResult(u.Value1)),
 			_ => binding(u.Value2),
-			}).ConfigureAwait(continueOnCapturedContext);
+			}).ConfigureAwait(false);
 			
 		}
 
 	public static async Task<Union<T0New, T1, T2>> Bind0<T0New, T0Old, T1, T2>(this Union<T0Old, T1, T2> union,
 		Func<T0Old, Task<Union<T0New, T1, T2>>> binding,
-		CancellationToken cancellationToken = default,
-		bool continueOnCapturedContext = true){
+		CancellationToken cancellationToken = default){
 		var u = union;
 			cancellationToken.ThrowIfCancellationRequested();
 			return await (u.Index switch
@@ -101,14 +97,13 @@ namespace FuncNet.Union;
 			0 => binding(u.Value0),
 			1 => Union<T0New, T1, T2>.FromT1(Task.FromResult(u.Value1)),
 			_ => Union<T0New, T1, T2>.FromT2(Task.FromResult(u.Value2)),
-			}).ConfigureAwait(continueOnCapturedContext);
+			}).ConfigureAwait(false);
 			
 		}
 
 	public static async Task<Union<T0, T1New, T2>> Bind1<T1New, T0, T1Old, T2>(this Union<T0, T1Old, T2> union,
 		Func<T1Old, Task<Union<T0, T1New, T2>>> binding,
-		CancellationToken cancellationToken = default,
-		bool continueOnCapturedContext = true){
+		CancellationToken cancellationToken = default){
 		var u = union;
 			cancellationToken.ThrowIfCancellationRequested();
 			return await (u.Index switch
@@ -116,14 +111,13 @@ namespace FuncNet.Union;
 			0 => Union<T0, T1New, T2>.FromT0(Task.FromResult(u.Value0)),
 			1 => binding(u.Value1),
 			_ => Union<T0, T1New, T2>.FromT2(Task.FromResult(u.Value2)),
-			}).ConfigureAwait(continueOnCapturedContext);
+			}).ConfigureAwait(false);
 			
 		}
 
 	public static async Task<Union<T0, T1, T2New>> Bind2<T2New, T0, T1, T2Old>(this Union<T0, T1, T2Old> union,
 		Func<T2Old, Task<Union<T0, T1, T2New>>> binding,
-		CancellationToken cancellationToken = default,
-		bool continueOnCapturedContext = true){
+		CancellationToken cancellationToken = default){
 		var u = union;
 			cancellationToken.ThrowIfCancellationRequested();
 			return await (u.Index switch
@@ -131,15 +125,14 @@ namespace FuncNet.Union;
 			0 => Union<T0, T1, T2New>.FromT0(Task.FromResult(u.Value0)),
 			1 => Union<T0, T1, T2New>.FromT1(Task.FromResult(u.Value1)),
 			_ => binding(u.Value2),
-			}).ConfigureAwait(continueOnCapturedContext);
+			}).ConfigureAwait(false);
 			
 		}
 
 	public static async Task<Union<T0New, T1, T2>> Bind0<T0New, T0Old, T1, T2>(this Task<Union<T0Old, T1, T2>> union,
 		Func<T0Old, Union<T0New, T1, T2>> binding,
-		CancellationToken cancellationToken = default,
-		bool continueOnCapturedContext = true){
-		var u = await (union).ConfigureAwait(continueOnCapturedContext);
+		CancellationToken cancellationToken = default){
+		var u = await (union).ConfigureAwait(false);
 			cancellationToken.ThrowIfCancellationRequested();
 			return u.Index switch
 		{
@@ -152,9 +145,8 @@ namespace FuncNet.Union;
 
 	public static async Task<Union<T0, T1New, T2>> Bind1<T1New, T0, T1Old, T2>(this Task<Union<T0, T1Old, T2>> union,
 		Func<T1Old, Union<T0, T1New, T2>> binding,
-		CancellationToken cancellationToken = default,
-		bool continueOnCapturedContext = true){
-		var u = await (union).ConfigureAwait(continueOnCapturedContext);
+		CancellationToken cancellationToken = default){
+		var u = await (union).ConfigureAwait(false);
 			cancellationToken.ThrowIfCancellationRequested();
 			return u.Index switch
 		{
@@ -167,9 +159,8 @@ namespace FuncNet.Union;
 
 	public static async Task<Union<T0, T1, T2New>> Bind2<T2New, T0, T1, T2Old>(this Task<Union<T0, T1, T2Old>> union,
 		Func<T2Old, Union<T0, T1, T2New>> binding,
-		CancellationToken cancellationToken = default,
-		bool continueOnCapturedContext = true){
-		var u = await (union).ConfigureAwait(continueOnCapturedContext);
+		CancellationToken cancellationToken = default){
+		var u = await (union).ConfigureAwait(false);
 			cancellationToken.ThrowIfCancellationRequested();
 			return u.Index switch
 		{

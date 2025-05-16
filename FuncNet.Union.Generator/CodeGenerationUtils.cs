@@ -4,6 +4,21 @@ namespace FuncNet.Union.Generator;
 
 internal static class CodeGenerationUtils
 {
+	public const string THROW_IF_CANCELED = "cancellationToken.ThrowIfCancellationRequested()";
+
+	public static readonly string[] asyncMethodAdditionalArguments =
+	[
+		"CancellationToken cancellationToken = default"
+	];
+
+	public static readonly UnionMethodAsyncConfig[] allPossibleAsyncMethodConfigs =
+	[
+		UnionMethodAsyncConfig.None,
+		UnionMethodAsyncConfig.All,
+		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.AppliedMethodReturnType,
+		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.InputUnion
+	];
+
 	private static string JoinToString<T>(this IEnumerable<T> range, string separator, Func<T, string> toString) =>
 		string.Join(separator, range.Select(toString));
 
@@ -18,14 +33,20 @@ internal static class CodeGenerationUtils
 
 	public static string CommaSeparatedTs(int count) =>
 		CommaSeparatedTs(0, count);
-	
-	public delegate string WrapText(string text);
+
+	public static string CommaSeparatedTErrors(int start, int count) =>
+		JoinRangeToString(", ", start, count, i => $"TError{i}");
+
+	public static string CommaSeparatedTErrors(int count) =>
+		CommaSeparatedTErrors(0, count);
+
 	public static string DontWrap(string text) => text;
 	public static string WrapInTask(string text) => $"Task<{text}>";
 	public static string WrapInTaskFromResult(string text) => $"Task.FromResult({text})";
 	public static string WrapInAsyncTask(string text) => $"async {WrapInTask(text)}";
-	public static string WrapInAwaitConfiguredFromParameter(string text) =>
-		$"await ({text}).ConfigureAwait(continueOnCapturedContext)";
+
+	public static string WrapInAwaitConfigured(string text) =>
+		$"await ({text}).ConfigureAwait(false)";
 
 	public static string WrapInTaskIf(this string text, bool shouldWrap) =>
 		shouldWrap ? WrapInTask(text) : text;
@@ -37,15 +58,7 @@ internal static class CodeGenerationUtils
 		shouldWrap ? WrapInAsyncTask(text) : text;
 
 	public static string WrapInAwaitConfiguredFromParameterIf(this string text, bool shouldWrap) =>
-		shouldWrap ? WrapInAwaitConfiguredFromParameter(text) : text;
-
-	public static readonly string[] asyncMethodAdditionalArguments =
-	[
-		"CancellationToken cancellationToken = default",
-		"bool continueOnCapturedContext = true"
-	];
-
-	public const string THROW_IF_CANCELED = "cancellationToken.ThrowIfCancellationRequested()";
+		shouldWrap ? WrapInAwaitConfigured(text) : text;
 
 	private static IEnumerable<string> TsWithSpecialReplacement(int count, int specialIndex, string specialReplacement) =>
 		Enumerable.Range(0, count).Select(i => i == specialIndex ? specialReplacement : $"T{i}");
@@ -64,26 +77,30 @@ internal static class CodeGenerationUtils
 
 	public static string UnionOfTs(int unionSize) => $"Union<{CommaSeparatedTs(unionSize)}>";
 	public static string UnionOfTs(int start, int count) => $"Union<{CommaSeparatedTs(start, count)}>";
+
 	private static string UnionOfTsOneSpecial(int unionSize, int specialIndex, string specialReplacement) =>
 		$"Union<{CommaSeparatedTsWithSpecialReplacement(unionSize, specialIndex, specialReplacement)}>";
+
 	public static string UnionOfTsOneNew(int unionSize, int newIndex) =>
 		UnionOfTsOneSpecial(unionSize, newIndex, $"T{newIndex}New");
+
 	public static string UnionOfTsOneOld(int unionSize, int oldIndex) =>
 		UnionOfTsOneSpecial(unionSize, oldIndex, $"T{oldIndex}Old");
-	
-	public static readonly UnionMethodAsyncConfig[] allPossibleAsyncMethodConfigs =
-	[
-		UnionMethodAsyncConfig.None,
-		UnionMethodAsyncConfig.All,
-		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.AppliedMethodReturnType,
-		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.InputUnion
-	];
+
+	private static string CommaSeparatedErrorTs(int count) =>
+		string.Join(", ", Enumerable.Range(0, count).Select(i => $"TError{i}"));
+
+	public static string ResultOfTs(int unionSize) => $"Result<{ResultTs(unionSize)}>";
+	public static string ResultTs(int unionSize) => $"TSuccess, {CommaSeparatedTErrors(unionSize - 1)}";
+	public static string ResultUnion(int unionSize) => $"Union<{ResultTs(unionSize)}>";
+
+	public delegate string WrapText(string text);
 }
 
 public sealed class SourceCodeFileBuilder
 {
 	private const string DELIMITER = "\n\t\t";
-	
+
 	private readonly StringBuilder builder = new();
 
 	public SourceCodeFileBuilder(string header)
@@ -105,11 +122,8 @@ public sealed class ClassBuilder
 	private readonly string className;
 
 	private readonly List<MethodBuilder> methods = [];
-	
-	public ClassBuilder(string className)
-	{
-		this.className = className;
-	}
+
+	public ClassBuilder(string className) => this.className = className;
 
 	public ClassBuilder AddMethod(MethodBuilder method)
 	{
@@ -129,7 +143,7 @@ public sealed class ClassBuilder
 public sealed class StatementsBlockBuilder
 {
 	private const string DELIMITER = "\n\t\t";
-	
+
 	private readonly StringBuilder builder = new();
 
 	public StatementsBlockBuilder AddStatement(string statement)
@@ -142,7 +156,9 @@ public sealed class StatementsBlockBuilder
 }
 
 public readonly record struct SwitchCase(int Index, string Variable, string Value);
+
 public readonly record struct SwitchCaseOneSpecial(int Index, string Variable, int SpecialIndex);
+
 public readonly record struct SwitchCaseText(string Left, string Right);
 
 public sealed class SwitchExpressionBuilder
@@ -150,7 +166,7 @@ public sealed class SwitchExpressionBuilder
 	private const string DELIMITER = "\n\t\t";
 
 	private readonly StringBuilder builder = new();
-	
+
 	public SwitchExpressionBuilder(string switchOnIdentifier)
 	{
 		builder.Append($"{switchOnIdentifier} switch{DELIMITER}{{{DELIMITER}\t");
@@ -181,10 +197,7 @@ public sealed class MethodBuilder
 	private readonly ArgumentListBuilder argumentList = new();
 	private readonly StatementsBlockBuilder body = new();
 
-	public MethodBuilder(string name)
-	{
-		this.name = name;
-	}
+	public MethodBuilder(string name) => this.name = name;
 
 	public MethodBuilder AddArgument(string argument)
 	{
@@ -263,5 +276,5 @@ public enum UnionMethodAsyncConfig
 	All = ~0,
 	ReturnType = 1 << 0,
 	InputUnion = 1 << 1,
-	AppliedMethodReturnType = 1 << 2,
+	AppliedMethodReturnType = 1 << 2
 }

@@ -16,6 +16,10 @@ for (var i = 2; i < maxChoices + 1; ++i)
 	File.WriteAllText(
 		Path.Join(basePath, $"Union{i}.g.cs"),
 		UnionGenerator.GenerateUnionFile(@namespace, i));
+	
+	File.WriteAllText(
+		Path.Join(basePath, $"Result{i}.g.cs"),
+		ResultGenerator.GenerateResultFile(@namespace, i));
 
 	UnionExtensionMethodsFileGenerationParams[] generationParams =
 	[
@@ -30,6 +34,10 @@ for (var i = 2; i < maxChoices + 1; ++i)
 			Path.Join(basePath, p.FileName),
 			UnionExtensionMethodsFileGenerator.GenerateExtensionsFile(p));
 	}
+
+	File.WriteAllText(
+		Path.Join(basePath, $"Result{i}.g.cs"),
+		ResultGenerator.GenerateResultFile(@namespace, i));
 }
 
 Console.WriteLine($"Generated in {Stopwatch.GetElapsedTime(startTime)}");
