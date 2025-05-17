@@ -23,12 +23,12 @@ for (var i = 2; i < maxChoices + 1; ++i)
 
 	UnionExtensionMethodsFileGenerationParams[] generationParams =
 	[
-		new("Union", @namespace, "Map", i, UnionMapExtensionsGenerator.GenerateMethods),
-		new("Union", @namespace, "Bind", i, UnionBindExtensionsGenerator.GenerateMethods),
-		new("Union", @namespace, "Match", i, UnionMatchExtensionsGenerator.GenerateMethods),
-		new("Result", @namespace, "Map", i, ResultMapExtensionsGenerator.GenerateMethods),
-		new("Result", @namespace, "Bind", i, ResultBindExtensionsGenerator.GenerateMethods),
-		new("Result", @namespace, "Match", i, ResultMatchExtensionsGenerator.GenerateMethods)
+		new("Union", @namespace, "Map", i, MapExtensionsGenerator.GenerateMethods, "union", UnionElementNamesGenerator(i), UnionGetterForUnion, UnionFactoryMethodName),
+		new("Union", @namespace, "Bind", i, BindExtensionsGenerator.GenerateMethods, "union", UnionElementNamesGenerator(i), UnionGetterForUnion, UnionFactoryMethodName),
+		new("Union", @namespace, "Match", i, UnionMatchExtensionsGenerator.GenerateMethods, "union", UnionElementNamesGenerator(i), UnionGetterForUnion, UnionFactoryMethodName),
+		new("Result", @namespace, "Map", i, MapExtensionsGenerator.GenerateMethods, "result", ResultElementNamesGenerator(i), UnionGetterForResult, ResultFactoryMethodName),
+		new("Result", @namespace, "Bind", i, BindExtensionsGenerator.GenerateMethods, "result", ResultElementNamesGenerator(i), UnionGetterForResult, ResultFactoryMethodName),
+		new("Result", @namespace, "Match", i, ResultMatchExtensionsGenerator.GenerateMethods, "result", ResultElementNamesGenerator(i), UnionGetterForResult, ResultFactoryMethodName)
 	];
 
 	foreach (var p in generationParams)
@@ -44,3 +44,17 @@ for (var i = 2; i < maxChoices + 1; ++i)
 }
 
 Console.WriteLine($"Generated in {Stopwatch.GetElapsedTime(startTime)}");
+return;
+
+static Func<IEnumerable<string>> UnionElementNamesGenerator(int unionSize) =>
+	() => Enumerable.Range(0, unionSize).Select(i => i.ToString());
+
+static string UnionGetterForUnion(string argument) => argument;
+
+static Func<IEnumerable<string>> ResultElementNamesGenerator(int unionSize) =>
+	() => new[] { "Success" }.Concat(Enumerable.Range(0, unionSize - 1).Select(i => $"Error{i}"));
+
+static string UnionGetterForResult(string argument) => $"({argument}).Value";
+
+static string UnionFactoryMethodName(int tIndex) => $"FromT{tIndex}";
+static string ResultFactoryMethodName(int tIndex) => tIndex == 0 ? "FromSuccess" : "FromError";

@@ -10,7 +10,7 @@ internal static class ResultMatchExtensionsGenerator
 	private static IEnumerable<MatchMethodGenerationParams> CreateAllMethodsGenerationParams(UnionExtensionMethodsFileGenerationParams p) =>
 		from asyncConfig in allPossibleAsyncMethodConfigs
 		from otherCaseSize in Enumerable.Range(1, p.UnionSize - 1)
-		select new MatchMethodGenerationParams(p.MethodNameOnly, p.UnionSize, asyncConfig, otherCaseSize);
+		select new MatchMethodGenerationParams(p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, otherCaseSize, p.ThisArgumentName, p.GetUnionOnArgument, p.ElementTypeNamesGenerator);
 
 	private static MethodBuilder GenerateMethod(MatchMethodGenerationParams p) =>
 		new MethodBuilder($"public static {"TResult".WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}<TResult, {ResultTs(p.UnionSize)}>")
@@ -18,9 +18,9 @@ internal static class ResultMatchExtensionsGenerator
 			.AddArgument($"Func<TSuccess, {"TResult".WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> success")
 			.AddArguments(Enumerable.Range(1, p.UnionSize - p.OtherCaseSize - 1).Select(i => $"Func<TError{i - 1}, {"TResult".WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> error{i - 1}"))
 			.AddArgument(GenerateLastArgumentCode(p))
-			.AddAsyncArgumentsIfNeeded(p)
+			.AddAsyncArgumentsIfAsync(p)
 			.AddBodyStatement($"var u = ({"result".WrapInAwaitConfiguredFromParameterIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}).Value")
-			.AddThrowIfCanceledStatementIfNeeded(p)
+			.AddThrowIfCanceledStatementIfAsync(p)
 			.AddBodyStatement($"return {new SwitchExpressionBuilder("u.Index")
 				.AddCase(new SwitchCaseText("0", "success(u.Value0)"))
 				.AddCases(Enumerable.Range(1, p.UnionSize - p.OtherCaseSize - 1)

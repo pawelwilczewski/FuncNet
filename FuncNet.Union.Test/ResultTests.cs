@@ -31,7 +31,7 @@ public class ResultTests
 	{
 		var result = Result<int, string, float>.FromSuccess(42);
 
-		var bound = result.Bind(
+		var bound = result.BindSuccess(
 			value => Result<string, string, float>.FromSuccess($"Value: {value}")
 		);
 
@@ -49,7 +49,7 @@ public class ResultTests
 	{
 		var result = Result<int, string, float>.FromError("Original error");
 
-		var bound = result.Bind(
+		var bound = result.BindSuccess(
 			value => Result<string, string, float>.FromSuccess($"Value: {value}")
 		);
 
@@ -66,7 +66,7 @@ public class ResultTests
 	public async Task AsyncBindVariants_Work()
 	{
 		var taskResult = Task.FromResult(Result<int, string, float>.FromSuccess(10));
-		var boundTaskAsync = await taskResult.Bind(async value =>
+		var boundTaskAsync = await taskResult.BindSuccess(async value =>
 		{
 			await Task.Yield();
 			return Result<double, string, float>.FromSuccess(value * 2.5);
@@ -81,7 +81,7 @@ public class ResultTests
 		Assert.Equal(25.0, taskAsyncValue);
 
 		var result = Result<int, string, float>.FromSuccess(7);
-		var boundAsync = await result.Bind(async value =>
+		var boundAsync = await result.BindSuccess(async value =>
 		{
 			await Task.Yield();
 			return Result<string, string, float>.FromSuccess($"Processed: {value * 3}");
@@ -96,7 +96,7 @@ public class ResultTests
 		Assert.Equal("Processed: 21", asyncValue);
 
 		var errorTaskResult = Task.FromResult(Result<int, string, float>.FromError(3.14f));
-		var boundTask = await errorTaskResult.Bind(
+		var boundTask = await errorTaskResult.BindSuccess(
 			value => Result<string, string, float>.FromSuccess(value.ToString())
 		);
 
@@ -118,14 +118,14 @@ public class ResultTests
 		return;
 
 		async Task<string> Process(Result<int, string, double> input) => await input
-			.Bind(async value =>
+			.BindSuccess(async value =>
 			{
 				await Task.Yield();
 				return value > 100
 					? Result<int, string, double>.FromError("Processing error: Value too large")
 					: Result<int, string, double>.FromSuccess(value * 3);
 			})
-			.Bind(value => Result<string, string, double>.FromSuccess($"Success: {value}"))
+			.BindSuccess(value => Result<string, string, double>.FromSuccess($"Success: {value}"))
 			.Match(
 				success => success,
 				error => error,
@@ -190,7 +190,7 @@ public class ResultTests
 	{
 		var result = Result<int, string, float>.FromSuccess(42);
 
-		var mapped = result.Map(
+		var mapped = result.MapSuccess(
 			value => value.ToString()
 		);
 
@@ -208,7 +208,7 @@ public class ResultTests
 	{
 		var result = Result<int, string, float>.FromError("Original error");
 
-		var mapped = result.Map(
+		var mapped = result.MapSuccess(
 			value => value * 2
 		);
 
@@ -225,7 +225,7 @@ public class ResultTests
 	public async Task AsyncMapVariants_Work()
 	{
 		var taskResult = Task.FromResult(Result<int, string, float>.FromSuccess(10));
-		var mappedTaskAsync = await taskResult.Map(async value =>
+		var mappedTaskAsync = await taskResult.MapSuccess(async value =>
 		{
 			await Task.Yield();
 			return value * 2.5;
@@ -240,7 +240,7 @@ public class ResultTests
 		Assert.Equal(25.0, taskAsyncValue);
 
 		var result = Result<int, string, float>.FromSuccess(7);
-		var mappedAsync = await result.Map<int, int, string, float>(async value =>
+		var mappedAsync = await result.MapSuccess<int, int, string, float>(async value =>
 		{
 			await Task.Yield();
 			return value * 3;
@@ -255,7 +255,7 @@ public class ResultTests
 		Assert.Equal(21, asyncValue);
 
 		var errorTaskResult = Task.FromResult(Result<int, string, float>.FromError(3.14f));
-		var mappedTask = await errorTaskResult.Map(
+		var mappedTask = await errorTaskResult.MapSuccess(
 			value => value.ToString()
 		);
 
@@ -290,7 +290,7 @@ public class ResultTests
 	public async Task MapErrorAsync_Works()
 	{
 		var result = Result<int, string, double>.FromError(132.43);
-		var transformed = await result.MapError1<int, double, string, double>(async errorValue =>
+		var transformed = await result.MapError1<double, int, string, double>(async errorValue =>
 		{
 			await Task.Yield();
 			return errorValue / 2;
@@ -306,7 +306,7 @@ public class ResultTests
 
 		var successResult = Result<string, int, float>.FromSuccess("Success value");
 		var unchanged = await successResult
-			.MapError0<string, double, int, float>(async errorCode =>
+			.MapError0<double, string, int, float>(async errorCode =>
 			{
 				await Task.Yield();
 				return errorCode * 0.5;
@@ -331,13 +331,13 @@ public class ResultTests
 		return;
 
 		string ProcessPipeline(Result<int, string, double> input) =>
-			input.Map(value => value * 2)
-				.Bind(value => value < 0
+			input.MapSuccess(value => value * 2)
+				.BindSuccess(value => value < 0
 					? Result<int, string, double>.FromError("Value is negative")
 					: Result<int, string, double>.FromSuccess(value + 10))
 				.MapError0(errorMsg => $"Error: {errorMsg}")
-				.Map(value => value * 3)
-				.Bind(value => Result<string, string, double>.FromSuccess($"FINAL: {value}"))
+				.MapSuccess(value => value * 3)
+				.BindSuccess(value => Result<string, string, double>.FromSuccess($"FINAL: {value}"))
 				.Match(
 					success => success,
 					error => error,
@@ -355,8 +355,8 @@ public class ResultTests
 
 		async Task<string> ProcessWithReusablePipeline(Result<int, string, double> input)
 		{
-			return await input.Bind(Operation)
-				.Map(value => $"Result: {value}")
+			return await input.BindSuccess(Operation)
+				.MapSuccess(value => $"Result: {value}")
 				.MapError0(error => $"Error: {error}")
 				.Match(
 					success => success,

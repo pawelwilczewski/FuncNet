@@ -69,12 +69,6 @@ internal static class CodeGenerationUtils
 	public static string TsOld(int count, int specialIndex) =>
 		CommaSeparatedTsWithSpecialReplacement(count, specialIndex, $"T{specialIndex}Old");
 
-	public static string WrapInNewUnionFromT(this string value, SwitchCaseOneSpecial @case, int unionSize) =>
-		$"{UnionOfTsOneNew(unionSize, @case.SpecialIndex)}.FromT{@case.Index}({value})";
-
-	public static string WrapInNewUnionFromTIfNotSpecial(this string value, SwitchCaseOneSpecial @case, int unionSize) =>
-		@case.SpecialIndex == @case.Index ? value : value.WrapInNewUnionFromT(@case, unionSize);
-
 	public static string UnionOfTs(int unionSize) => UnionOfTs(0, unionSize);
 	public static string UnionOfTs(int start, int count) => $"Union<{CommaSeparatedTs(start, count)}>";
 	public static string UnionOfTErrors(int unionSize) => UnionOfTErrors(0, unionSize);
@@ -164,9 +158,7 @@ public sealed class StatementsBlockBuilder
 	public override string ToString() => $"{{{DELIMITER}{builder}{DELIMITER}}}";
 }
 
-public readonly record struct SwitchCase(int Index, string Variable, string Value);
-
-public readonly record struct SwitchCaseOneSpecial(int Index, string Variable, int SpecialIndex);
+public readonly record struct SwitchCase(int Index, string Identifier);
 
 public readonly record struct SwitchCaseText(string Left, string Right);
 
@@ -250,12 +242,12 @@ public sealed class ArgumentListBuilder
 	public override string ToString() => $"({string.Join(DELIMITER, arguments)})";
 }
 
-public static class MethodBuilderExtensions
+internal static class MethodBuilderExtensions
 {
-	public static MethodBuilder AddAsyncArgumentsIfNeeded(this MethodBuilder methodBuilder, MethodGenerationParams p) =>
+	public static MethodBuilder AddAsyncArgumentsIfAsync(this MethodBuilder methodBuilder, MethodGenerationParams p) =>
 		methodBuilder.AddArguments(p.IsAsync(UnionMethodAsyncConfig.ReturnType) ? CodeGenerationUtils.asyncMethodAdditionalArguments : []);
 
-	public static MethodBuilder AddThrowIfCanceledStatementIfNeeded(this MethodBuilder methodBuilder, MethodGenerationParams p) =>
+	public static MethodBuilder AddThrowIfCanceledStatementIfAsync(this MethodBuilder methodBuilder, MethodGenerationParams p) =>
 		methodBuilder.AddBodyStatement(p.IsAsync(UnionMethodAsyncConfig.ReturnType) ? CodeGenerationUtils.THROW_IF_CANCELED : "");
 }
 
@@ -264,20 +256,51 @@ internal sealed record class UnionExtensionMethodsFileGenerationParams(
 	string Namespace,
 	string MethodNameOnly,
 	int UnionSize,
-	GenerateAllMethods GenerateAllMethods)
+	GenerateAllMethods GenerateAllMethods,
+	string ThisArgumentName,
+	Func<IEnumerable<string>> ElementTypeNamesGenerator,
+	UnionGetter GetUnionOnArgument,
+	FactoryMethodNameForTIndex FactoryMethodName)
 {
 	public string FileName => $"{ExtendedTypeName}{UnionSize}.{MethodNameOnly}.g.cs";
 }
 
 internal delegate IEnumerable<MethodBuilder> GenerateAllMethods(UnionExtensionMethodsFileGenerationParams p);
 
-public record class MethodGenerationParams(
+internal record class MethodGenerationParams(
+	string ExtendedTypeName,
 	string MethodNameOnly,
 	int UnionSize,
-	UnionMethodAsyncConfig AsyncConfig)
+	UnionMethodAsyncConfig AsyncConfig,
+	string ThisArgumentName,
+	UnionGetter GetUnionOnArgument,
+	Func<IEnumerable<string>> ElementTypeNamesGenerator)
 {
 	public bool IsAsync(UnionMethodAsyncConfig typeToCheck) => (typeToCheck & AsyncConfig) != 0;
 }
+
+internal record class MethodGenerationParamsWithSpecialIndex(
+	string ExtendedTypeName,
+	string MethodNameOnly,
+	int UnionSize,
+	UnionMethodAsyncConfig AsyncConfig,
+	string ThisArgumentName,
+	Func<IEnumerable<string>> ElementTypeNamesGenerator,
+	int SpecialIndex,
+	UnionGetter GetUnionOnArgument,
+	FactoryMethodNameForTIndex FactoryMethodName) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, GetUnionOnArgument, ElementTypeNamesGenerator);
+
+internal delegate string FactoryMethodNameForTIndex(int tIndex);
+
+internal sealed record class MethodGenerationParamsWithOtherCaseSize(
+	string ExtendedTypeName,
+	string MethodNameOnly,
+	int UnionSize,
+	UnionMethodAsyncConfig AsyncConfig,
+	string ThisArgumentName,
+	Func<IEnumerable<string>> ElementTypeNamesGenerator,
+	UnionGetter GetUnionOnArgument,
+	int OtherCaseSize) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, GetUnionOnArgument, ElementTypeNamesGenerator);
 
 [Flags]
 public enum UnionMethodAsyncConfig
@@ -287,4 +310,37 @@ public enum UnionMethodAsyncConfig
 	ReturnType = 1 << 0,
 	InputUnion = 1 << 1,
 	AppliedMethodReturnType = 1 << 2
+}
+
+internal static class MethodGenerationParamsExtensions
+{
+	public static IEnumerable<string> Ts(this MethodGenerationParams p) =>
+		p.ElementTypeNamesGenerator().Select(t => $"T{t}");
+
+	public static string TsCommaSeparated(this MethodGenerationParams p) =>
+		string.Join(", ", p.Ts());
+
+	public static string TsCommaSeparatedWithSpecialReplacement(this MethodGenerationParamsWithSpecialIndex p, Func<string, string> replaceSpecial) =>
+		string.Join(", ", p.Ts().Select((t, index) => index == p.SpecialIndex ? replaceSpecial(t) : t));
+
+	public static string TsCommaSeparatedNew(this MethodGenerationParamsWithSpecialIndex p) =>
+		p.TsCommaSeparatedWithSpecialReplacement(t => $"{t}New");
+
+	public static string TsCommaSeparatedOld(this MethodGenerationParamsWithSpecialIndex p) =>
+		p.TsCommaSeparatedWithSpecialReplacement(t => $"{t}Old");
+
+	public static string ExtendedTypeOfTs(this MethodGenerationParams p) =>
+		$"{p.ExtendedTypeName}<{p.TsCommaSeparated()}>";
+
+	public static string ExtendedTypeOfTsNew(this MethodGenerationParamsWithSpecialIndex p) =>
+		$"{p.ExtendedTypeName}<{p.TsCommaSeparatedNew()}>";
+
+	public static string ExtendedTypeOfTsOld(this MethodGenerationParamsWithSpecialIndex p) =>
+		$"{p.ExtendedTypeName}<{p.TsCommaSeparatedOld()}>";
+
+	public static string WrapInNewExtendedTypeFromT(this string value, SwitchCase @case, MethodGenerationParamsWithSpecialIndex p) =>
+		$"{p.ExtendedTypeOfTsNew()}.{p.FactoryMethodName(@case.Index)}({value})";
+
+	public static string WrapInNewExtendedTypeFromTIfNotSpecial(this string value, SwitchCase @case, MethodGenerationParamsWithSpecialIndex p) =>
+		p.SpecialIndex == @case.Index ? value : value.WrapInNewExtendedTypeFromT(@case, p);
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FuncNet.Union;
 		public static class Result2Bind
-{public static Result<TSuccessNew, TError0> Bind<TSuccessNew, TSuccessOld, TError0>(this Result<TSuccessOld, TError0> result,
+{public static Result<TSuccessNew, TError0> BindSuccess<TSuccessNew, TSuccessOld, TError0>(this Result<TSuccessOld, TError0> result,
 		Func<TSuccessOld, Result<TSuccessNew, TError0>> binding){
 		var u = (result).Value;
 			;
@@ -18,19 +18,19 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static Result<TSuccess, TErrorNew> BindError0<TSuccess, TErrorNew, TError0>(this Result<TSuccess, TError0> result,
-		Func<TError0, Result<TSuccess, TErrorNew>> binding){
+	public static Result<TSuccess, TError0New> BindError0<TError0New, TSuccess, TError0Old>(this Result<TSuccess, TError0Old> result,
+		Func<TError0Old, Result<TSuccess, TError0New>> binding){
 		var u = (result).Value;
 			;
 			return u.Index switch
 		{
-			0 => Result<TSuccess, TErrorNew>.FromSuccess(u.Value0),
+			0 => Result<TSuccess, TError0New>.FromSuccess(u.Value0),
 			_ => binding(u.Value1),
 			};
 			
 		}
 
-	public static async Task<Result<TSuccessNew, TError0>> Bind<TSuccessNew, TSuccessOld, TError0>(this Task<Result<TSuccessOld, TError0>> result,
+	public static async Task<Result<TSuccessNew, TError0>> BindSuccess<TSuccessNew, TSuccessOld, TError0>(this Task<Result<TSuccessOld, TError0>> result,
 		Func<TSuccessOld, Task<Result<TSuccessNew, TError0>>> binding,
 		CancellationToken cancellationToken = default){
 		var u = (await (result).ConfigureAwait(false)).Value;
@@ -38,25 +38,25 @@ namespace FuncNet.Union;
 			return await (u.Index switch
 		{
 			0 => binding(u.Value0),
-			_ => Task.FromResult(Result<TSuccessNew, TError0>.FromError(u.Value1)),
+			_ => Result<TSuccessNew, TError0>.FromError(Task.FromResult(u.Value1)),
 			}).ConfigureAwait(false);
 			
 		}
 
-	public static async Task<Result<TSuccess, TErrorNew>> BindError0<TSuccess, TErrorNew, TError0>(this Task<Result<TSuccess, TError0>> result,
-		Func<TError0, Task<Result<TSuccess, TErrorNew>>> binding,
+	public static async Task<Result<TSuccess, TError0New>> BindError0<TError0New, TSuccess, TError0Old>(this Task<Result<TSuccess, TError0Old>> result,
+		Func<TError0Old, Task<Result<TSuccess, TError0New>>> binding,
 		CancellationToken cancellationToken = default){
 		var u = (await (result).ConfigureAwait(false)).Value;
 			cancellationToken.ThrowIfCancellationRequested();
 			return await (u.Index switch
 		{
-			0 => Task.FromResult(Result<TSuccess, TErrorNew>.FromSuccess(u.Value0)),
+			0 => Result<TSuccess, TError0New>.FromSuccess(Task.FromResult(u.Value0)),
 			_ => binding(u.Value1),
 			}).ConfigureAwait(false);
 			
 		}
 
-	public static async Task<Result<TSuccessNew, TError0>> Bind<TSuccessNew, TSuccessOld, TError0>(this Result<TSuccessOld, TError0> result,
+	public static async Task<Result<TSuccessNew, TError0>> BindSuccess<TSuccessNew, TSuccessOld, TError0>(this Result<TSuccessOld, TError0> result,
 		Func<TSuccessOld, Task<Result<TSuccessNew, TError0>>> binding,
 		CancellationToken cancellationToken = default){
 		var u = (result).Value;
@@ -64,25 +64,25 @@ namespace FuncNet.Union;
 			return await (u.Index switch
 		{
 			0 => binding(u.Value0),
-			_ => Task.FromResult(Result<TSuccessNew, TError0>.FromError(u.Value1)),
+			_ => Result<TSuccessNew, TError0>.FromError(Task.FromResult(u.Value1)),
 			}).ConfigureAwait(false);
 			
 		}
 
-	public static async Task<Result<TSuccess, TErrorNew>> BindError0<TSuccess, TErrorNew, TError0>(this Result<TSuccess, TError0> result,
-		Func<TError0, Task<Result<TSuccess, TErrorNew>>> binding,
+	public static async Task<Result<TSuccess, TError0New>> BindError0<TError0New, TSuccess, TError0Old>(this Result<TSuccess, TError0Old> result,
+		Func<TError0Old, Task<Result<TSuccess, TError0New>>> binding,
 		CancellationToken cancellationToken = default){
 		var u = (result).Value;
 			cancellationToken.ThrowIfCancellationRequested();
 			return await (u.Index switch
 		{
-			0 => Task.FromResult(Result<TSuccess, TErrorNew>.FromSuccess(u.Value0)),
+			0 => Result<TSuccess, TError0New>.FromSuccess(Task.FromResult(u.Value0)),
 			_ => binding(u.Value1),
 			}).ConfigureAwait(false);
 			
 		}
 
-	public static async Task<Result<TSuccessNew, TError0>> Bind<TSuccessNew, TSuccessOld, TError0>(this Task<Result<TSuccessOld, TError0>> result,
+	public static async Task<Result<TSuccessNew, TError0>> BindSuccess<TSuccessNew, TSuccessOld, TError0>(this Task<Result<TSuccessOld, TError0>> result,
 		Func<TSuccessOld, Result<TSuccessNew, TError0>> binding,
 		CancellationToken cancellationToken = default){
 		var u = (await (result).ConfigureAwait(false)).Value;
@@ -95,14 +95,14 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Result<TSuccess, TErrorNew>> BindError0<TSuccess, TErrorNew, TError0>(this Task<Result<TSuccess, TError0>> result,
-		Func<TError0, Result<TSuccess, TErrorNew>> binding,
+	public static async Task<Result<TSuccess, TError0New>> BindError0<TError0New, TSuccess, TError0Old>(this Task<Result<TSuccess, TError0Old>> result,
+		Func<TError0Old, Result<TSuccess, TError0New>> binding,
 		CancellationToken cancellationToken = default){
 		var u = (await (result).ConfigureAwait(false)).Value;
 			cancellationToken.ThrowIfCancellationRequested();
 			return u.Index switch
 		{
-			0 => Result<TSuccess, TErrorNew>.FromSuccess(u.Value0),
+			0 => Result<TSuccess, TError0New>.FromSuccess(u.Value0),
 			_ => binding(u.Value1),
 			};
 			
