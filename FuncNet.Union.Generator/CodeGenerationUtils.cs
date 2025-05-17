@@ -77,8 +77,8 @@ internal static class CodeGenerationUtils
 
 	public static string UnionOfTs(int unionSize) => UnionOfTs(0, unionSize);
 	public static string UnionOfTs(int start, int count) => $"Union<{CommaSeparatedTs(start, count)}>";
-	public static string UnionOfErrorTs(int unionSize) => UnionOfErrorTs(0, unionSize);
-	public static string UnionOfErrorTs(int start, int count) => $"Union<{CommaSeparatedErrorTs(start, count)}>";
+	public static string UnionOfTErrors(int unionSize) => UnionOfTErrors(0, unionSize);
+	public static string UnionOfTErrors(int start, int count) => $"Union<{CommaSeparatedErrorTs(start, count)}>";
 
 	private static string UnionOfTsOneSpecial(int unionSize, int specialIndex, string specialReplacement) =>
 		$"Union<{CommaSeparatedTsWithSpecialReplacement(unionSize, specialIndex, specialReplacement)}>";

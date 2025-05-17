@@ -34,10 +34,10 @@ internal static class ResultMatchExtensionsGenerator
 		var tResultWrapped = "TResult".WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType));
 		return p.OtherCaseSize <= 1
 			? $"Func<TError{p.UnionSize - 2}, {tResultWrapped}> error{p.UnionSize - 2}"
-			: $"Func<{UnionOfErrorTs(p.UnionSize - p.OtherCaseSize - 1, p.OtherCaseSize)}, {tResultWrapped}> other";
+			: $"Func<{UnionOfTErrors(p.UnionSize - p.OtherCaseSize - 1, p.OtherCaseSize)}, {tResultWrapped}> other";
 	}
 
 	private static SwitchCaseText GenerateOtherSwitchCase(MatchMethodGenerationParams p) => p.OtherCaseSize <= 1
 		? new SwitchCaseText("_", $"error{p.UnionSize - 2}(u.Value{p.UnionSize - 1})")
-		: new SwitchCaseText("_", $"other(new {UnionOfErrorTs(p.UnionSize - p.OtherCaseSize - 1, p.OtherCaseSize)}(u.Value))");
+		: new SwitchCaseText("_", $"other(new {UnionOfTErrors(p.UnionSize - p.OtherCaseSize - 1, p.OtherCaseSize)}(u.Value))");
 }

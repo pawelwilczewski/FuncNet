@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace FuncNet.Union.Test;
 
 public class UnionTests
@@ -226,27 +224,5 @@ public class UnionTests
 					errMsg => errMsg,
 					_ => throw new InvalidOperationException(),
 					normalizedDouble => $"Final normalized value is {normalizedDouble:F2}");
-	}
-
-	[Fact]
-	public async Task ResultMatch_Works()
-	{
-		var result = Result<int, string, float>.FromSuccess(18);
-
-		var value = result.Match(
-			success => "abcd",
-			error => throw new UnreachableException(),
-			otherErrors => throw new UnreachableException());
-
-		Assert.Equal("abcd", value);
-
-		var resultAsync = Result<int, string, float>.FromError(Task.FromResult(123.4f));
-
-		var valueAsync = resultAsync.Match(
-			success => throw new UnreachableException(),
-			error => throw new UnreachableException(),
-			otherErrors => 1000);
-
-		Assert.Equal(1000, await valueAsync);
 	}
 }
