@@ -26,8 +26,9 @@ for (var i = 2; i < maxChoices + 1; ++i)
 		new("Union", @namespace, "Map", i, UnionMapExtensionsGenerator.GenerateMethods),
 		new("Union", @namespace, "Bind", i, UnionBindExtensionsGenerator.GenerateMethods),
 		new("Union", @namespace, "Match", i, UnionMatchExtensionsGenerator.GenerateMethods),
-		new("Result", @namespace, "Match", i, ResultMatchExtensionsGenerator.GenerateMethods),
-		new("Result", @namespace, "Bind", i, ResultBindExtensionsGenerator.GenerateMethods)
+		new("Result", @namespace, "Map", i, ResultMapExtensionsGenerator.GenerateMethods),
+		new("Result", @namespace, "Bind", i, ResultBindExtensionsGenerator.GenerateMethods),
+		new("Result", @namespace, "Match", i, ResultMatchExtensionsGenerator.GenerateMethods)
 	];
 
 	foreach (var p in generationParams)
