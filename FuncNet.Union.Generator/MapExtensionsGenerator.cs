@@ -2,17 +2,6 @@ namespace FuncNet.Union.Generator;
 
 using static CodeGenerationUtils;
 
-internal sealed record class MapOrBindMethodGenerationParams(
-	string ExtendedTypeName,
-	string MethodNameOnly,
-	int UnionSize,
-	UnionMethodAsyncConfig AsyncConfig,
-	string ThisArgumentName,
-	Func<IEnumerable<string>> ElementTypeNamesGenerator,
-	int SpecialIndex,
-	UnionGetter GetUnionOnArgument,
-	FactoryMethodNameForTIndex FactoryMethodName) : MethodGenerationParamsWithSpecialIndex(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, ElementTypeNamesGenerator, SpecialIndex, GetUnionOnArgument, FactoryMethodName);
-
 internal delegate string UnionGetter(string argument);
 
 internal static class MapExtensionsGenerator
@@ -20,14 +9,14 @@ internal static class MapExtensionsGenerator
 	public static IEnumerable<MethodBuilder> GenerateMethods(UnionExtensionMethodsFileGenerationParams p) =>
 		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
 
-	private static IEnumerable<MapOrBindMethodGenerationParams> CreateAllMethodsGenerationParams(UnionExtensionMethodsFileGenerationParams p) =>
+	private static IEnumerable<MethodGenerationParamsWithSpecialIndex> CreateAllMethodsGenerationParams(UnionExtensionMethodsFileGenerationParams p) =>
 		from asyncConfig in allPossibleAsyncMethodConfigs
 		from specialIndex in Enumerable.Range(0, p.UnionSize)
-		select new MapOrBindMethodGenerationParams(
+		select new MethodGenerationParamsWithSpecialIndex(
 			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName,
-			p.ElementTypeNamesGenerator, specialIndex, p.GetUnionOnArgument, p.FactoryMethodName);
+			p.ElementTypeNamesGenerator, p.GetUnionOnArgument, p.FactoryMethodName, specialIndex);
 
-	private static MethodBuilder GenerateMethod(MapOrBindMethodGenerationParams p) =>
+	private static MethodBuilder GenerateMethod(MethodGenerationParamsWithSpecialIndex p) =>
 		new MethodBuilder($"public static {p.ExtendedTypeOfTsNew().WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}{p.ElementTypeNamesGenerator().ElementAt(p.SpecialIndex)}<{p.Ts().ElementAt(p.SpecialIndex)}New, {p.TsCommaSeparatedOld()}>")
 			.AddArgument($"this {p.ExtendedTypeOfTsOld().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} {p.ThisArgumentName}")
 			.AddArgument($"Func<{p.Ts().ElementAt(p.SpecialIndex)}Old, {$"{p.Ts().ElementAt(p.SpecialIndex)}New".WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> mapping")

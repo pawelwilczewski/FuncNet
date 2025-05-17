@@ -257,9 +257,9 @@ internal record class MethodGenerationParamsWithSpecialIndex(
 	UnionMethodAsyncConfig AsyncConfig,
 	string ThisArgumentName,
 	Func<IEnumerable<string>> ElementTypeNamesGenerator,
-	int SpecialIndex,
 	UnionGetter GetUnionOnArgument,
-	FactoryMethodNameForTIndex FactoryMethodName) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, GetUnionOnArgument, ElementTypeNamesGenerator);
+	FactoryMethodNameForTIndex FactoryMethodName,
+	int SpecialIndex) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, GetUnionOnArgument, ElementTypeNamesGenerator);
 
 internal delegate string FactoryMethodNameForTIndex(int tIndex);
 
@@ -269,8 +269,8 @@ internal sealed record class MethodGenerationParamsWithOtherCaseSize(
 	int UnionSize,
 	UnionMethodAsyncConfig AsyncConfig,
 	string ThisArgumentName,
-	Func<IEnumerable<string>> ElementTypeNamesGenerator,
 	UnionGetter GetUnionOnArgument,
+	Func<IEnumerable<string>> ElementTypeNamesGenerator,
 	int OtherCaseSize) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, GetUnionOnArgument, ElementTypeNamesGenerator);
 
 [Flags]

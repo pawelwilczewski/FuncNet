@@ -7,14 +7,14 @@ internal static class BindExtensionsGenerator
 	public static IEnumerable<MethodBuilder> GenerateMethods(UnionExtensionMethodsFileGenerationParams p) =>
 		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
 
-	private static IEnumerable<MapOrBindMethodGenerationParams> CreateAllMethodsGenerationParams(UnionExtensionMethodsFileGenerationParams p) =>
+	private static IEnumerable<MethodGenerationParamsWithSpecialIndex> CreateAllMethodsGenerationParams(UnionExtensionMethodsFileGenerationParams p) =>
 		from asyncConfig in allPossibleAsyncMethodConfigs
 		from specialIndex in Enumerable.Range(0, p.UnionSize)
-		select new MapOrBindMethodGenerationParams(
+		select new MethodGenerationParamsWithSpecialIndex(
 			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName,
-			p.ElementTypeNamesGenerator, specialIndex, p.GetUnionOnArgument, p.FactoryMethodName);
+			p.ElementTypeNamesGenerator, p.GetUnionOnArgument, p.FactoryMethodName, specialIndex);
 
-	private static MethodBuilder GenerateMethod(MapOrBindMethodGenerationParams p) =>
+	private static MethodBuilder GenerateMethod(MethodGenerationParamsWithSpecialIndex p) =>
 		new MethodBuilder($"public static {p.ExtendedTypeOfTsNew().WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}{p.ElementTypeNamesGenerator().ElementAt(p.SpecialIndex)}<{p.Ts().ElementAt(p.SpecialIndex)}New, {p.TsCommaSeparatedOld()}>")
 			.AddArgument($"this {p.ExtendedTypeOfTsOld().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} {p.ThisArgumentName}")
 			.AddArgument($"Func<{p.Ts().ElementAt(p.SpecialIndex)}Old, {p.ExtendedTypeOfTsNew().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> binding")
