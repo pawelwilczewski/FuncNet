@@ -75,8 +75,10 @@ internal static class CodeGenerationUtils
 	public static string WrapInNewUnionFromTIfNotSpecial(this string value, SwitchCaseOneSpecial @case, int unionSize) =>
 		@case.SpecialIndex == @case.Index ? value : value.WrapInNewUnionFromT(@case, unionSize);
 
-	public static string UnionOfTs(int unionSize) => $"Union<{CommaSeparatedTs(unionSize)}>";
+	public static string UnionOfTs(int unionSize) => UnionOfTs(0, unionSize);
 	public static string UnionOfTs(int start, int count) => $"Union<{CommaSeparatedTs(start, count)}>";
+	public static string UnionOfErrorTs(int unionSize) => UnionOfErrorTs(0, unionSize);
+	public static string UnionOfErrorTs(int start, int count) => $"Union<{CommaSeparatedErrorTs(start, count)}>";
 
 	private static string UnionOfTsOneSpecial(int unionSize, int specialIndex, string specialReplacement) =>
 		$"Union<{CommaSeparatedTsWithSpecialReplacement(unionSize, specialIndex, specialReplacement)}>";
@@ -88,10 +90,17 @@ internal static class CodeGenerationUtils
 		UnionOfTsOneSpecial(unionSize, oldIndex, $"T{oldIndex}Old");
 
 	private static string CommaSeparatedErrorTs(int count) =>
-		string.Join(", ", Enumerable.Range(0, count).Select(i => $"TError{i}"));
+		CommaSeparatedErrorTs(0, count);
+
+	private static string CommaSeparatedErrorTs(int start, int count) =>
+		string.Join(", ", Enumerable.Range(start, count).Select(i => $"TError{i}"));
 
 	public static string ResultOfTs(int unionSize) => $"Result<{ResultTs(unionSize)}>";
-	public static string ResultTs(int unionSize) => $"TSuccess, {CommaSeparatedTErrors(unionSize - 1)}";
+
+	public static string ResultTs(int count) => count < 2
+		? throw new ArgumentOutOfRangeException(nameof(count))
+		: $"TSuccess, {CommaSeparatedErrorTs(count - 1)}";
+
 	public static string ResultUnion(int unionSize) => $"Union<{ResultTs(unionSize)}>";
 
 	public delegate string WrapText(string text);
@@ -251,12 +260,13 @@ public static class MethodBuilderExtensions
 }
 
 internal sealed record class UnionExtensionMethodsFileGenerationParams(
+	string ExtendedTypeName,
 	string Namespace,
 	string MethodNameOnly,
 	int UnionSize,
 	GenerateAllMethods GenerateAllMethods)
 {
-	public string FileName => $"Union{UnionSize}.{MethodNameOnly}.g.cs";
+	public string FileName => $"{ExtendedTypeName}{UnionSize}.{MethodNameOnly}.g.cs";
 }
 
 internal delegate IEnumerable<MethodBuilder> GenerateAllMethods(UnionExtensionMethodsFileGenerationParams p);

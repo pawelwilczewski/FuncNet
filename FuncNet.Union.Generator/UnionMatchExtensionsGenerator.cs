@@ -8,7 +8,7 @@ internal sealed record class MatchMethodGenerationParams(
 	UnionMethodAsyncConfig AsyncConfig,
 	int OtherCaseSize) : MethodGenerationParams(MethodNameOnly, UnionSize, AsyncConfig);
 
-internal static class MatchExtensionsGenerator
+internal static class UnionMatchExtensionsGenerator
 {
 	public static IEnumerable<MethodBuilder> GenerateMethods(UnionExtensionMethodsFileGenerationParams p) =>
 		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
@@ -43,5 +43,5 @@ internal static class MatchExtensionsGenerator
 
 	private static SwitchCaseText GenerateOtherSwitchCase(MatchMethodGenerationParams p) => p.OtherCaseSize <= 1
 		? new SwitchCaseText("_", $"t{p.UnionSize - 1}(u.Value{p.UnionSize - 1})")
-		: new SwitchCaseText("_",$"other(new {UnionOfTs(p.UnionSize - p.OtherCaseSize, p.OtherCaseSize)}(u.Value))");
+		: new SwitchCaseText("_", $"other(new {UnionOfTs(p.UnionSize - p.OtherCaseSize, p.OtherCaseSize)}(u.Value))");
 }

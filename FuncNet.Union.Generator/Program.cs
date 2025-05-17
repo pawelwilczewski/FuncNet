@@ -16,16 +16,17 @@ for (var i = 2; i < maxChoices + 1; ++i)
 	File.WriteAllText(
 		Path.Join(basePath, $"Union{i}.g.cs"),
 		UnionGenerator.GenerateUnionFile(@namespace, i));
-	
+
 	File.WriteAllText(
 		Path.Join(basePath, $"Result{i}.g.cs"),
 		ResultGenerator.GenerateResultFile(@namespace, i));
 
 	UnionExtensionMethodsFileGenerationParams[] generationParams =
 	[
-		new(@namespace, "Map", i, MapExtensionsGenerator.GenerateMethods),
-		new(@namespace, "Bind", i, BindExtensionsGenerator.GenerateMethods),
-		new(@namespace, "Match", i, MatchExtensionsGenerator.GenerateMethods)
+		new("Union", @namespace, "Map", i, MapExtensionsGenerator.GenerateMethods),
+		new("Union", @namespace, "Bind", i, BindExtensionsGenerator.GenerateMethods),
+		new("Union", @namespace, "Match", i, UnionMatchExtensionsGenerator.GenerateMethods),
+		new("Result", @namespace, "Match", i, ResultMatchExtensionsGenerator.GenerateMethods)
 	];
 
 	foreach (var p in generationParams)
