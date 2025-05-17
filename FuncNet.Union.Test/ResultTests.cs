@@ -132,4 +132,56 @@ public class ResultTests
 				otherErrors => $"Other error: {otherErrors}"
 			);
 	}
+
+	[Fact]
+	public void BindError_WithError_Works()
+	{
+		var result = Result<int, string, float>.FromError("Error message");
+
+		var bound = result.BindError0(
+			errorMsg => Result<int, DateTime, float>.FromError(DateTime.Parse("2020-01-01"))
+		);
+
+		var finalValue = bound.Match(
+			success => throw new UnreachableException(),
+			error => error,
+			otherErrors => throw new UnreachableException()
+		);
+
+		Assert.Equal(DateTime.Parse("2020-01-01"), finalValue);
+	}
+
+	[Fact]
+	public async Task BindErrorAsync_Works()
+	{
+		var result = Result<int, string, double>.FromError(132.43);
+		var transformed = await result.BindError1(async errorMsg =>
+		{
+			await Task.Yield();
+			return Result<int, string, double>.FromSuccess(42);
+		});
+
+		var finalValue = transformed.Match(
+			success => success,
+			error => throw new UnreachableException(),
+			otherErrors => throw new UnreachableException()
+		);
+
+		Assert.Equal(42, finalValue);
+
+		var successResult = Result<string, int, float>.FromSuccess("Success value");
+		var unchanged = await successResult.BindError0(async errorCode =>
+		{
+			await Task.Yield();
+			return Result<string, string, float>.FromError("Transformed error");
+		});
+
+		var unchangedValue = unchanged.Match(
+			success => success,
+			error => throw new UnreachableException(),
+			otherErrors => throw new UnreachableException()
+		);
+
+		Assert.Equal("Success value", unchangedValue);
+	}
 }
