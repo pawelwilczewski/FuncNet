@@ -23,7 +23,7 @@ for (var i = 2; i < maxChoices + 1; ++i)
 
 	UnionExtensionMethodsFileGenerationParams[] generationParams =
 	[
-		new("Union", @namespace, "Map", i, MapExtensionsGenerator.GenerateMethods),
+		new("Union", @namespace, "Map", i, UnionMapExtensionsGenerator.GenerateMethods),
 		new("Union", @namespace, "Bind", i, UnionBindExtensionsGenerator.GenerateMethods),
 		new("Union", @namespace, "Match", i, UnionMatchExtensionsGenerator.GenerateMethods),
 		new("Result", @namespace, "Match", i, ResultMatchExtensionsGenerator.GenerateMethods),

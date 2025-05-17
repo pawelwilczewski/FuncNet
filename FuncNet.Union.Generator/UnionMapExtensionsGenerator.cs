@@ -8,7 +8,7 @@ internal sealed record class MapMethodGenerationParams(
 	UnionMethodAsyncConfig AsyncConfig,
 	int SpecialIndex) : MethodGenerationParams(MethodNameOnly, UnionSize, AsyncConfig);
 
-internal static class MapExtensionsGenerator
+internal static class UnionMapExtensionsGenerator
 {
 	public static IEnumerable<MethodBuilder> GenerateMethods(UnionExtensionMethodsFileGenerationParams p) =>
 		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);

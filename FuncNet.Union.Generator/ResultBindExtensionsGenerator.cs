@@ -2,26 +2,20 @@ namespace FuncNet.Union.Generator;
 
 using static CodeGenerationUtils;
 
-internal sealed record class ResultBindMethodGenerationParams(
-	string MethodNameOnly,
-	int UnionSize,
-	UnionMethodAsyncConfig AsyncConfig,
-	int SpecialIndex) : MethodGenerationParams(MethodNameOnly, UnionSize, AsyncConfig);
-
 internal static class ResultBindExtensionsGenerator
 {
 	public static IEnumerable<MethodBuilder> GenerateMethods(UnionExtensionMethodsFileGenerationParams p) =>
 		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
 
-	private static IEnumerable<ResultBindMethodGenerationParams> CreateAllMethodsGenerationParams(UnionExtensionMethodsFileGenerationParams p) =>
+	private static IEnumerable<BindMethodGenerationParams> CreateAllMethodsGenerationParams(UnionExtensionMethodsFileGenerationParams p) =>
 		from asyncConfig in allPossibleAsyncMethodConfigs
 		from specialIndex in Enumerable.Range(0, p.UnionSize)
-		select new ResultBindMethodGenerationParams(p.MethodNameOnly, p.UnionSize, asyncConfig, specialIndex);
+		select new BindMethodGenerationParams(p.MethodNameOnly, p.UnionSize, asyncConfig, specialIndex);
 
-	private static MethodBuilder GenerateMethod(ResultBindMethodGenerationParams p) =>
+	private static MethodBuilder GenerateMethod(BindMethodGenerationParams p) =>
 		p.SpecialIndex == 0 ? GenerateSuccessBind(p) : GenerateErrorBind(p);
 
-	private static MethodBuilder GenerateSuccessBind(ResultBindMethodGenerationParams p)
+	private static MethodBuilder GenerateSuccessBind(BindMethodGenerationParams p)
 	{
 		var newResult = $"Result<TSuccessNew, {CommaSeparatedTErrors(p.UnionSize - 1)}>";
 		var errorTs = CommaSeparatedTErrors(p.UnionSize - 1);
@@ -39,7 +33,7 @@ internal static class ResultBindExtensionsGenerator
 				.WrapInAwaitConfiguredFromParameterIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}");
 	}
 
-	private static MethodBuilder GenerateErrorBind(ResultBindMethodGenerationParams p)
+	private static MethodBuilder GenerateErrorBind(BindMethodGenerationParams p)
 	{
 		var errorIndex = p.SpecialIndex - 1;
 		var oldErrorTs = CommaSeparatedTErrors(p.UnionSize - 1);
@@ -57,7 +51,7 @@ internal static class ResultBindExtensionsGenerator
 				.WrapInAwaitConfiguredFromParameterIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}");
 	}
 
-	private static IEnumerable<SwitchCaseText> GenerateSuccessBindExpressionCases(ResultBindMethodGenerationParams p) =>
+	private static IEnumerable<SwitchCaseText> GenerateSuccessBindExpressionCases(BindMethodGenerationParams p) =>
 		Enumerable.Range(1, p.UnionSize - 1)
 			.Select(i =>
 			{
@@ -67,7 +61,7 @@ internal static class ResultBindExtensionsGenerator
 					$"Result<TSuccessNew, {CommaSeparatedTErrors(p.UnionSize - 1)}>.FromError(u.Value{i})".WrapInTaskFromResultIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType)));
 			});
 
-	private static IEnumerable<SwitchCaseText> GenerateErrorBindExpressionCases(ResultBindMethodGenerationParams p)
+	private static IEnumerable<SwitchCaseText> GenerateErrorBindExpressionCases(BindMethodGenerationParams p)
 	{
 		var errorIndex = p.SpecialIndex - 1;
 		var newErrorTypeList = ReplaceErrorTypeAtIndex(p.UnionSize - 1, errorIndex);
