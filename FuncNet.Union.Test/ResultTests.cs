@@ -32,14 +32,12 @@ public class ResultTests
 		var result = Result<int, string, float>.FromSuccess(42);
 
 		var bound = result.BindSuccess(
-			value => Result<string, string, float>.FromSuccess($"Value: {value}")
-		);
+			value => Result<string, string, float>.FromSuccess($"Value: {value}"));
 
 		var finalValue = bound.Match(
 			success => success,
 			error => throw new UnreachableException(),
-			otherErrors => throw new UnreachableException()
-		);
+			otherErrors => throw new UnreachableException());
 
 		Assert.Equal("Value: 42", finalValue);
 	}
@@ -50,14 +48,12 @@ public class ResultTests
 		var result = Result<int, string, float>.FromError("Original error");
 
 		var bound = result.BindSuccess(
-			value => Result<string, string, float>.FromSuccess($"Value: {value}")
-		);
+			value => Result<string, string, float>.FromSuccess($"Value: {value}"));
 
 		var finalValue = bound.Match(
 			success => throw new UnreachableException(),
 			error => error,
-			otherErrors => throw new UnreachableException()
-		);
+			otherErrors => throw new UnreachableException());
 
 		Assert.Equal("Original error", finalValue);
 	}
@@ -75,8 +71,7 @@ public class ResultTests
 		var taskAsyncValue = boundTaskAsync.Match(
 			success => success,
 			error => throw new UnreachableException(),
-			otherErrors => throw new UnreachableException()
-		);
+			otherErrors => throw new UnreachableException());
 
 		Assert.Equal(25.0, taskAsyncValue);
 
@@ -90,21 +85,18 @@ public class ResultTests
 		var asyncValue = boundAsync.Match(
 			success => success,
 			error => throw new UnreachableException(),
-			otherErrors => throw new UnreachableException()
-		);
+			otherErrors => throw new UnreachableException());
 
 		Assert.Equal("Processed: 21", asyncValue);
 
 		var errorTaskResult = Task.FromResult(Result<int, string, float>.FromError(3.14f));
 		var boundTask = await errorTaskResult.BindSuccess(
-			value => Result<string, string, float>.FromSuccess(value.ToString())
-		);
+			value => Result<string, string, float>.FromSuccess(value.ToString()));
 
 		var errorPassThrough = boundTask.Match(
 			success => throw new UnreachableException(),
 			error => throw new UnreachableException(),
-			otherErrors => true
-		);
+			otherErrors => true);
 
 		Assert.True(errorPassThrough);
 	}
@@ -129,8 +121,7 @@ public class ResultTests
 			.Match(
 				success => success,
 				error => error,
-				otherErrors => $"Other error: {otherErrors}"
-			);
+				otherErrors => $"Other error: {otherErrors}");
 	}
 
 	[Fact]
@@ -139,14 +130,12 @@ public class ResultTests
 		var result = Result<int, string, float>.FromError("Error message");
 
 		var bound = result.BindError0(
-			errorMsg => Result<int, DateTime, float>.FromError(DateTime.Parse("2020-01-01"))
-		);
+			errorMsg => Result<int, DateTime, float>.FromError(DateTime.Parse("2020-01-01")));
 
 		var finalValue = bound.Match(
 			success => throw new UnreachableException(),
 			error => error,
-			otherErrors => throw new UnreachableException()
-		);
+			otherErrors => throw new UnreachableException());
 
 		Assert.Equal(DateTime.Parse("2020-01-01"), finalValue);
 	}
@@ -164,8 +153,7 @@ public class ResultTests
 		var finalValue = transformed.Match(
 			success => success,
 			error => throw new UnreachableException(),
-			otherErrors => throw new UnreachableException()
-		);
+			otherErrors => throw new UnreachableException());
 
 		Assert.Equal(42, finalValue);
 
@@ -179,8 +167,7 @@ public class ResultTests
 		var unchangedValue = unchanged.Match(
 			success => success,
 			error => throw new UnreachableException(),
-			otherErrors => throw new UnreachableException()
-		);
+			otherErrors => throw new UnreachableException());
 
 		Assert.Equal("Success value", unchangedValue);
 	}
@@ -191,14 +178,12 @@ public class ResultTests
 		var result = Result<int, string, float>.FromSuccess(42);
 
 		var mapped = result.MapSuccess(
-			value => value.ToString()
-		);
+			value => value.ToString());
 
 		var finalValue = mapped.Match(
 			success => success,
 			error => throw new UnreachableException(),
-			otherErrors => throw new UnreachableException()
-		);
+			otherErrors => throw new UnreachableException());
 
 		Assert.Equal("42", finalValue);
 	}
@@ -209,14 +194,12 @@ public class ResultTests
 		var result = Result<int, string, float>.FromError("Original error");
 
 		var mapped = result.MapSuccess(
-			value => value * 2
-		);
+			value => value * 2);
 
 		var finalValue = mapped.Match(
 			success => throw new UnreachableException(),
 			error => error,
-			otherErrors => throw new UnreachableException()
-		);
+			otherErrors => throw new UnreachableException());
 
 		Assert.Equal("Original error", finalValue);
 	}
@@ -234,8 +217,7 @@ public class ResultTests
 		var taskAsyncValue = mappedTaskAsync.Match(
 			success => success,
 			error => throw new UnreachableException(),
-			otherErrors => throw new UnreachableException()
-		);
+			otherErrors => throw new UnreachableException());
 
 		Assert.Equal(25.0, taskAsyncValue);
 
@@ -249,21 +231,18 @@ public class ResultTests
 		var asyncValue = mappedAsync.Match(
 			success => success,
 			error => throw new UnreachableException(),
-			otherErrors => throw new UnreachableException()
-		);
+			otherErrors => throw new UnreachableException());
 
 		Assert.Equal(21, asyncValue);
 
 		var errorTaskResult = Task.FromResult(Result<int, string, float>.FromError(3.14f));
 		var mappedTask = await errorTaskResult.MapSuccess(
-			value => value.ToString()
-		);
+			value => value.ToString());
 
 		var errorPassThrough = mappedTask.Match(
 			success => throw new UnreachableException(),
 			error => throw new UnreachableException(),
-			otherErrors => true
-		);
+			otherErrors => true);
 
 		Assert.True(errorPassThrough);
 	}
@@ -274,14 +253,12 @@ public class ResultTests
 		var result = Result<int, string, float>.FromError("Error message");
 
 		var mapped = result.MapError0(
-			errorMsg => DateTime.Parse("2020-01-01")
-		);
+			errorMsg => DateTime.Parse("2020-01-01"));
 
 		var finalValue = mapped.Match(
 			success => throw new UnreachableException(),
 			error => error,
-			otherErrors => throw new UnreachableException()
-		);
+			otherErrors => throw new UnreachableException());
 
 		Assert.Equal(DateTime.Parse("2020-01-01"), finalValue);
 	}
@@ -299,8 +276,7 @@ public class ResultTests
 		var finalValue = transformed.Match(
 			success => throw new UnreachableException(),
 			error => throw new UnreachableException(),
-			otherErrors => otherErrors
-		);
+			otherErrors => otherErrors);
 
 		Assert.Equal(66.215, finalValue);
 
@@ -315,8 +291,7 @@ public class ResultTests
 		var unchangedValue = unchanged.Match(
 			success => success,
 			error => throw new UnreachableException(),
-			otherErrors => throw new UnreachableException()
-		);
+			otherErrors => throw new UnreachableException());
 
 		Assert.Equal("Success value", unchangedValue);
 	}
