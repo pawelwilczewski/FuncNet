@@ -25,10 +25,10 @@ for (var i = 2; i < maxChoices + 1; ++i)
 	[
 		new("Union", @namespace, "Map", i, MapExtensionsGenerator.GenerateMethods, "union", UnionElementNamesGenerator(i), UnionGetterForUnion, UnionFactoryMethodName),
 		new("Union", @namespace, "Bind", i, BindExtensionsGenerator.GenerateMethods, "union", UnionElementNamesGenerator(i), UnionGetterForUnion, UnionFactoryMethodName),
-		new("Union", @namespace, "Match", i, UnionMatchExtensionsGenerator.GenerateMethods, "union", UnionElementNamesGenerator(i), UnionGetterForUnion, UnionFactoryMethodName),
+		new("Union", @namespace, "Match", i, MatchExtensionsGenerator.GenerateMethods, "union", UnionElementNamesGenerator(i), UnionGetterForUnion, UnionFactoryMethodName),
 		new("Result", @namespace, "Map", i, MapExtensionsGenerator.GenerateMethods, "result", ResultElementNamesGenerator(i), UnionGetterForResult, ResultFactoryMethodName),
 		new("Result", @namespace, "Bind", i, BindExtensionsGenerator.GenerateMethods, "result", ResultElementNamesGenerator(i), UnionGetterForResult, ResultFactoryMethodName),
-		new("Result", @namespace, "Match", i, ResultMatchExtensionsGenerator.GenerateMethods, "result", ResultElementNamesGenerator(i), UnionGetterForResult, ResultFactoryMethodName)
+		new("Result", @namespace, "Match", i, MatchExtensionsGenerator.GenerateMethods, "result", ResultElementNamesGenerator(i), UnionGetterForResult, ResultFactoryMethodName)
 	];
 
 	foreach (var p in generationParams)

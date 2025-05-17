@@ -31,15 +31,6 @@ internal static class CodeGenerationUtils
 	public static string CommaSeparatedTs(int start, int count) =>
 		JoinRangeToString(", ", start, count, i => $"T{i}");
 
-	public static string CommaSeparatedTs(int count) =>
-		CommaSeparatedTs(0, count);
-
-	public static string CommaSeparatedTErrors(int start, int count) =>
-		JoinRangeToString(", ", start, count, i => $"TError{i}");
-
-	public static string CommaSeparatedTErrors(int count) =>
-		CommaSeparatedTErrors(0, count);
-
 	public static string DontWrap(string text) => text;
 	public static string WrapInTask(string text) => $"Task<{text}>";
 	public static string WrapInTaskFromResult(string text) => $"Task.FromResult({text})";
@@ -60,28 +51,8 @@ internal static class CodeGenerationUtils
 	public static string WrapInAwaitConfiguredFromParameterIf(this string text, bool shouldWrap) =>
 		shouldWrap ? WrapInAwaitConfigured(text) : text;
 
-	private static IEnumerable<string> TsWithSpecialReplacement(int count, int specialIndex, string specialReplacement) =>
-		Enumerable.Range(0, count).Select(i => i == specialIndex ? specialReplacement : $"T{i}");
-
-	private static string CommaSeparatedTsWithSpecialReplacement(int count, int specialIndex, string specialReplacement) =>
-		string.Join(", ", TsWithSpecialReplacement(count, specialIndex, specialReplacement));
-
-	public static string TsOld(int count, int specialIndex) =>
-		CommaSeparatedTsWithSpecialReplacement(count, specialIndex, $"T{specialIndex}Old");
-
 	public static string UnionOfTs(int unionSize) => UnionOfTs(0, unionSize);
 	public static string UnionOfTs(int start, int count) => $"Union<{CommaSeparatedTs(start, count)}>";
-	public static string UnionOfTErrors(int unionSize) => UnionOfTErrors(0, unionSize);
-	public static string UnionOfTErrors(int start, int count) => $"Union<{CommaSeparatedErrorTs(start, count)}>";
-
-	private static string UnionOfTsOneSpecial(int unionSize, int specialIndex, string specialReplacement) =>
-		$"Union<{CommaSeparatedTsWithSpecialReplacement(unionSize, specialIndex, specialReplacement)}>";
-
-	public static string UnionOfTsOneNew(int unionSize, int newIndex) =>
-		UnionOfTsOneSpecial(unionSize, newIndex, $"T{newIndex}New");
-
-	public static string UnionOfTsOneOld(int unionSize, int oldIndex) =>
-		UnionOfTsOneSpecial(unionSize, oldIndex, $"T{oldIndex}Old");
 
 	private static string CommaSeparatedErrorTs(int count) =>
 		CommaSeparatedErrorTs(0, count);
