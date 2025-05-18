@@ -223,8 +223,8 @@ internal static class MethodBuilderExtensions
 }
 
 internal sealed record class UnionExtensionMethodsFileGenerationParams(
-	string ExtendedTypeName,
 	string Namespace,
+	string ExtendedTypeName,
 	string MethodNameOnly,
 	int UnionSize,
 	GenerateAllMethods GenerateAllMethods,
@@ -272,6 +272,8 @@ internal sealed record class MethodGenerationParamsWithOtherCaseSize(
 	UnionGetter GetUnionOnArgument,
 	Func<IEnumerable<string>> ElementTypeNamesGenerator,
 	int OtherCaseSize) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, GetUnionOnArgument, ElementTypeNamesGenerator);
+
+internal delegate string UnionGetter(string argument);
 
 [Flags]
 public enum UnionMethodAsyncConfig

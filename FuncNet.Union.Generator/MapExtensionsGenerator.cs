@@ -2,8 +2,6 @@ namespace FuncNet.Union.Generator;
 
 using static CodeGenerationUtils;
 
-internal delegate string UnionGetter(string argument);
-
 internal static class MapExtensionsGenerator
 {
 	public static IEnumerable<MethodBuilder> GenerateMethods(UnionExtensionMethodsFileGenerationParams p) =>

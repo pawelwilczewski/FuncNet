@@ -9,6 +9,8 @@ const string @namespace = "FuncNet.Union";
 
 for (var i = 2; i < maxChoices + 1; ++i)
 {
+	var unionSize = i;
+
 	var basePath = Path.Join(
 		Path.GetFullPath(Assembly.GetExecutingAssembly().Location),
 		"/../../../../../FuncNet.Union");
@@ -21,15 +23,24 @@ for (var i = 2; i < maxChoices + 1; ++i)
 		Path.Join(basePath, $"Result{i}.g.cs"),
 		ResultGenerator.GenerateResultFile(@namespace, i));
 
-	UnionExtensionMethodsFileGenerationParams[] generationParams =
+	(string extendedTypeName, string thisArgumentName, Func<IEnumerable<string>> elementNamesGenerator, UnionGetter unionGetter, FactoryMethodNameForTIndex factoryMethodName)[] baseParams =
 	[
-		new("Union", @namespace, "Map", i, MapExtensionsGenerator.GenerateMethods, "union", UnionElementNamesGenerator(i), UnionGetterForUnion, UnionFactoryMethodName),
-		new("Union", @namespace, "Bind", i, BindExtensionsGenerator.GenerateMethods, "union", UnionElementNamesGenerator(i), UnionGetterForUnion, UnionFactoryMethodName),
-		new("Union", @namespace, "Match", i, MatchExtensionsGenerator.GenerateMethods, "union", UnionElementNamesGenerator(i), UnionGetterForUnion, UnionFactoryMethodName),
-		new("Result", @namespace, "Map", i, MapExtensionsGenerator.GenerateMethods, "result", ResultElementNamesGenerator(i), UnionGetterForResult, ResultFactoryMethodName),
-		new("Result", @namespace, "Bind", i, BindExtensionsGenerator.GenerateMethods, "result", ResultElementNamesGenerator(i), UnionGetterForResult, ResultFactoryMethodName),
-		new("Result", @namespace, "Match", i, MatchExtensionsGenerator.GenerateMethods, "result", ResultElementNamesGenerator(i), UnionGetterForResult, ResultFactoryMethodName)
+		("Union", "union", UnionElementNamesGenerator(i), UnionGetterForUnion, UnionFactoryMethodName),
+		("Result", "result", ResultElementNamesGenerator(i), UnionGetterForResult, ResultFactoryMethodName)
 	];
+
+	(string methodNameOnly, GenerateAllMethods generateMethods)[] methodGenerators =
+	[
+		("Match", MatchExtensionsGenerator.GenerateMethods),
+		("Map", MapExtensionsGenerator.GenerateMethods),
+		("Bind", BindExtensionsGenerator.GenerateMethods)
+	];
+
+	var generationParams =
+		from m in methodGenerators
+		from p in baseParams
+		select new UnionExtensionMethodsFileGenerationParams(
+			@namespace, p.extendedTypeName, m.methodNameOnly, unionSize, m.generateMethods, p.thisArgumentName, p.elementNamesGenerator, p.unionGetter, p.factoryMethodName);
 
 	foreach (var p in generationParams)
 	{
