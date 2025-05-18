@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace {@namespace};
 
-public readonly record struct {ResultOfTs(unionSize)}
+public readonly partial record struct {ResultOfTs(unionSize)}
 {{
     internal {ResultUnion(unionSize)} Value {{ get; init; }}
 

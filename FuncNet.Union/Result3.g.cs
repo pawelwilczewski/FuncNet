@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FuncNet.Union;
 
-public readonly record struct Result<TSuccess, TError0, TError1>
+public readonly partial record struct Result<TSuccess, TError0, TError1>
 {
     internal Union<TSuccess, TError0, TError1> Value { get; init; }
 

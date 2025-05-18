@@ -123,6 +123,16 @@ public sealed class StatementsBlockBuilder
 		return this;
 	}
 
+	public StatementsBlockBuilder AddStatements(IEnumerable<string> statements)
+	{
+		foreach (var statement in statements)
+		{
+			builder.Append(statement).Append(';').Append(DELIMITER).Append('\t');
+		}
+
+		return this;
+	}
+
 	public override string ToString() => $"{{{DELIMITER}{builder}{DELIMITER}}}";
 }
 
@@ -160,6 +170,23 @@ public sealed class SwitchExpressionBuilder
 	public override string ToString() => $"{builder}}}";
 }
 
+public sealed class IfStatementBuilder
+{
+	private const string DELIMITER = "\n\t\t";
+	private readonly string condition;
+	private readonly StatementsBlockBuilder statements = new();
+
+	public IfStatementBuilder(string condition) => this.condition = condition;
+
+	public IfStatementBuilder AddStatement(string statement)
+	{
+		statements.AddStatement(statement);
+		return this;
+	}
+
+	public override string ToString() => $"if ({condition}){statements}";
+}
+
 public sealed class MethodBuilder
 {
 	private readonly string name;
@@ -177,6 +204,12 @@ public sealed class MethodBuilder
 	public MethodBuilder AddArguments(IEnumerable<string> arguments)
 	{
 		argumentList.AddArguments(arguments);
+		return this;
+	}
+
+	public MethodBuilder AddBodyStatements(IEnumerable<string> statements)
+	{
+		body.AddStatements(statements);
 		return this;
 	}
 
@@ -221,6 +254,8 @@ internal static class MethodBuilderExtensions
 
 internal sealed record class UnionExtensionMethodsFileGenerationParams(
 	string Namespace,
+	string AdditionalUsings,
+	Func<UnionExtensionMethodsFileGenerationParams, string> ClassDeclaration,
 	string ExtendedTypeName,
 	string MethodNameOnly,
 	int UnionSize,
@@ -259,9 +294,7 @@ internal record class MethodGenerationParamsWithSpecialIndex(
 	FactoryMethodNameForTIndex FactoryMethodName,
 	int SpecialIndex) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, GetUnionOnArgument, FactoryMethodName, ElementTypeNamesGenerator);
 
-internal delegate string FactoryMethodNameForTIndex(int tIndex);
-
-internal sealed record class MethodGenerationParamsWithOtherCaseSize(
+internal record class MethodGenerationParamsWithOtherCaseSize(
 	string ExtendedTypeName,
 	string MethodNameOnly,
 	int UnionSize,
@@ -271,6 +304,19 @@ internal sealed record class MethodGenerationParamsWithOtherCaseSize(
 	FactoryMethodNameForTIndex FactoryMethodName,
 	Func<IEnumerable<string>> ElementTypeNamesGenerator,
 	int OtherCaseSize) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, GetUnionOnArgument, FactoryMethodName, ElementTypeNamesGenerator);
+
+internal record class MethodGenerationParamsWithOptionsCount(
+	string ExtendedTypeName,
+	string MethodNameOnly,
+	int UnionSize,
+	UnionMethodAsyncConfig AsyncConfig,
+	string ThisArgumentName,
+	Func<IEnumerable<string>> ElementTypeNamesGenerator,
+	UnionGetter GetUnionOnArgument,
+	FactoryMethodNameForTIndex FactoryMethodName,
+	int OptionsCount) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, GetUnionOnArgument, FactoryMethodName, ElementTypeNamesGenerator);
+
+internal delegate string FactoryMethodNameForTIndex(int tIndex);
 
 internal delegate string UnionGetter(string argument);
 

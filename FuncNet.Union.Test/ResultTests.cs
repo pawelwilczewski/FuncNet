@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 
 namespace FuncNet.Union.Test;
 
@@ -402,4 +403,255 @@ public class ResultTests
 					error => error,
 					otherErrors => $"Other error: {otherErrors}");
 	}
+
+	[Fact]
+	public void Combine_AllSuccess_CallsCombineSuccess()
+	{
+		var result1 = Result<int, string, double>.FromSuccess(10);
+		var result2 = Result<string, string, double>.FromSuccess("test");
+
+		var combined = Result.Combine(
+			result1,
+			result2,
+			(num, str) => $"{str}-{num}",
+			(errors0, errors1) => "Error case should not be reached");
+
+		Assert.Equal("test-10", combined);
+	}
+
+	[Fact]
+	public void Combine_Works()
+	{
+		var result1 = Result<int, string, double>.FromError("Error 1");
+		var result2 = Result<DateTime, string, double>.FromSuccess(DateTime.Now);
+
+		var combined = Result.Combine(
+			result1,
+			result2,
+			(num, str) => "Success case should not be reached",
+			(errors0, errors1) => $"Errors: {string.Join(", ", errors0)}");
+
+		Assert.Equal("Errors: Error 1", combined);
+
+		result1 = Result<int, string, double>.FromSuccess(10);
+		result2 = Result<DateTime, string, double>.FromSuccess(DateTime.Now);
+
+		combined = Result.Combine(
+			result1,
+			result2,
+			(num, str) => "Success case should be reached",
+			(errors0, errors1) => $"Errors: {string.Join(", ", errors0)}");
+
+		Assert.Equal("Success case should be reached", combined);
+	}
+
+	[Fact]
+	public void Combine_BothErrors_CollectsAllErrors()
+	{
+		var result1 = Result<int, string, double>.FromError("Error 1");
+		var result2 = Result<string, string, double>.FromError("Error 2");
+
+		var combined = Result.Combine(
+			result1,
+			result2,
+			(num, str) => "Success case should not be reached",
+			(errors0, errors1) => $"Errors: {string.Join(", ", errors0.Concat(errors1.Select(err => err.ToString(CultureInfo.InvariantCulture))))}");
+
+		Assert.Equal("Errors: Error 1, Error 2", combined);
+	}
+
+	[Fact]
+	public void Combine_MixedErrorTypes_CollectsTypedErrors()
+	{
+		var result1 = Result<int, string, double>.FromError(123.45);
+		var result2 = Result<string, string, double>.FromError("Error string");
+
+		var combined = Result.Combine(
+			result1,
+			result2,
+			(num, str) => "Success case should not be reached",
+			(errors0, errors1) => $"String errors: {string.Join(", ", errors0)}, Double errors: {string.Join(", ", errors1)}");
+
+		Assert.Equal("String errors: Error string, Double errors: 123.45", combined);
+	}
+
+	[Fact]
+	public void Combine_ThreeResults_AllSuccess()
+	{
+		var result1 = Result<int, string, double>.FromSuccess(10);
+		var result2 = Result<string, string, double>.FromSuccess("test");
+		var result3 = Result<bool, string, double>.FromSuccess(true);
+
+		var combined = Result.Combine(
+			result1,
+			result2,
+			result3,
+			(num, str, boolean) => $"{str}-{num}-{boolean}",
+			(errors0, errors1) => "Error case should not be reached");
+
+		Assert.Equal("test-10-True", combined);
+	}
+
+	[Fact]
+	public void Combine_ThreeResults_MixedErrors()
+	{
+		var result1 = Result<int, string, double>.FromSuccess(10);
+		var result2 = Result<string, string, double>.FromError("Error 2");
+		var result3 = Result<bool, string, double>.FromError(99.9);
+
+		var combined = Result.Combine(
+			result1,
+			result2,
+			result3,
+			(num, str, boolean) => "Success case should not be reached",
+			(errors0, errors1) => $"String errors: {errors1.Count}, Double errors: {errors0.Count}");
+
+		Assert.Equal("String errors: 1, Double errors: 1", combined);
+	}
+
+	[Fact]
+	public async Task Combine_Async_AllSuccess()
+	{
+		var result1 = Task.FromResult(Result<int, string, double>.FromSuccess(10));
+		var result2 = Task.FromResult(Result<string, string, double>.FromSuccess("test"));
+
+		var combined = await Result.Combine(
+			result1,
+			result2,
+			async (num, str) =>
+			{
+				await Task.Yield();
+				return $"{str}-{num}";
+			},
+			async (errors0, errors1) =>
+			{
+				await Task.Yield();
+				return "Error case should not be reached";
+			});
+
+		Assert.Equal("test-10", combined);
+	}
+
+	[Fact]
+	public async Task Combine_Async_WithErrors()
+	{
+		var result1 = Task.FromResult(Result<int, string, double>.FromError("Error 1"));
+		var result2 = Task.FromResult(Result<string, string, double>.FromError(123.45));
+
+		var combined = await Result.Combine(
+			result1,
+			result2,
+			async (num, str) =>
+			{
+				await Task.Yield();
+				return "Success case should not be reached";
+			},
+			async (errors0, errors1) =>
+			{
+				await Task.Yield();
+				return $"Errors collected: {errors0.Count + errors1.Count}";
+			});
+
+		Assert.Equal("Errors collected: 2", combined);
+	}
+
+	[Fact]
+	public async Task Combine_Async_WithCancellation()
+	{
+		var result1 = Task.FromResult(Result<int, string, double>.FromSuccess(10));
+		var result2 = Task.FromResult(Result<string, string, double>.FromSuccess("test"));
+		var cts = new CancellationTokenSource();
+
+		var combined = Result.Combine(
+			result1,
+			result2,
+			async (num, str) =>
+			{
+				await Task.Yield();
+				return $"{str}-{num}";
+			},
+			async (errors0, errors1) =>
+			{
+				await Task.Yield();
+				return "Error case should not be reached";
+			},
+			cts.Token);
+
+		await cts.CancelAsync();
+
+		Assert.Equal("test-10", await combined);
+		await Assert.ThrowsAsync<TaskCanceledException>(async () =>
+		{
+			await Result.Combine(
+				result1,
+				result2,
+				async (num, str) =>
+				{
+					await Task.Delay(1000, cts.Token);
+					return $"{str}-{num}";
+				},
+				async (errors0, errors1) =>
+				{
+					await Task.Delay(1000, cts.Token);
+					return "Error case should not be reached";
+				},
+				cts.Token);
+		});
+	}
+
+	[Fact]
+	public void Combine_PracticalExample_ValidationScenario()
+	{
+		var nameValidation = ValidateName("John Doe");
+		var ageValidation = ValidateAge(25);
+		var emailValidation = ValidateEmail("john@example.com");
+
+		var validationResult = Result.Combine(
+			nameValidation,
+			ageValidation,
+			emailValidation,
+			(name, age, email) => Result<User, string>.FromSuccess(new User(name, age, email)),
+			(stringErrors, doubleErrors) => string.Join(", ", stringErrors));
+
+		validationResult.Match(
+			user =>
+			{
+				Assert.Equal("John Doe", user.Name);
+				Assert.Equal(25, user.Age);
+				Assert.Equal("john@example.com", user.Email);
+				return 0;
+			},
+			error => throw new UnreachableException());
+
+		var invalidNameValidation = ValidateName("");
+		var invalidAgeValidation = ValidateAge(-5);
+		var invalidEmailValidation = ValidateEmail("not-an-email");
+
+		var invalidResult = Result.Combine(
+			invalidNameValidation,
+			invalidAgeValidation,
+			invalidEmailValidation,
+			(name, age, email) => Result<User, string>.FromSuccess(new User(name, age, email)),
+			(stringErrors, doubleErrors) => string.Join(", ", stringErrors));
+
+		Assert.Equal("Name cannot be empty, Age must be positive, Invalid email format", invalidResult);
+		return;
+
+		static Result<string, string, double> ValidateName(string name) =>
+			!string.IsNullOrEmpty(name)
+				? Result<string, string, double>.FromSuccess(name)
+				: Result<string, string, double>.FromError("Name cannot be empty");
+
+		static Result<int, string, double> ValidateAge(int age) =>
+			age > 0
+				? Result<int, string, double>.FromSuccess(age)
+				: Result<int, string, double>.FromError("Age must be positive");
+
+		static Result<string, string, double> ValidateEmail(string email) =>
+			email.Contains('@')
+				? Result<string, string, double>.FromSuccess(email)
+				: Result<string, string, double>.FromError("Invalid email format");
+	}
+
+	private sealed record class User(string Name, int Age, string Email);
 }
