@@ -343,4 +343,118 @@ public class UnionTests
 					i => $"Integer value: {i}",
 					d => $"Value processed to: {d:F1}");
 	}
+
+	[Fact]
+	public void EnsureVariants_Work()
+	{
+		Union<string, int, double> u1 = "test";
+		var result1 = u1.Ensure0(
+			s => s.Length > 2,
+			() => Union<string, int, double>.FromT0("error"));
+
+		var original = result1.Match(
+			s => s,
+			_ => string.Empty,
+			_ => string.Empty);
+		Assert.Equal("test", original);
+
+		Union<string, int, double> u2 = "a";
+		var result2 = u2.Ensure0(
+			s => s.Length > 2,
+			() => Union<string, int, double>.FromT1(42));
+
+		var switched = result2.Match(
+			_ => -1,
+			i => i,
+			_ => -1);
+		Assert.Equal(42, switched);
+
+		Union<string, int, double> u3 = 5;
+		var result3 = u3.Ensure1(
+			i => i > 10,
+			() => Union<string, int, double>.FromT2(99.9));
+
+		var valueType = result3.Match(
+			_ => "string",
+			_ => "int",
+			_ => "double");
+		Assert.Equal("double", valueType);
+
+		Union<string, int, double> u4 = 20;
+		var result4 = u4.Ensure1(
+			i => i > 10,
+			() => Union<string, int, double>.FromT0("should not happen"));
+
+		Assert.Equal(20, result4.Match(
+			_ => 0,
+			i => i,
+			_ => 0));
+	}
+
+	[Fact]
+	public async Task AsyncEnsureVariants_Work()
+	{
+		var taskUnion = Task.FromResult<Union<string, int, double>>("short");
+		var result1 = await taskUnion.Ensure0(
+			async s =>
+			{
+				await Task.Delay(10);
+				return s.Length > 5;
+			},
+			async () =>
+			{
+				await Task.Delay(10);
+				return Union<string, int, double>.FromT1(123);
+			});
+
+		Assert.Equal(123, result1.Match(
+			_ => 0,
+			i => i,
+			_ => 0));
+
+		Union<string, int, double> u2 = 15.5;
+		var result2 = await u2.Ensure2(
+			async d =>
+			{
+				await Task.Delay(10);
+				return d < 10.0;
+			},
+			async () =>
+			{
+				await Task.Delay(10);
+				return Union<string, int, double>.FromT0("value too large");
+			});
+
+		Assert.Equal("value too large", result2.Match(
+			s => s,
+			_ => string.Empty,
+			_ => string.Empty));
+	}
+
+	[Fact]
+	public void EnsureInPipeline_Works()
+	{
+		var result = ProcessWithValidation(5);
+		Assert.Equal("Processed value: 20", result);
+
+		result = ProcessWithValidation(-5);
+		Assert.Equal("Invalid input: Value must be positive", result);
+
+		result = ProcessWithValidation(200);
+		Assert.Equal("Invalid input: Value too large", result);
+
+		return;
+
+		static string ProcessWithValidation(int input) =>
+			Union<string, int>.FromT1(input)
+				.Ensure1(
+					i => i > 0,
+					() => Union<string, int>.FromT0("Value must be positive"))
+				.Ensure1(
+					i => i < 100,
+					() => Union<string, int>.FromT0("Value too large"))
+				.Match(
+					errorMsg => $"Invalid input: {errorMsg}",
+					i => $"Processed value: {i * 4}");
+	}
 }

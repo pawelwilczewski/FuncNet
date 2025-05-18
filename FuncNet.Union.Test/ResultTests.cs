@@ -347,4 +347,59 @@ public class ResultTests
 			}
 		}
 	}
+
+	[Fact]
+	public void TapAndEnsurePipeline_Works()
+	{
+		var messages = new List<string>();
+
+		var successResult = ProcessWithValidation(42, messages);
+		Assert.Equal("Final value: 84", successResult);
+		Assert.Equal(2, messages.Count);
+		Assert.Contains("Processing value: 42", messages);
+		Assert.Contains("Doubled value: 84", messages);
+
+		messages.Clear();
+
+		var invalidResult = ProcessWithValidation(-5, messages);
+		Assert.Equal("Validation error: Value must be positive", invalidResult);
+		Assert.Equal(2, messages.Count);
+		Assert.Contains("Validation failed for: -5", messages);
+
+		messages.Clear();
+
+		var tooBigResult = ProcessWithValidation(150, messages);
+		Assert.Equal("Validation error: Value exceeds maximum", tooBigResult);
+		Assert.Equal(3, messages.Count);
+		Assert.Contains("Processing value: 150", messages);
+		Assert.Contains("Validation failed: 150 is too large", messages);
+
+		return;
+
+		static string ProcessWithValidation(int input, List<string> logMessages) =>
+			Result<int, string, double>.FromSuccess(input)
+				.TapSuccess(value => { logMessages.Add($"Processing value: {value}"); })
+				.EnsureSuccess(
+					value => value > 0,
+					() =>
+					{
+						logMessages.Add($"Validation failed for: {input}");
+						return Result<int, string, double>.FromError("Value must be positive");
+					})
+				.MapSuccess(value => value * 2)
+				.TapSuccess(value => { logMessages.Add($"Doubled value: {value}"); })
+				.EnsureSuccess(
+					value => value < 100,
+					() =>
+					{
+						logMessages.Add($"Validation failed: {input} is too large");
+						return Result<int, string, double>.FromError("Value exceeds maximum");
+					})
+				.MapSuccess(value => $"Final value: {value}")
+				.MapError0(error => $"Validation error: {error}")
+				.Match(
+					success => success,
+					error => error,
+					otherErrors => $"Other error: {otherErrors}");
+	}
 }
