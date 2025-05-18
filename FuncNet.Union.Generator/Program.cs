@@ -7,55 +7,50 @@ var startTime = Stopwatch.GetTimestamp();
 const int maxChoices = 8;
 const string @namespace = "FuncNet.Union";
 
-for (var i = 2; i < maxChoices + 1; ++i)
+var basePath = Path.Join(
+	Path.GetFullPath(Assembly.GetExecutingAssembly().Location),
+	"/../../../../../FuncNet.Union");
+
+for (var unionSize = 2; unionSize < maxChoices + 1; ++unionSize)
 {
-	var unionSize = i;
-
-	var basePath = Path.Join(
-		Path.GetFullPath(Assembly.GetExecutingAssembly().Location),
-		"/../../../../../FuncNet.Union");
+	File.WriteAllText(
+		Path.Join(basePath, $"Union{unionSize}.g.cs"),
+		UnionGenerator.GenerateUnionFile(@namespace, unionSize));
 
 	File.WriteAllText(
-		Path.Join(basePath, $"Union{i}.g.cs"),
-		UnionGenerator.GenerateUnionFile(@namespace, i));
+		Path.Join(basePath, $"Result{unionSize}.g.cs"),
+		ResultGenerator.GenerateResultFile(@namespace, unionSize));
+}
 
+(string methodNameOnly, GenerateAllMethods generateMethods)[] methodGenerators =
+[
+	("Match", MatchExtensionsGenerator.GenerateMethods),
+	("Map", MapExtensionsGenerator.GenerateMethods),
+	("Bind", BindExtensionsGenerator.GenerateMethods)
+];
+
+var generationParams =
+	from m in methodGenerators
+	from unionSize in Enumerable.Range(2, maxChoices - 1)
+	from p in GenerateBaseParams(unionSize)
+	select new UnionExtensionMethodsFileGenerationParams(
+		@namespace, p.extendedTypeName, m.methodNameOnly, unionSize, m.generateMethods, p.thisArgumentName, p.elementNamesGenerator, p.unionGetter, p.factoryMethodName);
+
+foreach (var p in generationParams)
+{
 	File.WriteAllText(
-		Path.Join(basePath, $"Result{i}.g.cs"),
-		ResultGenerator.GenerateResultFile(@namespace, i));
-
-	(string extendedTypeName, string thisArgumentName, Func<IEnumerable<string>> elementNamesGenerator, UnionGetter unionGetter, FactoryMethodNameForTIndex factoryMethodName)[] baseParams =
-	[
-		("Union", "union", UnionElementNamesGenerator(i), UnionGetterForUnion, UnionFactoryMethodName),
-		("Result", "result", ResultElementNamesGenerator(i), UnionGetterForResult, ResultFactoryMethodName)
-	];
-
-	(string methodNameOnly, GenerateAllMethods generateMethods)[] methodGenerators =
-	[
-		("Match", MatchExtensionsGenerator.GenerateMethods),
-		("Map", MapExtensionsGenerator.GenerateMethods),
-		("Bind", BindExtensionsGenerator.GenerateMethods)
-	];
-
-	var generationParams =
-		from m in methodGenerators
-		from p in baseParams
-		select new UnionExtensionMethodsFileGenerationParams(
-			@namespace, p.extendedTypeName, m.methodNameOnly, unionSize, m.generateMethods, p.thisArgumentName, p.elementNamesGenerator, p.unionGetter, p.factoryMethodName);
-
-	foreach (var p in generationParams)
-	{
-		File.WriteAllText(
-			Path.Join(basePath, p.FileName),
-			UnionExtensionMethodsFileGenerator.GenerateExtensionsFile(p));
-	}
-
-	File.WriteAllText(
-		Path.Join(basePath, $"Result{i}.g.cs"),
-		ResultGenerator.GenerateResultFile(@namespace, i));
+		Path.Join(basePath, p.FileName),
+		UnionExtensionMethodsFileGenerator.GenerateExtensionsFile(p));
 }
 
 Console.WriteLine($"Generated in {Stopwatch.GetElapsedTime(startTime)}");
 return;
+
+(string extendedTypeName, string thisArgumentName, Func<IEnumerable<string>> elementNamesGenerator, UnionGetter unionGetter, FactoryMethodNameForTIndex factoryMethodName)[] GenerateBaseParams(int unionSize) =>
+[
+	("Union", "union", UnionElementNamesGenerator(unionSize), UnionGetterForUnion, UnionFactoryMethodName),
+	("Result", "result", ResultElementNamesGenerator(unionSize), UnionGetterForResult, ResultFactoryMethodName)
+];
 
 static Func<IEnumerable<string>> UnionElementNamesGenerator(int unionSize) =>
 	() => Enumerable.Range(0, unionSize).Select(i => i.ToString());
