@@ -26,7 +26,8 @@ for (var unionSize = 2; unionSize < maxChoices + 1; ++unionSize)
 [
 	("Match", MatchExtensionsGenerator.GenerateMethods),
 	("Map", MapExtensionsGenerator.GenerateMethods),
-	("Bind", BindExtensionsGenerator.GenerateMethods)
+	("Bind", BindExtensionsGenerator.GenerateMethods),
+	("Tap", TapExtensionsGenerator.GenerateMethods)
 ];
 
 var generationParams =

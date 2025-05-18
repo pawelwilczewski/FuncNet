@@ -31,12 +31,11 @@ internal static class CodeGenerationUtils
 	public static string CommaSeparatedTs(int start, int count) =>
 		JoinRangeToString(", ", start, count, i => $"T{i}");
 
-	public static string DontWrap(string text) => text;
-	public static string WrapInTask(string text) => $"Task<{text}>";
-	public static string WrapInTaskFromResult(string text) => $"Task.FromResult({text})";
-	public static string WrapInAsyncTask(string text) => $"async {WrapInTask(text)}";
+	public static string WrapInTask(this string text) => $"Task<{text}>";
+	public static string WrapInTaskFromResult(this string text) => $"Task.FromResult({text})";
+	public static string WrapInAsyncTask(this string text) => $"async {WrapInTask(text)}";
 
-	public static string WrapInAwaitConfigured(string text) =>
+	public static string WrapInAwaitConfigured(this string text) =>
 		$"await ({text}).ConfigureAwait(false)";
 
 	public static string WrapInTaskIf(this string text, bool shouldWrap) =>
@@ -48,7 +47,7 @@ internal static class CodeGenerationUtils
 	public static string WrapInAsyncTaskIf(this string text, bool shouldWrap) =>
 		shouldWrap ? WrapInAsyncTask(text) : text;
 
-	public static string WrapInAwaitConfiguredFromParameterIf(this string text, bool shouldWrap) =>
+	public static string WrapInAwaitConfiguredIf(this string text, bool shouldWrap) =>
 		shouldWrap ? WrapInAwaitConfigured(text) : text;
 
 	public static string UnionOfTs(int unionSize) => UnionOfTs(0, unionSize);
@@ -67,8 +66,6 @@ internal static class CodeGenerationUtils
 		: $"TSuccess, {CommaSeparatedErrorTs(count - 1)}";
 
 	public static string ResultUnion(int unionSize) => $"Union<{ResultTs(unionSize)}>";
-
-	public delegate string WrapText(string text);
 }
 
 public sealed class SourceCodeFileBuilder
@@ -245,6 +242,7 @@ internal record class MethodGenerationParams(
 	UnionMethodAsyncConfig AsyncConfig,
 	string ThisArgumentName,
 	UnionGetter GetUnionOnArgument,
+	FactoryMethodNameForTIndex FactoryMethodName,
 	Func<IEnumerable<string>> ElementTypeNamesGenerator)
 {
 	public bool IsAsync(UnionMethodAsyncConfig typeToCheck) => (typeToCheck & AsyncConfig) != 0;
@@ -259,7 +257,7 @@ internal record class MethodGenerationParamsWithSpecialIndex(
 	Func<IEnumerable<string>> ElementTypeNamesGenerator,
 	UnionGetter GetUnionOnArgument,
 	FactoryMethodNameForTIndex FactoryMethodName,
-	int SpecialIndex) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, GetUnionOnArgument, ElementTypeNamesGenerator);
+	int SpecialIndex) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, GetUnionOnArgument, FactoryMethodName, ElementTypeNamesGenerator);
 
 internal delegate string FactoryMethodNameForTIndex(int tIndex);
 
@@ -270,8 +268,9 @@ internal sealed record class MethodGenerationParamsWithOtherCaseSize(
 	UnionMethodAsyncConfig AsyncConfig,
 	string ThisArgumentName,
 	UnionGetter GetUnionOnArgument,
+	FactoryMethodNameForTIndex FactoryMethodName,
 	Func<IEnumerable<string>> ElementTypeNamesGenerator,
-	int OtherCaseSize) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, GetUnionOnArgument, ElementTypeNamesGenerator);
+	int OtherCaseSize) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, GetUnionOnArgument, FactoryMethodName, ElementTypeNamesGenerator);
 
 internal delegate string UnionGetter(string argument);
 

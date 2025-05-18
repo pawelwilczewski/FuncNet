@@ -10,7 +10,7 @@ internal static class MatchExtensionsGenerator
 	private static IEnumerable<MethodGenerationParamsWithOtherCaseSize> CreateAllMethodsGenerationParams(UnionExtensionMethodsFileGenerationParams p) =>
 		from asyncConfig in allPossibleAsyncMethodConfigs
 		from otherCaseSize in Enumerable.Range(1, p.UnionSize - 1)
-		select new MethodGenerationParamsWithOtherCaseSize(p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName, p.GetUnionOnArgument, p.ElementTypeNamesGenerator, otherCaseSize);
+		select new MethodGenerationParamsWithOtherCaseSize(p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName, p.GetUnionOnArgument, p.FactoryMethodName, p.ElementTypeNamesGenerator, otherCaseSize);
 
 	private static MethodBuilder GenerateMethod(MethodGenerationParamsWithOtherCaseSize p) =>
 		new MethodBuilder($"public static {"TResult".WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}<TResult, {p.TsCommaSeparated()}>")
@@ -18,14 +18,14 @@ internal static class MatchExtensionsGenerator
 			.AddArguments(Enumerable.Range(0, p.UnionSize - p.OtherCaseSize).Select(i => $"Func<{p.Ts().ElementAt(i)}, {"TResult".WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> {p.ElementTypeNamesLowerCamelCase().ElementAt(i)}"))
 			.AddArgument(GenerateLastArgument(p))
 			.AddAsyncArgumentsIfAsync(p)
-			.AddBodyStatement($"var u = {p.GetUnionOnArgument(p.ThisArgumentName.WrapInAwaitConfiguredFromParameterIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion)))}")
+			.AddBodyStatement($"var u = {p.GetUnionOnArgument(p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion)))}")
 			.AddThrowIfCanceledStatementIfAsync(p)
 			.AddBodyStatement($"return {new SwitchExpressionBuilder("u.Index")
 				.AddCases(Enumerable.Range(0, p.UnionSize - p.OtherCaseSize)
 					.Select(i => new SwitchCaseText(i.ToString(), $"{p.ElementTypeNamesLowerCamelCase().ElementAt(i)}(u.Value{i})")))
 				.AddCase(GenerateOtherSwitchCase(p))
 				.ToString()
-				.WrapInAwaitConfiguredFromParameterIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}");
+				.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}");
 
 	private static string GenerateLastArgument(MethodGenerationParamsWithOtherCaseSize p)
 	{

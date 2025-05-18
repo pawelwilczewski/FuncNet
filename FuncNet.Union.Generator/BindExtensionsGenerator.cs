@@ -19,12 +19,12 @@ internal static class BindExtensionsGenerator
 			.AddArgument($"this {p.ExtendedTypeOfTsOld().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} {p.ThisArgumentName}")
 			.AddArgument($"Func<{p.Ts().ElementAt(p.SpecialIndex)}Old, {p.ExtendedTypeOfTsNew().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> binding")
 			.AddAsyncArgumentsIfAsync(p)
-			.AddBodyStatement($"var u = {p.GetUnionOnArgument(p.ThisArgumentName.WrapInAwaitConfiguredFromParameterIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion)))}")
+			.AddBodyStatement($"var u = {p.GetUnionOnArgument(p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion)))}")
 			.AddThrowIfCanceledStatementIfAsync(p)
 			.AddBodyStatement($"return {new SwitchExpressionBuilder("u.Index")
 				.AddCases(GenerateSwitchExpressionCases(p))
 				.ToString()
-				.WrapInAwaitConfiguredFromParameterIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}");
+				.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}");
 
 	private static IEnumerable<SwitchCaseText> GenerateSwitchExpressionCases(MethodGenerationParamsWithSpecialIndex p) =>
 		Enumerable.Range(0, p.UnionSize)

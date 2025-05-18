@@ -225,4 +225,122 @@ public class UnionTests
 					_ => throw new InvalidOperationException(),
 					normalizedDouble => $"Final normalized value is {normalizedDouble:F2}");
 	}
+
+	[Fact]
+	public void TapVariants_Work()
+	{
+		var sideEffects = new List<string>();
+
+		var u1 = Union<string, int, double>.FromT0("test string");
+		var result1 = u1.Tap0(s => sideEffects.Add($"Tapped string: {s}"));
+
+		Assert.Single(sideEffects);
+		Assert.Equal("Tapped string: test string", sideEffects[0]);
+
+		var originalValue = result1.Match(
+			s => s,
+			_ => throw new InvalidOperationException("Should not be here"),
+			_ => throw new InvalidOperationException("Should not be here"));
+		Assert.Equal("test string", originalValue);
+
+		Union<string, int, double> u2 = 42;
+		var result2 = u2.Tap1(i => sideEffects.Add($"Tapped int: {i}"));
+
+		Assert.Equal(2, sideEffects.Count);
+		Assert.Equal("Tapped int: 42", sideEffects[1]);
+
+		Union<string, int, double> u3 = 3.14;
+		var result3 = u3.Tap1(i => sideEffects.Add("This shouldn't be added"));
+
+		Assert.Equal(2, sideEffects.Count);
+
+		var finalValue = result3.Match(
+			_ => throw new InvalidOperationException("Should not be here"),
+			_ => throw new InvalidOperationException("Should not be here"),
+			d => d);
+		Assert.Equal(3.14, finalValue);
+	}
+
+	[Fact]
+	public async Task AsyncTapVariants_Work()
+	{
+		var sideEffects = new List<string>();
+
+		var taskUnion = Task.FromResult<Union<string, int, double>>("async test");
+		var result1 = await taskUnion.Tap0(async s =>
+		{
+			await Task.Delay(10);
+			sideEffects.Add($"Async tapped: {s}");
+		});
+
+		Assert.Single(sideEffects);
+		Assert.Equal("Async tapped: async test", sideEffects[0]);
+
+		var originalValue = result1.Match(
+			s => s,
+			_ => throw new InvalidOperationException("Should not be here"),
+			_ => throw new InvalidOperationException("Should not be here"));
+		Assert.Equal("async test", originalValue);
+
+		Union<string, int, double> u2 = 42;
+		var result2 = await u2.Tap1(async i =>
+		{
+			await Task.Delay(10);
+			sideEffects.Add($"Async tapped int: {i}");
+		});
+
+		Assert.Equal(2, sideEffects.Count);
+		Assert.Equal("Async tapped int: 42", sideEffects[1]);
+
+		Union<string, int, double> u3 = 3.14;
+		var result3 = await u3.Tap0(async s =>
+		{
+			await Task.Delay(10);
+			sideEffects.Add("This shouldn't be added");
+		});
+
+		Assert.Equal(2, sideEffects.Count);
+	}
+
+	[Fact]
+	public void TapInPipeline_Works()
+	{
+		var logs = new List<string>();
+
+		Assert.Equal("Value processed to: 7.5", ProcessWithLogging(5, logs));
+		Assert.Equal(3, logs.Count);
+		Assert.Equal("Processing input: 5", logs[0]);
+		Assert.Equal("After conversion: 10.0", logs[1]);
+		Assert.Equal("Final result: 7.5", logs[2]);
+
+		logs.Clear();
+		Assert.Equal("Error: Input was zero", ProcessWithLogging(0, logs));
+		Assert.Equal(2, logs.Count);
+		Assert.Equal("Processing input: 0", logs[0]);
+
+		logs.Clear();
+		Assert.Equal("Error: Value too large", ProcessWithLogging(100, logs));
+		Assert.Equal(3, logs.Count);
+		Assert.Equal("Processing input: 100", logs[0]);
+		Assert.Equal("After conversion: 200.0", logs[1]);
+		Assert.Equal("Error detected: Value too large", logs[2]);
+		return;
+
+		static string ProcessWithLogging(int input, List<string> logList) =>
+			Union<string, int, double>.FromT1(input)
+				.Tap1(i => logList.Add($"Processing input: {i}"))
+				.Bind1(i => i == 0
+					? Union<string, int, double>.FromT0("Input was zero")
+					: Union<string, int, double>.FromT2(i * 2.0))
+				.Tap2(d => logList.Add($"After conversion: {d:F1}"))
+				.Bind2(d => d > 100
+					? Union<string, int, double>.FromT0("Value too large")
+					: Union<string, int, double>.FromT2(d * 0.75))
+				.Tap0(err => logList.Add($"Error detected: {err}"))
+				.Tap2(result => logList.Add($"Final result: {result:F1}"))
+				.Match(
+					error => $"Error: {error}",
+					i => $"Integer value: {i}",
+					d => $"Value processed to: {d:F1}");
+	}
 }
