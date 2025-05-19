@@ -2,10 +2,10 @@ using FuncNet.Union.Generator.CodeGeneration.Builders;
 
 namespace FuncNet.Union.Generator.CodeGeneration.Models;
 
-internal sealed record class UnionExtensionMethodsFileGenerationParams(
+internal sealed record class UnionExtensionsFileGenerationParams(
 	string Namespace,
 	string AdditionalUsings,
-	Func<UnionExtensionMethodsFileGenerationParams, string> ClassDeclaration,
+	Func<UnionExtensionsFileGenerationParams, string> ClassDeclaration,
 	string ExtendedTypeName,
 	string MethodNameOnly,
 	int UnionSize,
@@ -18,4 +18,4 @@ internal sealed record class UnionExtensionMethodsFileGenerationParams(
 	public string FileName => $"{ExtendedTypeName}{UnionSize}.{MethodNameOnly}.g.cs";
 }
 
-internal delegate IEnumerable<MethodBuilder> GenerateAllMethods(UnionExtensionMethodsFileGenerationParams p);
+internal delegate IEnumerable<MethodBuilder> GenerateAllMethods(UnionExtensionsFileGenerationParams p);

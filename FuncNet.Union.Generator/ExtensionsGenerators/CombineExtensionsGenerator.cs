@@ -8,10 +8,10 @@ using static UnionMethodAsyncConfigConsts;
 
 internal static class CombineExtensionsGenerator
 {
-	public static IEnumerable<MethodBuilder> GenerateMethods(UnionExtensionMethodsFileGenerationParams p) =>
+	public static IEnumerable<MethodBuilder> GenerateMethods(UnionExtensionsFileGenerationParams p) =>
 		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
 
-	private static IEnumerable<MethodGenerationParamsWithOptionsCount> CreateAllMethodsGenerationParams(UnionExtensionMethodsFileGenerationParams p) =>
+	private static IEnumerable<MethodGenerationParamsWithOptionsCount> CreateAllMethodsGenerationParams(UnionExtensionsFileGenerationParams p) =>
 		from asyncConfig in AllPossibleMethodAsyncConfigs
 		from optionsCount in Enumerable.Range(2, 5)
 		select new MethodGenerationParamsWithOptionsCount(

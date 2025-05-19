@@ -6,9 +6,9 @@ internal record class MethodGenerationParams(
 	int UnionSize,
 	UnionMethodAsyncConfig AsyncConfig,
 	string ThisArgumentName,
+	Func<IEnumerable<string>> ElementTypeNamesGenerator,
 	UnionGetter GetUnionOnArgument,
-	FactoryMethodNameForTIndex FactoryMethodName,
-	Func<IEnumerable<string>> ElementTypeNamesGenerator)
+	FactoryMethodNameForTIndex FactoryMethodName)
 {
 	public bool IsAsync(UnionMethodAsyncConfig typeToCheck) => (typeToCheck & AsyncConfig) != 0;
 }

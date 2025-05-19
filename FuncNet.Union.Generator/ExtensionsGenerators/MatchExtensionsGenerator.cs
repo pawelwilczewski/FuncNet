@@ -8,10 +8,10 @@ using static UnionMethodAsyncConfigConsts;
 
 internal static class MatchExtensionsGenerator
 {
-	public static IEnumerable<MethodBuilder> GenerateMethods(UnionExtensionMethodsFileGenerationParams p) =>
+	public static IEnumerable<MethodBuilder> GenerateMethods(UnionExtensionsFileGenerationParams p) =>
 		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
 
-	private static IEnumerable<MethodGenerationParamsWithOtherCaseSize> CreateAllMethodsGenerationParams(UnionExtensionMethodsFileGenerationParams p) =>
+	private static IEnumerable<MethodGenerationParamsWithOtherCaseSize> CreateAllMethodsGenerationParams(UnionExtensionsFileGenerationParams p) =>
 		from asyncConfig in AllPossibleMethodAsyncConfigs
 		from otherCaseSize in Enumerable.Range(1, p.UnionSize - 1)
 		select new MethodGenerationParamsWithOtherCaseSize(p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName, p.GetUnionOnArgument, p.FactoryMethodName, p.ElementTypeNamesGenerator, otherCaseSize);

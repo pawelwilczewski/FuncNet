@@ -16,13 +16,14 @@ const string @namespace = "FuncNet.Union";
 	("Result", "result", ResultElementNamesGenerator(unionSize), UnionGetterForResult, ResultFactoryMethodName)
 ];
 
-(string methodNameOnly, GenerateAllMethods generateMethods, Func<UnionExtensionMethodsFileGenerationParams, string> classDeclaration, string additionalUsings)[] methodGenerators =
+(string methodNameOnly, GenerateAllMethods generateMethods, Func<UnionExtensionsFileGenerationParams, string> classDeclaration, string additionalUsings)[] methodGenerators =
 [
 	("Match", MatchExtensionsGenerator.GenerateMethods, StaticClassDeclaration, ""),
 	("Map", MapExtensionsGenerator.GenerateMethods, StaticClassDeclaration, ""),
 	("Bind", BindExtensionsGenerator.GenerateMethods, StaticClassDeclaration, ""),
 	("Tap", TapExtensionsGenerator.GenerateMethods, StaticClassDeclaration, ""),
 	("Ensure", EnsureExtensionsGenerator.GenerateMethods, StaticClassDeclaration, ""),
+	("Zip", ZipExtensionsGenerator.GenerateMethods, StaticClassDeclaration, "using System.Collections.Generic;\nusing System.Linq;\n"),
 	("Combine", CombineExtensionsGenerator.GenerateMethods, PartialRecordStructDeclaration, "using System.Collections.Generic;\n")
 ];
 
@@ -31,7 +32,7 @@ var generationParams =
 	from unionSize in Enumerable.Range(2, maxChoices - 1)
 	from p in GenerateBaseParams(unionSize)
 	where !(p.extendedTypeName == "Union" && m.methodNameOnly == "Combine") // hacky don't generate Combine for Union
-	select new UnionExtensionMethodsFileGenerationParams(
+	select new UnionExtensionsFileGenerationParams(
 		@namespace, m.additionalUsings, m.classDeclaration, p.extendedTypeName, m.methodNameOnly, unionSize,
 		m.generateMethods, p.thisArgumentName, p.elementNamesGenerator, p.unionGetter, p.factoryMethodName);
 
@@ -60,7 +61,7 @@ Parallel.ForEach(generationParams, p =>
 Console.WriteLine($"Generated in {Stopwatch.GetElapsedTime(startTime)}");
 return;
 
-static string GenerateSourceFile(UnionExtensionMethodsFileGenerationParams p) =>
+static string GenerateSourceFile(UnionExtensionsFileGenerationParams p) =>
 	new SourceCodeFileBuilder(
 			$@"using System;
 using System.Threading;
@@ -73,10 +74,10 @@ namespace {p.Namespace};")
 			.AddMethods(p.GenerateAllMethods(p)))
 		.ToString();
 
-static string StaticClassDeclaration(UnionExtensionMethodsFileGenerationParams p) =>
+static string StaticClassDeclaration(UnionExtensionsFileGenerationParams p) =>
 	$"public static class {p.ExtendedTypeName}{p.UnionSize}{p.MethodNameOnly}";
 
-static string PartialRecordStructDeclaration(UnionExtensionMethodsFileGenerationParams p) =>
+static string PartialRecordStructDeclaration(UnionExtensionsFileGenerationParams p) =>
 	$"public readonly partial record struct {p.ExtendedTypeName}";
 
 static Func<IEnumerable<string>> UnionElementNamesGenerator(int unionSize) =>

@@ -457,4 +457,94 @@ public class UnionTests
 					errorMsg => $"Invalid input: {errorMsg}",
 					i => $"Processed value: {i * 4}");
 	}
+
+	[Fact]
+	public void Zip_SyncInput_SyncZip_Works()
+	{
+		var values = new List<Union<string, int, double>>
+		{
+			Union<string, int, double>.FromT0("apple"),
+			Union<string, int, double>.FromT1(10),
+			Union<string, int, double>.FromT0("banana"),
+			Union<string, int, double>.FromT2(20.5),
+			Union<string, int, double>.FromT1(5)
+		};
+
+		var result = values.Zip((strs, ints, dbls) =>
+			$"S:{string.Join(",", strs.OrderBy(s => s))}|I:{string.Join(",", ints.OrderBy(i => i))}|D:{string.Join(",", dbls.OrderBy(d => d))}"
+		);
+
+		Assert.Equal("S:apple,banana|I:5,10|D:20.5", result);
+	}
+
+	[Fact]
+	public void Zip_EmptyInput_SyncInput_SyncZip_Works()
+	{
+		var values = new List<Union<string, int, double>>();
+
+		var result = values.Zip((strs, ints, dbls) =>
+			$"S:{string.Join(",", strs.OrderBy(s => s))}|I:{string.Join(",", ints.OrderBy(i => i))}|D:{string.Join(",", dbls.OrderBy(d => d))}");
+
+		Assert.Equal("S:|I:|D:", result);
+	}
+
+	[Fact]
+	public async Task Zip_AsyncInput_AsyncZip_Works()
+	{
+		var values = new List<Task<Union<string, int, double>>>
+		{
+			Task.FromResult(Union<string, int, double>.FromT0("apple")),
+			Task.FromResult(Union<string, int, double>.FromT1(10)),
+			Task.FromResult(Union<string, int, double>.FromT0("banana")),
+			Task.FromResult(Union<string, int, double>.FromT2(20.5)),
+			Task.FromResult(Union<string, int, double>.FromT1(5))
+		};
+
+		var result = await values.Zip(async (strs, ints, dbls) =>
+		{
+			await Task.Yield();
+			return $"S:{string.Join(",", strs.OrderBy(s => s))}|I:{string.Join(",", ints.OrderBy(i => i))}|D:{string.Join(",", dbls.OrderBy(d => d))}";
+		});
+
+		Assert.Equal("S:apple,banana|I:5,10|D:20.5", result);
+	}
+
+	[Fact]
+	public async Task Zip_SyncInput_AsyncZip_Works()
+	{
+		var values = new List<Union<string, int, double>>
+		{
+			Union<string, int, double>.FromT0("apple"),
+			Union<string, int, double>.FromT1(10),
+			Union<string, int, double>.FromT0("banana"),
+			Union<string, int, double>.FromT2(20.5),
+			Union<string, int, double>.FromT1(5)
+		};
+
+		var result = await values.Zip(async (strs, ints, dbls) =>
+		{
+			await Task.Yield();
+			return $"S:{string.Join(",", strs.OrderBy(s => s))}|I:{string.Join(",", ints.OrderBy(i => i))}|D:{string.Join(",", dbls.OrderBy(d => d))}";
+		});
+
+		Assert.Equal("S:apple,banana|I:5,10|D:20.5", result);
+	}
+
+	[Fact]
+	public async Task Zip_AsyncInput_SyncZip_Works()
+	{
+		var values = new List<Task<Union<string, int, double>>>
+		{
+			Task.FromResult(Union<string, int, double>.FromT0("apple")),
+			Task.FromResult(Union<string, int, double>.FromT1(10)),
+			Task.FromResult(Union<string, int, double>.FromT0("banana")),
+			Task.FromResult(Union<string, int, double>.FromT2(20.5)),
+			Task.FromResult(Union<string, int, double>.FromT1(5))
+		};
+
+		var result = await values.Zip((strs, ints, dbls) =>
+			$"S:{string.Join(",", strs.OrderBy(s => s))}|I:{string.Join(",", ints.OrderBy(i => i))}|D:{string.Join(",", dbls.OrderBy(d => d))}");
+
+		Assert.Equal("S:apple,banana|I:5,10|D:20.5", result);
+	}
 }
