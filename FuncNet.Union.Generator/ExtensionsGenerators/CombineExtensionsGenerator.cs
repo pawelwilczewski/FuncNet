@@ -2,7 +2,7 @@ using FuncNet.Union.Generator.CodeGeneration;
 using FuncNet.Union.Generator.CodeGeneration.Builders;
 using FuncNet.Union.Generator.CodeGeneration.Models;
 
-namespace FuncNet.Union.Generator;
+namespace FuncNet.Union.Generator.ExtensionsGenerators;
 
 using static UnionMethodAsyncConfigConsts;
 
