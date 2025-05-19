@@ -9,3 +9,14 @@ public enum UnionMethodAsyncConfig
 	InputUnion = 1 << 1,
 	AppliedMethodReturnType = 1 << 2
 }
+
+internal static class UnionMethodAsyncConfigConsts
+{
+	public static UnionMethodAsyncConfig[] AllPossibleMethodAsyncConfigs { get; } =
+	[
+		UnionMethodAsyncConfig.None,
+		UnionMethodAsyncConfig.All,
+		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.AppliedMethodReturnType,
+		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.InputUnion
+	];
+}

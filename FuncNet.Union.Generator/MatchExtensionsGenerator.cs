@@ -4,7 +4,7 @@ using FuncNet.Union.Generator.CodeGeneration.Models;
 
 namespace FuncNet.Union.Generator;
 
-using static CodeGenerationUtils;
+using static UnionMethodAsyncConfigConsts;
 
 internal static class MatchExtensionsGenerator
 {
@@ -12,7 +12,7 @@ internal static class MatchExtensionsGenerator
 		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
 
 	private static IEnumerable<MethodGenerationParamsWithOtherCaseSize> CreateAllMethodsGenerationParams(UnionExtensionMethodsFileGenerationParams p) =>
-		from asyncConfig in allPossibleAsyncMethodConfigs
+		from asyncConfig in AllPossibleMethodAsyncConfigs
 		from otherCaseSize in Enumerable.Range(1, p.UnionSize - 1)
 		select new MethodGenerationParamsWithOtherCaseSize(p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName, p.GetUnionOnArgument, p.FactoryMethodName, p.ElementTypeNamesGenerator, otherCaseSize);
 
