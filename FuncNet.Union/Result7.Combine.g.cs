@@ -272,8 +272,9 @@ namespace FuncNet.Union;
 		Func<TSuccess0, TSuccess1, Task<TResult>> combineSuccess,
 		Func<IReadOnlyList<TError0>, IReadOnlyList<TError1>, IReadOnlyList<TError2>, IReadOnlyList<TError3>, IReadOnlyList<TError4>, IReadOnlyList<TError5>, Task<TResult>> combineErrors,
 		CancellationToken cancellationToken = default){
-		var r0 = await (result0).ConfigureAwait(false);
-			var r1 = await (result1).ConfigureAwait(false);
+		await (Task.WhenAll(result0, result1)).ConfigureAwait(false);
+			var r0 = (result0).Result;
+			var r1 = (result1).Result;
 			if (r0.IsSuccess
 			&& r1.IsSuccess){
 		return await (combineSuccess(r0.Value.Value0, r1.Value.Value0)).ConfigureAwait(false);
@@ -308,9 +309,10 @@ namespace FuncNet.Union;
 		Func<TSuccess0, TSuccess1, TSuccess2, Task<TResult>> combineSuccess,
 		Func<IReadOnlyList<TError0>, IReadOnlyList<TError1>, IReadOnlyList<TError2>, IReadOnlyList<TError3>, IReadOnlyList<TError4>, IReadOnlyList<TError5>, Task<TResult>> combineErrors,
 		CancellationToken cancellationToken = default){
-		var r0 = await (result0).ConfigureAwait(false);
-			var r1 = await (result1).ConfigureAwait(false);
-			var r2 = await (result2).ConfigureAwait(false);
+		await (Task.WhenAll(result0, result1, result2)).ConfigureAwait(false);
+			var r0 = (result0).Result;
+			var r1 = (result1).Result;
+			var r2 = (result2).Result;
 			if (r0.IsSuccess
 			&& r1.IsSuccess
 			&& r2.IsSuccess){
@@ -353,10 +355,11 @@ namespace FuncNet.Union;
 		Func<TSuccess0, TSuccess1, TSuccess2, TSuccess3, Task<TResult>> combineSuccess,
 		Func<IReadOnlyList<TError0>, IReadOnlyList<TError1>, IReadOnlyList<TError2>, IReadOnlyList<TError3>, IReadOnlyList<TError4>, IReadOnlyList<TError5>, Task<TResult>> combineErrors,
 		CancellationToken cancellationToken = default){
-		var r0 = await (result0).ConfigureAwait(false);
-			var r1 = await (result1).ConfigureAwait(false);
-			var r2 = await (result2).ConfigureAwait(false);
-			var r3 = await (result3).ConfigureAwait(false);
+		await (Task.WhenAll(result0, result1, result2, result3)).ConfigureAwait(false);
+			var r0 = (result0).Result;
+			var r1 = (result1).Result;
+			var r2 = (result2).Result;
+			var r3 = (result3).Result;
 			if (r0.IsSuccess
 			&& r1.IsSuccess
 			&& r2.IsSuccess
@@ -407,11 +410,12 @@ namespace FuncNet.Union;
 		Func<TSuccess0, TSuccess1, TSuccess2, TSuccess3, TSuccess4, Task<TResult>> combineSuccess,
 		Func<IReadOnlyList<TError0>, IReadOnlyList<TError1>, IReadOnlyList<TError2>, IReadOnlyList<TError3>, IReadOnlyList<TError4>, IReadOnlyList<TError5>, Task<TResult>> combineErrors,
 		CancellationToken cancellationToken = default){
-		var r0 = await (result0).ConfigureAwait(false);
-			var r1 = await (result1).ConfigureAwait(false);
-			var r2 = await (result2).ConfigureAwait(false);
-			var r3 = await (result3).ConfigureAwait(false);
-			var r4 = await (result4).ConfigureAwait(false);
+		await (Task.WhenAll(result0, result1, result2, result3, result4)).ConfigureAwait(false);
+			var r0 = (result0).Result;
+			var r1 = (result1).Result;
+			var r2 = (result2).Result;
+			var r3 = (result3).Result;
+			var r4 = (result4).Result;
 			if (r0.IsSuccess
 			&& r1.IsSuccess
 			&& r2.IsSuccess
@@ -470,12 +474,13 @@ namespace FuncNet.Union;
 		Func<TSuccess0, TSuccess1, TSuccess2, TSuccess3, TSuccess4, TSuccess5, Task<TResult>> combineSuccess,
 		Func<IReadOnlyList<TError0>, IReadOnlyList<TError1>, IReadOnlyList<TError2>, IReadOnlyList<TError3>, IReadOnlyList<TError4>, IReadOnlyList<TError5>, Task<TResult>> combineErrors,
 		CancellationToken cancellationToken = default){
-		var r0 = await (result0).ConfigureAwait(false);
-			var r1 = await (result1).ConfigureAwait(false);
-			var r2 = await (result2).ConfigureAwait(false);
-			var r3 = await (result3).ConfigureAwait(false);
-			var r4 = await (result4).ConfigureAwait(false);
-			var r5 = await (result5).ConfigureAwait(false);
+		await (Task.WhenAll(result0, result1, result2, result3, result4, result5)).ConfigureAwait(false);
+			var r0 = (result0).Result;
+			var r1 = (result1).Result;
+			var r2 = (result2).Result;
+			var r3 = (result3).Result;
+			var r4 = (result4).Result;
+			var r5 = (result5).Result;
 			if (r0.IsSuccess
 			&& r1.IsSuccess
 			&& r2.IsSuccess
@@ -802,8 +807,9 @@ namespace FuncNet.Union;
 		Func<TSuccess0, TSuccess1, TResult> combineSuccess,
 		Func<IReadOnlyList<TError0>, IReadOnlyList<TError1>, IReadOnlyList<TError2>, IReadOnlyList<TError3>, IReadOnlyList<TError4>, IReadOnlyList<TError5>, TResult> combineErrors,
 		CancellationToken cancellationToken = default){
-		var r0 = await (result0).ConfigureAwait(false);
-			var r1 = await (result1).ConfigureAwait(false);
+		await (Task.WhenAll(result0, result1)).ConfigureAwait(false);
+			var r0 = (result0).Result;
+			var r1 = (result1).Result;
 			if (r0.IsSuccess
 			&& r1.IsSuccess){
 		return combineSuccess(r0.Value.Value0, r1.Value.Value0);
@@ -838,9 +844,10 @@ namespace FuncNet.Union;
 		Func<TSuccess0, TSuccess1, TSuccess2, TResult> combineSuccess,
 		Func<IReadOnlyList<TError0>, IReadOnlyList<TError1>, IReadOnlyList<TError2>, IReadOnlyList<TError3>, IReadOnlyList<TError4>, IReadOnlyList<TError5>, TResult> combineErrors,
 		CancellationToken cancellationToken = default){
-		var r0 = await (result0).ConfigureAwait(false);
-			var r1 = await (result1).ConfigureAwait(false);
-			var r2 = await (result2).ConfigureAwait(false);
+		await (Task.WhenAll(result0, result1, result2)).ConfigureAwait(false);
+			var r0 = (result0).Result;
+			var r1 = (result1).Result;
+			var r2 = (result2).Result;
 			if (r0.IsSuccess
 			&& r1.IsSuccess
 			&& r2.IsSuccess){
@@ -883,10 +890,11 @@ namespace FuncNet.Union;
 		Func<TSuccess0, TSuccess1, TSuccess2, TSuccess3, TResult> combineSuccess,
 		Func<IReadOnlyList<TError0>, IReadOnlyList<TError1>, IReadOnlyList<TError2>, IReadOnlyList<TError3>, IReadOnlyList<TError4>, IReadOnlyList<TError5>, TResult> combineErrors,
 		CancellationToken cancellationToken = default){
-		var r0 = await (result0).ConfigureAwait(false);
-			var r1 = await (result1).ConfigureAwait(false);
-			var r2 = await (result2).ConfigureAwait(false);
-			var r3 = await (result3).ConfigureAwait(false);
+		await (Task.WhenAll(result0, result1, result2, result3)).ConfigureAwait(false);
+			var r0 = (result0).Result;
+			var r1 = (result1).Result;
+			var r2 = (result2).Result;
+			var r3 = (result3).Result;
 			if (r0.IsSuccess
 			&& r1.IsSuccess
 			&& r2.IsSuccess
@@ -937,11 +945,12 @@ namespace FuncNet.Union;
 		Func<TSuccess0, TSuccess1, TSuccess2, TSuccess3, TSuccess4, TResult> combineSuccess,
 		Func<IReadOnlyList<TError0>, IReadOnlyList<TError1>, IReadOnlyList<TError2>, IReadOnlyList<TError3>, IReadOnlyList<TError4>, IReadOnlyList<TError5>, TResult> combineErrors,
 		CancellationToken cancellationToken = default){
-		var r0 = await (result0).ConfigureAwait(false);
-			var r1 = await (result1).ConfigureAwait(false);
-			var r2 = await (result2).ConfigureAwait(false);
-			var r3 = await (result3).ConfigureAwait(false);
-			var r4 = await (result4).ConfigureAwait(false);
+		await (Task.WhenAll(result0, result1, result2, result3, result4)).ConfigureAwait(false);
+			var r0 = (result0).Result;
+			var r1 = (result1).Result;
+			var r2 = (result2).Result;
+			var r3 = (result3).Result;
+			var r4 = (result4).Result;
 			if (r0.IsSuccess
 			&& r1.IsSuccess
 			&& r2.IsSuccess
@@ -1000,12 +1009,13 @@ namespace FuncNet.Union;
 		Func<TSuccess0, TSuccess1, TSuccess2, TSuccess3, TSuccess4, TSuccess5, TResult> combineSuccess,
 		Func<IReadOnlyList<TError0>, IReadOnlyList<TError1>, IReadOnlyList<TError2>, IReadOnlyList<TError3>, IReadOnlyList<TError4>, IReadOnlyList<TError5>, TResult> combineErrors,
 		CancellationToken cancellationToken = default){
-		var r0 = await (result0).ConfigureAwait(false);
-			var r1 = await (result1).ConfigureAwait(false);
-			var r2 = await (result2).ConfigureAwait(false);
-			var r3 = await (result3).ConfigureAwait(false);
-			var r4 = await (result4).ConfigureAwait(false);
-			var r5 = await (result5).ConfigureAwait(false);
+		await (Task.WhenAll(result0, result1, result2, result3, result4, result5)).ConfigureAwait(false);
+			var r0 = (result0).Result;
+			var r1 = (result1).Result;
+			var r2 = (result2).Result;
+			var r3 = (result3).Result;
+			var r4 = (result4).Result;
+			var r5 = (result5).Result;
 			if (r0.IsSuccess
 			&& r1.IsSuccess
 			&& r2.IsSuccess

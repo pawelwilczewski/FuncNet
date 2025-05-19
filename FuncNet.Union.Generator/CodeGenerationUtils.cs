@@ -35,6 +35,9 @@ internal static class CodeGenerationUtils
 	public static string WrapInTaskFromResult(this string text) => $"Task.FromResult({text})";
 	public static string WrapInAsyncTask(this string text) => $"async {WrapInTask(text)}";
 
+	public static string WrapInResultGetter(this string text) =>
+		$"({text}).Result";
+
 	public static string WrapInAwaitConfigured(this string text) =>
 		$"await ({text}).ConfigureAwait(false)";
 
@@ -49,6 +52,9 @@ internal static class CodeGenerationUtils
 
 	public static string WrapInAwaitConfiguredIf(this string text, bool shouldWrap) =>
 		shouldWrap ? WrapInAwaitConfigured(text) : text;
+
+	public static string WrapInResultGetterIf(this string text, bool shouldWrap) =>
+		shouldWrap ? WrapInResultGetter(text) : text;
 
 	public static string UnionOfTs(int unionSize) => UnionOfTs(0, unionSize);
 	public static string UnionOfTs(int start, int count) => $"Union<{CommaSeparatedTs(start, count)}>";
@@ -218,6 +224,9 @@ public sealed class MethodBuilder
 		body.AddStatement(statement);
 		return this;
 	}
+
+	public MethodBuilder AddBodyStatementIf(string statement, bool shouldAdd) =>
+		shouldAdd ? AddBodyStatement(statement) : this;
 
 	public override string ToString() => $"{name}{argumentList}{body}";
 }
