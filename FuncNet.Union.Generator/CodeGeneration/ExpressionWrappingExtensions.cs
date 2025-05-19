@@ -1,6 +1,6 @@
 namespace FuncNet.Union.Generator.CodeGeneration;
 
-internal static class ExpressionWrappingUtils
+internal static class ExpressionWrappingExtensions
 {
 	public static string WrapInTask(this string expression) => $"Task<{expression}>";
 	public static string WrapInTaskFromResult(this string expression) => $"Task.FromResult({expression})";

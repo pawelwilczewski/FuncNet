@@ -17,14 +17,14 @@ namespace {@namespace};
 
 public readonly partial record struct {ResultOfTs(unionSize)}
 {{
-    internal {ResultUnion(unionSize)} Value {{ get; init; }}
+    internal {ResultBackingUnion(unionSize)} Value {{ get; init; }}
 
     public bool IsSuccess => Value.Index == 0;
     public bool IsError => Value.Index != 0;
 
     public Result() => throw new InvalidOperationException(""Result must be initialized with a value."");
 
-    private Result({ResultUnion(unionSize)} value)
+    private Result({ResultBackingUnion(unionSize)} value)
     {{
        Value = value;
     }}

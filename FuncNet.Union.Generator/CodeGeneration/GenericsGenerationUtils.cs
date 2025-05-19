@@ -22,5 +22,5 @@ internal static class GenericsGenerationUtils
 		? throw new ArgumentOutOfRangeException(nameof(count))
 		: $"TSuccess, {CommaSeparatedErrorTs(count - 1)}";
 
-	public static string ResultUnion(int unionSize) => $"Union<{ResultTs(unionSize)}>";
+	public static string ResultBackingUnion(int unionSize) => $"Union<{ResultTs(unionSize)}>";
 }
