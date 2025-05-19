@@ -10,21 +10,6 @@ var startTime = Stopwatch.GetTimestamp();
 const int maxChoices = 8;
 const string @namespace = "FuncNet.Union";
 
-var basePath = Path.Join(
-	Path.GetFullPath(Assembly.GetExecutingAssembly().Location),
-	"/../../../../../FuncNet.Union");
-
-for (var unionSize = 2; unionSize < maxChoices + 1; ++unionSize)
-{
-	File.WriteAllText(
-		Path.Join(basePath, $"Union{unionSize}.g.cs"),
-		UnionGenerator.GenerateUnionFile(@namespace, unionSize));
-
-	File.WriteAllText(
-		Path.Join(basePath, $"Result{unionSize}.g.cs"),
-		ResultGenerator.GenerateResultFile(@namespace, unionSize));
-}
-
 (string extendedTypeName, string thisArgumentName, Func<IEnumerable<string>> elementNamesGenerator, UnionGetter unionGetter, FactoryMethodNameForTIndex factoryMethodName)[] GenerateBaseParams(int unionSize) =>
 [
 	("Union", "union", UnionElementNamesGenerator(unionSize), UnionGetterForUnion, UnionFactoryMethodName),
@@ -50,12 +35,27 @@ var generationParams =
 		@namespace, m.additionalUsings, m.classDeclaration, p.extendedTypeName, m.methodNameOnly, unionSize,
 		m.generateMethods, p.thisArgumentName, p.elementNamesGenerator, p.unionGetter, p.factoryMethodName);
 
-foreach (var p in generationParams)
+var basePath = Path.Join(
+	Path.GetFullPath(Assembly.GetExecutingAssembly().Location),
+	"/../../../../../FuncNet.Union");
+
+Parallel.For(2, maxChoices + 1, unionSize =>
+{
+	File.WriteAllText(
+		Path.Join(basePath, $"Union{unionSize}.g.cs"),
+		UnionGenerator.GenerateUnionFile(@namespace, unionSize));
+
+	File.WriteAllText(
+		Path.Join(basePath, $"Result{unionSize}.g.cs"),
+		ResultGenerator.GenerateResultFile(@namespace, unionSize));
+});
+
+Parallel.ForEach(generationParams, p =>
 {
 	File.WriteAllText(
 		Path.Join(basePath, p.FileName),
 		GenerateSourceFile(p));
-}
+});
 
 Console.WriteLine($"Generated in {Stopwatch.GetElapsedTime(startTime)}");
 return;
