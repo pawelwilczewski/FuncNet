@@ -22,6 +22,12 @@ for (var unionSize = 2; unionSize < maxChoices + 1; ++unionSize)
 		ResultGenerator.GenerateResultFile(@namespace, unionSize));
 }
 
+(string extendedTypeName, string thisArgumentName, Func<IEnumerable<string>> elementNamesGenerator, UnionGetter unionGetter, FactoryMethodNameForTIndex factoryMethodName)[] GenerateBaseParams(int unionSize) =>
+[
+	("Union", "union", UnionElementNamesGenerator(unionSize), UnionGetterForUnion, UnionFactoryMethodName),
+	("Result", "result", ResultElementNamesGenerator(unionSize), UnionGetterForResult, ResultFactoryMethodName)
+];
+
 (string methodNameOnly, GenerateAllMethods generateMethods, Func<UnionExtensionMethodsFileGenerationParams, string> classDeclaration, string additionalUsings)[] methodGenerators =
 [
 	("Match", MatchExtensionsGenerator.GenerateMethods, StaticClassDeclaration, ""),
@@ -70,20 +76,13 @@ static string StaticClassDeclaration(UnionExtensionMethodsFileGenerationParams p
 static string PartialRecordStructDeclaration(UnionExtensionMethodsFileGenerationParams p) =>
 	$"public readonly partial record struct {p.ExtendedTypeName}";
 
-(string extendedTypeName, string thisArgumentName, Func<IEnumerable<string>> elementNamesGenerator, UnionGetter unionGetter, FactoryMethodNameForTIndex factoryMethodName)[] GenerateBaseParams(int unionSize) =>
-[
-	("Union", "union", UnionElementNamesGenerator(unionSize), UnionGetterForUnion, UnionFactoryMethodName),
-	("Result", "result", ResultElementNamesGenerator(unionSize), UnionGetterForResult, ResultFactoryMethodName)
-];
-
 static Func<IEnumerable<string>> UnionElementNamesGenerator(int unionSize) =>
 	() => Enumerable.Range(0, unionSize).Select(i => i.ToString());
-
-static string UnionGetterForUnion(string argument) => argument;
 
 static Func<IEnumerable<string>> ResultElementNamesGenerator(int unionSize) =>
 	() => new[] { "Success" }.Concat(Enumerable.Range(0, unionSize - 1).Select(i => $"Error{i}"));
 
+static string UnionGetterForUnion(string argument) => argument;
 static string UnionGetterForResult(string argument) => $"({argument}).Value";
 
 static string UnionFactoryMethodName(int tIndex) => $"FromT{tIndex}";
