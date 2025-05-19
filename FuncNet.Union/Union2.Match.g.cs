@@ -10,7 +10,6 @@ namespace FuncNet.Union;
 		Func<T0, TResult> t0,
 		Func<T1, TResult> t1){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => t0(u.Value0),

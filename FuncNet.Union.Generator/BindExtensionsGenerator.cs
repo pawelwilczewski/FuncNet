@@ -1,3 +1,7 @@
+using FuncNet.Union.Generator.CodeGeneration;
+using FuncNet.Union.Generator.CodeGeneration.Builders;
+using FuncNet.Union.Generator.CodeGeneration.Models;
+
 namespace FuncNet.Union.Generator;
 
 using static CodeGenerationUtils;
@@ -18,9 +22,9 @@ internal static class BindExtensionsGenerator
 		new MethodBuilder($"public static {p.ExtendedTypeOfTsNew().WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}{p.ElementTypeNamesGenerator().ElementAt(p.SpecialIndex)}<{p.Ts().ElementAt(p.SpecialIndex)}New, {p.TsCommaSeparatedOld()}>")
 			.AddArgument($"this {p.ExtendedTypeOfTsOld().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} {p.ThisArgumentName}")
 			.AddArgument($"Func<{p.Ts().ElementAt(p.SpecialIndex)}Old, {p.ExtendedTypeOfTsNew().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> binding")
-			.AddAsyncArgumentsIfAsync(p)
+			.AddCancellationTokenIfAsync(p)
 			.AddBodyStatement($"var u = {p.GetUnionOnArgument(p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion)))}")
-			.AddThrowIfCanceledStatementIfAsync(p)
+			.AddThrowIfCanceledIfAsync(p)
 			.AddBodyStatement($"return {new SwitchExpressionBuilder("u.Index")
 				.AddCases(GenerateSwitchExpressionCases(p))
 				.ToString()

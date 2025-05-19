@@ -1,11 +1,14 @@
+using FuncNet.Union.Generator.CodeGeneration;
+
 namespace FuncNet.Union.Generator;
 
-using static CodeGenerationUtils;
+using static GenericsGenerationUtils;
+using static StringJoinUtils;
 
 public static class UnionGenerator
 {
 	public static string GenerateUnionFile(string @namespace, int unionSize) =>
-$@"using System;
+		$@"using System;
 using System.Threading.Tasks;
 
 #nullable enable

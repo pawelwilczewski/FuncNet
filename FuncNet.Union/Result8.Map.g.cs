@@ -9,7 +9,6 @@ namespace FuncNet.Union;
 {public static Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5, TError6> MapSuccess<TSuccessNew, TSuccessOld, TError0, TError1, TError2, TError3, TError4, TError5, TError6>(this Result<TSuccessOld, TError0, TError1, TError2, TError3, TError4, TError5, TError6> result,
 		Func<TSuccessOld, TSuccessNew> mapping){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5, TError6>.FromSuccess(mapping(u.Value0)),
@@ -27,7 +26,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5, TError6> MapError0<TError0New, TSuccess, TError0Old, TError1, TError2, TError3, TError4, TError5, TError6>(this Result<TSuccess, TError0Old, TError1, TError2, TError3, TError4, TError5, TError6> result,
 		Func<TError0Old, TError0New> mapping){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5, TError6>.FromSuccess(u.Value0),
@@ -45,7 +43,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5, TError6> MapError1<TError1New, TSuccess, TError0, TError1Old, TError2, TError3, TError4, TError5, TError6>(this Result<TSuccess, TError0, TError1Old, TError2, TError3, TError4, TError5, TError6> result,
 		Func<TError1Old, TError1New> mapping){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5, TError6>.FromSuccess(u.Value0),
@@ -63,7 +60,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5, TError6> MapError2<TError2New, TSuccess, TError0, TError1, TError2Old, TError3, TError4, TError5, TError6>(this Result<TSuccess, TError0, TError1, TError2Old, TError3, TError4, TError5, TError6> result,
 		Func<TError2Old, TError2New> mapping){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5, TError6>.FromSuccess(u.Value0),
@@ -81,7 +77,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5, TError6> MapError3<TError3New, TSuccess, TError0, TError1, TError2, TError3Old, TError4, TError5, TError6>(this Result<TSuccess, TError0, TError1, TError2, TError3Old, TError4, TError5, TError6> result,
 		Func<TError3Old, TError3New> mapping){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5, TError6>.FromSuccess(u.Value0),
@@ -99,7 +94,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5, TError6> MapError4<TError4New, TSuccess, TError0, TError1, TError2, TError3, TError4Old, TError5, TError6>(this Result<TSuccess, TError0, TError1, TError2, TError3, TError4Old, TError5, TError6> result,
 		Func<TError4Old, TError4New> mapping){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5, TError6>.FromSuccess(u.Value0),
@@ -117,7 +111,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5New, TError6> MapError5<TError5New, TSuccess, TError0, TError1, TError2, TError3, TError4, TError5Old, TError6>(this Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5Old, TError6> result,
 		Func<TError5Old, TError5New> mapping){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5New, TError6>.FromSuccess(u.Value0),
@@ -135,7 +128,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5, TError6New> MapError6<TError6New, TSuccess, TError0, TError1, TError2, TError3, TError4, TError5, TError6Old>(this Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5, TError6Old> result,
 		Func<TError6Old, TError6New> mapping){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5, TError6New>.FromSuccess(u.Value0),

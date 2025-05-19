@@ -9,7 +9,6 @@ namespace FuncNet.Union;
 {public static Union<T0, T1> Tap0<T0, T1>(this Union<T0, T1> union,
 		Action<T0> action){
 		var u = union;
-			;
 			if (u.Index == 0) action(u.Value0);
 			return union;
 			
@@ -18,7 +17,6 @@ namespace FuncNet.Union;
 	public static Union<T0, T1> Tap1<T0, T1>(this Union<T0, T1> union,
 		Action<T1> action){
 		var u = union;
-			;
 			if (u.Index == 1) action(u.Value1);
 			return union;
 			

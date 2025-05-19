@@ -1,3 +1,7 @@
+using FuncNet.Union.Generator.CodeGeneration;
+using FuncNet.Union.Generator.CodeGeneration.Builders;
+using FuncNet.Union.Generator.CodeGeneration.Models;
+
 namespace FuncNet.Union.Generator;
 
 using static CodeGenerationUtils;
@@ -17,9 +21,9 @@ internal static class MatchExtensionsGenerator
 			.AddArgument($"this {p.ExtendedTypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} {p.ThisArgumentName}")
 			.AddArguments(Enumerable.Range(0, p.UnionSize - p.OtherCaseSize).Select(i => $"Func<{p.Ts().ElementAt(i)}, {"TResult".WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> {p.ElementTypeNamesLowerCamelCase().ElementAt(i)}"))
 			.AddArgument(GenerateLastArgument(p))
-			.AddAsyncArgumentsIfAsync(p)
+			.AddCancellationTokenIfAsync(p)
 			.AddBodyStatement($"var u = {p.GetUnionOnArgument(p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion)))}")
-			.AddThrowIfCanceledStatementIfAsync(p)
+			.AddThrowIfCanceledIfAsync(p)
 			.AddBodyStatement($"return {new SwitchExpressionBuilder("u.Index")
 				.AddCases(Enumerable.Range(0, p.UnionSize - p.OtherCaseSize)
 					.Select(i => new SwitchCaseText(i.ToString(), $"{p.ElementTypeNamesLowerCamelCase().ElementAt(i)}(u.Value{i})")))

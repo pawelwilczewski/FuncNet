@@ -15,7 +15,6 @@ namespace FuncNet.Union;
 		Func<TError4, TResult> error4,
 		Func<TError5, TResult> error5){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => success(u.Value0),
@@ -37,7 +36,6 @@ namespace FuncNet.Union;
 		Func<TError3, TResult> error3,
 		Func<Union<TError4, TError5>, TResult> other){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => success(u.Value0),
@@ -57,7 +55,6 @@ namespace FuncNet.Union;
 		Func<TError2, TResult> error2,
 		Func<Union<TError3, TError4, TError5>, TResult> other){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => success(u.Value0),
@@ -75,7 +72,6 @@ namespace FuncNet.Union;
 		Func<TError1, TResult> error1,
 		Func<Union<TError2, TError3, TError4, TError5>, TResult> other){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => success(u.Value0),
@@ -91,7 +87,6 @@ namespace FuncNet.Union;
 		Func<TError0, TResult> error0,
 		Func<Union<TError1, TError2, TError3, TError4, TError5>, TResult> other){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => success(u.Value0),
@@ -105,7 +100,6 @@ namespace FuncNet.Union;
 		Func<TSuccess, TResult> success,
 		Func<Union<TError0, TError1, TError2, TError3, TError4, TError5>, TResult> other){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => success(u.Value0),

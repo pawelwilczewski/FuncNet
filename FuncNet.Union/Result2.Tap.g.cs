@@ -9,7 +9,6 @@ namespace FuncNet.Union;
 {public static Result<TSuccess, TError0> TapSuccess<TSuccess, TError0>(this Result<TSuccess, TError0> result,
 		Action<TSuccess> action){
 		var u = (result).Value;
-			;
 			if (u.Index == 0) action(u.Value0);
 			return result;
 			
@@ -18,7 +17,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0> TapError0<TSuccess, TError0>(this Result<TSuccess, TError0> result,
 		Action<TError0> action){
 		var u = (result).Value;
-			;
 			if (u.Index == 1) action(u.Value1);
 			return result;
 			

@@ -9,7 +9,6 @@ namespace FuncNet.Union;
 {public static Result<TSuccess, TError0, TError1, TError2> TapSuccess<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
 		Action<TSuccess> action){
 		var u = (result).Value;
-			;
 			if (u.Index == 0) action(u.Value0);
 			return result;
 			
@@ -18,7 +17,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0, TError1, TError2> TapError0<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
 		Action<TError0> action){
 		var u = (result).Value;
-			;
 			if (u.Index == 1) action(u.Value1);
 			return result;
 			
@@ -27,7 +25,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0, TError1, TError2> TapError1<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
 		Action<TError1> action){
 		var u = (result).Value;
-			;
 			if (u.Index == 2) action(u.Value2);
 			return result;
 			
@@ -36,7 +33,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0, TError1, TError2> TapError2<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
 		Action<TError2> action){
 		var u = (result).Value;
-			;
 			if (u.Index == 3) action(u.Value3);
 			return result;
 			

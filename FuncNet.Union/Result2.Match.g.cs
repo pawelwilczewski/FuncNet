@@ -10,7 +10,6 @@ namespace FuncNet.Union;
 		Func<TSuccess, TResult> success,
 		Func<TError0, TResult> error0){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => success(u.Value0),

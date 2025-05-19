@@ -9,7 +9,6 @@ namespace FuncNet.Union;
 {public static Union<T0New, T1, T2, T3, T4, T5, T6> Bind0<T0New, T0Old, T1, T2, T3, T4, T5, T6>(this Union<T0Old, T1, T2, T3, T4, T5, T6> union,
 		Func<T0Old, Union<T0New, T1, T2, T3, T4, T5, T6>> binding){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => binding(u.Value0),
@@ -26,7 +25,6 @@ namespace FuncNet.Union;
 	public static Union<T0, T1New, T2, T3, T4, T5, T6> Bind1<T1New, T0, T1Old, T2, T3, T4, T5, T6>(this Union<T0, T1Old, T2, T3, T4, T5, T6> union,
 		Func<T1Old, Union<T0, T1New, T2, T3, T4, T5, T6>> binding){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => Union<T0, T1New, T2, T3, T4, T5, T6>.FromT0(u.Value0),
@@ -43,7 +41,6 @@ namespace FuncNet.Union;
 	public static Union<T0, T1, T2New, T3, T4, T5, T6> Bind2<T2New, T0, T1, T2Old, T3, T4, T5, T6>(this Union<T0, T1, T2Old, T3, T4, T5, T6> union,
 		Func<T2Old, Union<T0, T1, T2New, T3, T4, T5, T6>> binding){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => Union<T0, T1, T2New, T3, T4, T5, T6>.FromT0(u.Value0),
@@ -60,7 +57,6 @@ namespace FuncNet.Union;
 	public static Union<T0, T1, T2, T3New, T4, T5, T6> Bind3<T3New, T0, T1, T2, T3Old, T4, T5, T6>(this Union<T0, T1, T2, T3Old, T4, T5, T6> union,
 		Func<T3Old, Union<T0, T1, T2, T3New, T4, T5, T6>> binding){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => Union<T0, T1, T2, T3New, T4, T5, T6>.FromT0(u.Value0),
@@ -77,7 +73,6 @@ namespace FuncNet.Union;
 	public static Union<T0, T1, T2, T3, T4New, T5, T6> Bind4<T4New, T0, T1, T2, T3, T4Old, T5, T6>(this Union<T0, T1, T2, T3, T4Old, T5, T6> union,
 		Func<T4Old, Union<T0, T1, T2, T3, T4New, T5, T6>> binding){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => Union<T0, T1, T2, T3, T4New, T5, T6>.FromT0(u.Value0),
@@ -94,7 +89,6 @@ namespace FuncNet.Union;
 	public static Union<T0, T1, T2, T3, T4, T5New, T6> Bind5<T5New, T0, T1, T2, T3, T4, T5Old, T6>(this Union<T0, T1, T2, T3, T4, T5Old, T6> union,
 		Func<T5Old, Union<T0, T1, T2, T3, T4, T5New, T6>> binding){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => Union<T0, T1, T2, T3, T4, T5New, T6>.FromT0(u.Value0),
@@ -111,7 +105,6 @@ namespace FuncNet.Union;
 	public static Union<T0, T1, T2, T3, T4, T5, T6New> Bind6<T6New, T0, T1, T2, T3, T4, T5, T6Old>(this Union<T0, T1, T2, T3, T4, T5, T6Old> union,
 		Func<T6Old, Union<T0, T1, T2, T3, T4, T5, T6New>> binding){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => Union<T0, T1, T2, T3, T4, T5, T6New>.FromT0(u.Value0),

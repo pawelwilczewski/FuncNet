@@ -12,7 +12,6 @@ namespace FuncNet.Union;
 		Func<TError1, TResult> error1,
 		Func<TError2, TResult> error2){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => success(u.Value0),
@@ -28,7 +27,6 @@ namespace FuncNet.Union;
 		Func<TError0, TResult> error0,
 		Func<Union<TError1, TError2>, TResult> other){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => success(u.Value0),
@@ -42,7 +40,6 @@ namespace FuncNet.Union;
 		Func<TSuccess, TResult> success,
 		Func<Union<TError0, TError1, TError2>, TResult> other){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => success(u.Value0),

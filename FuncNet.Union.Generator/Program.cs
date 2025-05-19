@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.Reflection;
 using FuncNet.Union.Generator;
+using FuncNet.Union.Generator.CodeGeneration.Builders;
+using FuncNet.Union.Generator.CodeGeneration.Models;
 
 var startTime = Stopwatch.GetTimestamp();
 

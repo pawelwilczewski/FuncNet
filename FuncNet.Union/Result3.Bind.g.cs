@@ -9,7 +9,6 @@ namespace FuncNet.Union;
 {public static Result<TSuccessNew, TError0, TError1> BindSuccess<TSuccessNew, TSuccessOld, TError0, TError1>(this Result<TSuccessOld, TError0, TError1> result,
 		Func<TSuccessOld, Result<TSuccessNew, TError0, TError1>> binding){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => binding(u.Value0),
@@ -22,7 +21,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0New, TError1> BindError0<TError0New, TSuccess, TError0Old, TError1>(this Result<TSuccess, TError0Old, TError1> result,
 		Func<TError0Old, Result<TSuccess, TError0New, TError1>> binding){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => Result<TSuccess, TError0New, TError1>.FromSuccess(u.Value0),
@@ -35,7 +33,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0, TError1New> BindError1<TError1New, TSuccess, TError0, TError1Old>(this Result<TSuccess, TError0, TError1Old> result,
 		Func<TError1Old, Result<TSuccess, TError0, TError1New>> binding){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => Result<TSuccess, TError0, TError1New>.FromSuccess(u.Value0),

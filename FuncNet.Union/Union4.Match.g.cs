@@ -12,7 +12,6 @@ namespace FuncNet.Union;
 		Func<T2, TResult> t2,
 		Func<T3, TResult> t3){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => t0(u.Value0),
@@ -28,7 +27,6 @@ namespace FuncNet.Union;
 		Func<T1, TResult> t1,
 		Func<Union<T2, T3>, TResult> other){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => t0(u.Value0),
@@ -42,7 +40,6 @@ namespace FuncNet.Union;
 		Func<T0, TResult> t0,
 		Func<Union<T1, T2, T3>, TResult> other){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => t0(u.Value0),

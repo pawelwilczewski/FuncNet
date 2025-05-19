@@ -10,7 +10,6 @@ namespace FuncNet.Union;
 		Func<T0, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise){
 		var u = union;
-			;
 			if (u.Index == 0 && !(predicate(u.Value0))) return otherwise();
 			return union;
 			
@@ -20,7 +19,6 @@ namespace FuncNet.Union;
 		Func<T1, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise){
 		var u = union;
-			;
 			if (u.Index == 1 && !(predicate(u.Value1))) return otherwise();
 			return union;
 			
@@ -30,7 +28,6 @@ namespace FuncNet.Union;
 		Func<T2, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise){
 		var u = union;
-			;
 			if (u.Index == 2 && !(predicate(u.Value2))) return otherwise();
 			return union;
 			
@@ -40,7 +37,6 @@ namespace FuncNet.Union;
 		Func<T3, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise){
 		var u = union;
-			;
 			if (u.Index == 3 && !(predicate(u.Value3))) return otherwise();
 			return union;
 			
@@ -50,7 +46,6 @@ namespace FuncNet.Union;
 		Func<T4, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise){
 		var u = union;
-			;
 			if (u.Index == 4 && !(predicate(u.Value4))) return otherwise();
 			return union;
 			
@@ -60,7 +55,6 @@ namespace FuncNet.Union;
 		Func<T5, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise){
 		var u = union;
-			;
 			if (u.Index == 5 && !(predicate(u.Value5))) return otherwise();
 			return union;
 			
@@ -70,7 +64,6 @@ namespace FuncNet.Union;
 		Func<T6, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise){
 		var u = union;
-			;
 			if (u.Index == 6 && !(predicate(u.Value6))) return otherwise();
 			return union;
 			

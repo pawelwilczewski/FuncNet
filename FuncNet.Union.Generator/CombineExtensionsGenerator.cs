@@ -1,3 +1,7 @@
+using FuncNet.Union.Generator.CodeGeneration;
+using FuncNet.Union.Generator.CodeGeneration.Builders;
+using FuncNet.Union.Generator.CodeGeneration.Models;
+
 namespace FuncNet.Union.Generator;
 
 using static CodeGenerationUtils;
@@ -24,13 +28,13 @@ internal static class CombineExtensionsGenerator
 			.AddArguments(Enumerable.Range(0, p.OptionsCount).Select(i => $"{$"Result<TSuccess{i}, {errorTs}>".WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} result{i}"))
 			.AddArgument($"Func<{successTs}, {joinReturnType}> combineSuccess")
 			.AddArgument($"Func<{string.Join(", ", p.Ts().Skip(1).Select(t => $"IReadOnlyList<{t}>"))}, {joinReturnType}> combineErrors")
-			.AddAsyncArgumentsIfAsync(p)
+			.AddCancellationTokenIfAsync(p)
 			.AddBodyStatementIf($"Task.WhenAll({string.Join(", ", Enumerable.Range(0, p.OptionsCount).Select(i => $"result{i}"))})".WrapInAwaitConfigured(), p.IsAsync(UnionMethodAsyncConfig.InputUnion))
 			.AddBodyStatements(Enumerable.Range(0, p.OptionsCount).Select(i => $"var r{i} = {$"result{i}".WrapInResultGetterIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}"))
 			.AddBodyStatement(new IfStatementBuilder($"{string.Join("\n\t\t\t&& ", Enumerable.Range(0, p.OptionsCount).Select(i => $"r{i}.IsSuccess"))}")
 				.AddStatement($"return {$"combineSuccess({string.Join(", ", Enumerable.Range(0, p.OptionsCount).Select(i => $"r{i}.Value.Value0"))})".WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}")
 				.ToString())
-			.AddThrowIfCanceledStatementIfAsync(p)
+			.AddThrowIfCanceledIfAsync(p)
 			.AddBodyStatements(Enumerable.Range(0, p.UnionSize - 1)
 				.Select(errorIndex => $"var errors{errorIndex} = new List<TError{errorIndex}>();\n\t\t"
 					+ $"{string.Join(";\n\t\t", Enumerable.Range(0, p.OptionsCount).Select(resultIndex => $"if (r{resultIndex}.Value.Index == {errorIndex + 1}) errors{errorIndex}.Add(r{resultIndex}.Value.Value{errorIndex + 1})"))}"))

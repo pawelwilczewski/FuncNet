@@ -9,7 +9,6 @@ namespace FuncNet.Union;
 {public static Union<T0New, T1> Map0<T0New, T0Old, T1>(this Union<T0Old, T1> union,
 		Func<T0Old, T0New> mapping){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => Union<T0New, T1>.FromT0(mapping(u.Value0)),
@@ -21,7 +20,6 @@ namespace FuncNet.Union;
 	public static Union<T0, T1New> Map1<T1New, T0, T1Old>(this Union<T0, T1Old> union,
 		Func<T1Old, T1New> mapping){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => Union<T0, T1New>.FromT0(u.Value0),

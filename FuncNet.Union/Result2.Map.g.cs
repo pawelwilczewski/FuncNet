@@ -9,7 +9,6 @@ namespace FuncNet.Union;
 {public static Result<TSuccessNew, TError0> MapSuccess<TSuccessNew, TSuccessOld, TError0>(this Result<TSuccessOld, TError0> result,
 		Func<TSuccessOld, TSuccessNew> mapping){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => Result<TSuccessNew, TError0>.FromSuccess(mapping(u.Value0)),
@@ -21,7 +20,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0New> MapError0<TError0New, TSuccess, TError0Old>(this Result<TSuccess, TError0Old> result,
 		Func<TError0Old, TError0New> mapping){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => Result<TSuccess, TError0New>.FromSuccess(u.Value0),

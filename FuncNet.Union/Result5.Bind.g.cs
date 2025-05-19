@@ -9,7 +9,6 @@ namespace FuncNet.Union;
 {public static Result<TSuccessNew, TError0, TError1, TError2, TError3> BindSuccess<TSuccessNew, TSuccessOld, TError0, TError1, TError2, TError3>(this Result<TSuccessOld, TError0, TError1, TError2, TError3> result,
 		Func<TSuccessOld, Result<TSuccessNew, TError0, TError1, TError2, TError3>> binding){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => binding(u.Value0),
@@ -24,7 +23,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0New, TError1, TError2, TError3> BindError0<TError0New, TSuccess, TError0Old, TError1, TError2, TError3>(this Result<TSuccess, TError0Old, TError1, TError2, TError3> result,
 		Func<TError0Old, Result<TSuccess, TError0New, TError1, TError2, TError3>> binding){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => Result<TSuccess, TError0New, TError1, TError2, TError3>.FromSuccess(u.Value0),
@@ -39,7 +37,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0, TError1New, TError2, TError3> BindError1<TError1New, TSuccess, TError0, TError1Old, TError2, TError3>(this Result<TSuccess, TError0, TError1Old, TError2, TError3> result,
 		Func<TError1Old, Result<TSuccess, TError0, TError1New, TError2, TError3>> binding){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => Result<TSuccess, TError0, TError1New, TError2, TError3>.FromSuccess(u.Value0),
@@ -54,7 +51,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0, TError1, TError2New, TError3> BindError2<TError2New, TSuccess, TError0, TError1, TError2Old, TError3>(this Result<TSuccess, TError0, TError1, TError2Old, TError3> result,
 		Func<TError2Old, Result<TSuccess, TError0, TError1, TError2New, TError3>> binding){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => Result<TSuccess, TError0, TError1, TError2New, TError3>.FromSuccess(u.Value0),
@@ -69,7 +65,6 @@ namespace FuncNet.Union;
 	public static Result<TSuccess, TError0, TError1, TError2, TError3New> BindError3<TError3New, TSuccess, TError0, TError1, TError2, TError3Old>(this Result<TSuccess, TError0, TError1, TError2, TError3Old> result,
 		Func<TError3Old, Result<TSuccess, TError0, TError1, TError2, TError3New>> binding){
 		var u = (result).Value;
-			;
 			return u.Index switch
 		{
 			0 => Result<TSuccess, TError0, TError1, TError2, TError3New>.FromSuccess(u.Value0),

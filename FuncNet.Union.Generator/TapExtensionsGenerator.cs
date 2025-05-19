@@ -1,3 +1,7 @@
+using FuncNet.Union.Generator.CodeGeneration;
+using FuncNet.Union.Generator.CodeGeneration.Builders;
+using FuncNet.Union.Generator.CodeGeneration.Models;
+
 namespace FuncNet.Union.Generator;
 
 using static CodeGenerationUtils;
@@ -18,9 +22,9 @@ internal static class TapExtensionsGenerator
 		new MethodBuilder($"public static {p.ExtendedTypeOfTs().WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}{p.ElementTypeNamesGenerator().ElementAt(p.SpecialIndex)}<{p.TsCommaSeparated()}>")
 			.AddArgument($"this {p.ExtendedTypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} {p.ThisArgumentName}")
 			.AddArgument(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType) ? $"Func<{p.Ts().ElementAt(p.SpecialIndex)}, Task> action" : $"Action<{p.Ts().ElementAt(p.SpecialIndex)}> action")
-			.AddAsyncArgumentsIfAsync(p)
+			.AddCancellationTokenIfAsync(p)
 			.AddBodyStatement($"var u = {p.GetUnionOnArgument(p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion)))}")
-			.AddThrowIfCanceledStatementIfAsync(p)
+			.AddThrowIfCanceledIfAsync(p)
 			.AddBodyStatement($"if (u.Index == {p.SpecialIndex}) {$"action(u.Value{p.SpecialIndex})".WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}")
 			.AddBodyStatement($"return {p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}");
 }

@@ -1,9 +1,9 @@
-// Required for Task types
+using FuncNet.Union.Generator.CodeGeneration;
 
-namespace FuncNet.Union.Generator; // Assuming this namespace for the generator itself
-// The generated code will be in the '@namespace' parameter
+namespace FuncNet.Union.Generator;
 
-using static CodeGenerationUtils;
+using static GenericsGenerationUtils;
+using static StringJoinUtils;
 
 public static class ResultGenerator
 {

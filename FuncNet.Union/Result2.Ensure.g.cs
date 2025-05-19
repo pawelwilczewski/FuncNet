@@ -10,7 +10,6 @@ namespace FuncNet.Union;
 		Func<TSuccess, bool> predicate,
 		Func<Result<TSuccess, TError0>> otherwise){
 		var u = (result).Value;
-			;
 			if (u.Index == 0 && !(predicate(u.Value0))) return otherwise();
 			return result;
 			
@@ -20,7 +19,6 @@ namespace FuncNet.Union;
 		Func<TError0, bool> predicate,
 		Func<Result<TSuccess, TError0>> otherwise){
 		var u = (result).Value;
-			;
 			if (u.Index == 1 && !(predicate(u.Value1))) return otherwise();
 			return result;
 			

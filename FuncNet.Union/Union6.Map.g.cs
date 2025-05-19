@@ -9,7 +9,6 @@ namespace FuncNet.Union;
 {public static Union<T0New, T1, T2, T3, T4, T5> Map0<T0New, T0Old, T1, T2, T3, T4, T5>(this Union<T0Old, T1, T2, T3, T4, T5> union,
 		Func<T0Old, T0New> mapping){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => Union<T0New, T1, T2, T3, T4, T5>.FromT0(mapping(u.Value0)),
@@ -25,7 +24,6 @@ namespace FuncNet.Union;
 	public static Union<T0, T1New, T2, T3, T4, T5> Map1<T1New, T0, T1Old, T2, T3, T4, T5>(this Union<T0, T1Old, T2, T3, T4, T5> union,
 		Func<T1Old, T1New> mapping){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => Union<T0, T1New, T2, T3, T4, T5>.FromT0(u.Value0),
@@ -41,7 +39,6 @@ namespace FuncNet.Union;
 	public static Union<T0, T1, T2New, T3, T4, T5> Map2<T2New, T0, T1, T2Old, T3, T4, T5>(this Union<T0, T1, T2Old, T3, T4, T5> union,
 		Func<T2Old, T2New> mapping){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => Union<T0, T1, T2New, T3, T4, T5>.FromT0(u.Value0),
@@ -57,7 +54,6 @@ namespace FuncNet.Union;
 	public static Union<T0, T1, T2, T3New, T4, T5> Map3<T3New, T0, T1, T2, T3Old, T4, T5>(this Union<T0, T1, T2, T3Old, T4, T5> union,
 		Func<T3Old, T3New> mapping){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => Union<T0, T1, T2, T3New, T4, T5>.FromT0(u.Value0),
@@ -73,7 +69,6 @@ namespace FuncNet.Union;
 	public static Union<T0, T1, T2, T3, T4New, T5> Map4<T4New, T0, T1, T2, T3, T4Old, T5>(this Union<T0, T1, T2, T3, T4Old, T5> union,
 		Func<T4Old, T4New> mapping){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => Union<T0, T1, T2, T3, T4New, T5>.FromT0(u.Value0),
@@ -89,7 +84,6 @@ namespace FuncNet.Union;
 	public static Union<T0, T1, T2, T3, T4, T5New> Map5<T5New, T0, T1, T2, T3, T4, T5Old>(this Union<T0, T1, T2, T3, T4, T5Old> union,
 		Func<T5Old, T5New> mapping){
 		var u = union;
-			;
 			return u.Index switch
 		{
 			0 => Union<T0, T1, T2, T3, T4, T5New>.FromT0(u.Value0),
