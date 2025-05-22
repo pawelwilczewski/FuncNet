@@ -1,15 +1,10 @@
 using System.Diagnostics;
 using System.Globalization;
-using Xunit.Abstractions;
 
 namespace FuncNet.Union.Test;
 
 public class ResultTests
 {
-	private readonly ITestOutputHelper testOutputHelper;
-
-	public ResultTests(ITestOutputHelper testOutputHelper) => this.testOutputHelper = testOutputHelper;
-
 	[Fact]
 	public async Task Match_Works()
 	{
@@ -658,41 +653,60 @@ public class ResultTests
 				: Result<string, string, double>.FromError("Invalid email format");
 	}
 
-	// [Fact]
-	// public async Task CreateUserPipeline_Works()
-	// {
-	// 	var request = new CreateUserRequest("john", "hello", 48, "abc@abc.com");
-	// 	var test = CreateUser(request);
-	//
-	// 	test.Match(
-	// 		user => "User created: " + user,
-	// 		validationError => "HTTP ERROR",
-	// 		databaseError => "|fdfds",
-	// 		emailSendingError => "dfsdf");
-	//
-	// 	testOutputHelper.WriteLine(test.ToString());
-	// }
+	[Theory]
+	[InlineData("John", "Doe", 25, "john.doe@example.com", true, null)]
+	[InlineData("Jane", "Smith", 17, "jane.smith@example.com", false, "Age")]
+	[InlineData("Bob", "Johnson", 30, "bobexample.com", false, "Email")]
+	[InlineData("Alice", "Brown", 16, "aliceexample.com", false, "Age")]
+	public void CreateUserPipeline_Works(string firstName, string lastName, int age, string email, bool shouldSucceed, string expectedErrorField)
+	{
+		var request = new CreateUserRequest(firstName, lastName, age, email);
+		var result = CreateUser(request);
 
-	// private Result<User, ValidationError, DatabaseError, EmailSendingError> CreateUser(CreateUserRequest request) =>
-	// 	Result.Combine<Result<User, ValidationError, DatabaseError, EmailSendingError>, string, int, string, ValidationError>(
-	// 			$"{request.FirstName} {request.LastName}",
-	// 			Result<int, ValidationError>.FromSuccess(request.Age)
-	// 				.FilterSuccess(
-	// 					age => age >= 18,
-	// 					() => Result<string, ValidationError>.FromError(new ValidationError("Users must be 18 or older", nameof(request.Age)))),
-	// 			Result<string, ValidationError>.FromSuccess(request.Email)
-	// 				.FilterSuccess(
-	// 					email => email.Contains('@'),
-	// 					() => Result<string, ValidationError>.FromError(new ValidationError("Email must contain '@'", nameof(request.Email)))),
-	// 			(name, age, email) => Result<User, ValidationError, DatabaseError, EmailSendingError>.FromSuccess(new User(name, age, email)),
-	// 			errors => errors[0])
-	// 		.BindSuccess<User, User, ValidationError, DatabaseError, EmailSendingError>(user => SaveUserToDb(user))
-	// 		.MapSuccess(user => user with
-	// 		{
-	// 			Age = 128
-	// 		})
-	// 		.BindSuccess<User, User, ValidationError, DatabaseError, EmailSendingError>(
-	// 			user => Result<User, EmailSendingError>.FromSuccess(user));
+		if (shouldSucceed)
+		{
+			var userString = result.Match(
+				user => $"User created: {user.Name}",
+				validationError => $"Validation error: {validationError.Error}",
+				databaseError => "Database error",
+				emailSendingError => "Email sending error");
+
+			Assert.StartsWith("User created:", userString);
+		}
+		else
+		{
+			var errorString = result.Match(
+				user => $"User created: {user.Name}",
+				validationError => $"Validation error: {validationError.Error} ({validationError.FieldName})",
+				databaseError => "Database error",
+				emailSendingError => "Email sending error");
+
+			Assert.Contains(expectedErrorField, errorString);
+		}
+	}
+
+	private Result<User, ValidationError, DatabaseError, EmailSendingError> CreateUser(CreateUserRequest request) =>
+		Result.Combine<Result<User, ValidationError, DatabaseError, EmailSendingError>, string, int, string, ValidationError>(
+				$"{request.FirstName} {request.LastName}",
+				Result<int, ValidationError>.FromSuccess(request.Age)
+					.FilterSuccess(
+						age => age >= 18,
+						() => Result<int, ValidationError>.FromError(new ValidationError("Users must be 18 or older", nameof(request.Age)))),
+				Result<string, ValidationError>.FromSuccess(request.Email)
+					.FilterSuccess(
+						email => email.Contains('@'),
+						() => Result<string, ValidationError>.FromError(new ValidationError("Email must contain '@'", nameof(request.Email)))),
+				(name, age, email) => Result<User, ValidationError, DatabaseError, EmailSendingError>.FromSuccess(new User(name, age, email)),
+				errors => errors[0])
+			.BindSuccess(user => SaveUserToDb(user)
+				.Match(
+					Result<User, ValidationError, DatabaseError, EmailSendingError>.FromSuccess,
+					error => error))
+			.MapSuccess(user => user with
+			{
+				Age = 128
+			})
+			.BindSuccess(Result<User, ValidationError, DatabaseError, EmailSendingError>.FromSuccess);
 
 	private static Result<User, DatabaseError> SaveUserToDb(User user) => user;
 
