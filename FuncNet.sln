@@ -1,10 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet.Union", "FuncNet.Union\FuncNet.Union.csproj", "{3FE4D667-7415-4904-A711-E919CD0AFDE9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet", "FuncNet\FuncNet.csproj", "{3FE4D667-7415-4904-A711-E919CD0AFDE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet.Union.Generator", "FuncNet.Union.Generator\FuncNet.Union.Generator.csproj", "{B61313EB-8CEA-47B7-B1BB-DE28CAB1DBCC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet.Generator", "FuncNet.Generator\FuncNet.Generator.csproj", "{B61313EB-8CEA-47B7-B1BB-DE28CAB1DBCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet.Union.Test", "FuncNet.Union.Test\FuncNet.Union.Test.csproj", "{059E1CE6-0C05-4855-96BB-B6D39E5D69C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet.Test", "FuncNet.Test\FuncNet.Test.csproj", "{059E1CE6-0C05-4855-96BB-B6D39E5D69C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
