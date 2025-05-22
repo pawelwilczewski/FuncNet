@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using System.Reflection;
 using FuncNet.Union.Generator;
-using FuncNet.Union.Generator.CodeGeneration;
 using FuncNet.Union.Generator.CodeGeneration.Builders;
 using FuncNet.Union.Generator.CodeGeneration.Models;
 using FuncNet.Union.Generator.ExtensionsGenerators;
@@ -29,25 +28,13 @@ const string @namespace = "FuncNet.Union";
 ];
 
 var generationParams =
-	(from m in methodGenerators
-		from unionSize in Enumerable.Range(2, maxChoices - 1)
-		from p in GenerateBaseParams(unionSize)
-		where !(p.extendedTypeName == "Union" && m.methodNameOnly == "Combine") // hacky don't generate Combine for Union
-		select new UnionExtensionsFileGenerationParams(
-			@namespace, m.additionalUsings, m.classDeclaration, p.extendedTypeName, m.methodNameOnly, unionSize,
-			m.generateMethods, p.thisArgumentName, p.elementNamesGenerator, p.unionGetter, p.factoryMethodName, p.defaultSwitchCaseReturnValue))
-	.Append(new UnionExtensionsFileGenerationParams(@namespace, "", StaticClassDeclaration, "Option",
-		"Map", 1, MapExtensionsGenerator.GenerateMethods, "option", () => ["Value"],
-		argument => argument, index => index == 0 ? "Some" : "None",
-		p => "Option<TValueNew>.None".WrapInTaskFromResultIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))))
-	.Append(new UnionExtensionsFileGenerationParams(@namespace, "", StaticClassDeclaration, "Option",
-		"Bind", 1, BindExtensionsGenerator.GenerateMethods, "option", () => ["Value"],
-		argument => argument, index => index == 0 ? "Some" : "None",
-		p => "Option<TValueNew>.None".WrapInTaskFromResultIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))))
-	.Append(new UnionExtensionsFileGenerationParams(@namespace, "", StaticClassDeclaration, "Option",
-		"Tap", 1, TapExtensionsGenerator.GenerateMethods, "option", () => ["Value"],
-		argument => argument, index => index == 0 ? "Some" : "None",
-		p => "Option<TValueNew>.None".WrapInTaskFromResultIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))));
+	from m in methodGenerators
+	from unionSize in Enumerable.Range(2, maxChoices - 1)
+	from p in GenerateBaseParams(unionSize)
+	where !(p.extendedTypeName == "Union" && m.methodNameOnly == "Combine") // hacky don't generate Combine for Union
+	select new UnionExtensionsFileGenerationParams(
+		@namespace, m.additionalUsings, m.classDeclaration, p.extendedTypeName, m.methodNameOnly, unionSize,
+		m.generateMethods, p.thisArgumentName, p.elementNamesGenerator, p.unionGetter, p.factoryMethodName, p.defaultSwitchCaseReturnValue);
 
 var basePath = Path.Join(
 	Path.GetFullPath(Assembly.GetExecutingAssembly().Location),
