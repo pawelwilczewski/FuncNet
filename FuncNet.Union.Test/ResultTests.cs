@@ -3,6 +3,8 @@ using System.Globalization;
 
 namespace FuncNet.Union.Test;
 
+using UserResult = Result<ResultTests.User, ResultTests.ValidationError, ResultTests.DatabaseError, ResultTests.EmailSendingError>;
+
 public class ResultTests
 {
 	[Fact]
@@ -685,38 +687,42 @@ public class ResultTests
 		}
 	}
 
-	private Result<User, ValidationError, DatabaseError, EmailSendingError> CreateUser(CreateUserRequest request) =>
-		Result.Combine<Result<User, ValidationError, DatabaseError, EmailSendingError>, string, int, string, ValidationError>(
+	private static UserResult CreateUser(CreateUserRequest request) =>
+		Result.Combine<UserResult, string, int, string, ValidationError>(
 				$"{request.FirstName} {request.LastName}",
-				Result<int, ValidationError>.FromSuccess(request.Age)
-					.FilterSuccess(
-						age => age >= 18,
-						() => Result<int, ValidationError>.FromError(new ValidationError("Users must be 18 or older", nameof(request.Age)))),
-				Result<string, ValidationError>.FromSuccess(request.Email)
-					.FilterSuccess(
-						email => email.Contains('@'),
-						() => Result<string, ValidationError>.FromError(new ValidationError("Email must contain '@'", nameof(request.Email)))),
-				(name, age, email) => Result<User, ValidationError, DatabaseError, EmailSendingError>.FromSuccess(new User(name, age, email)),
+				ValidateAge(request.Age),
+				ValidateEmail(request.Email),
+				(name, age, email) => UserResult.FromSuccess(new User(name, age, email)),
 				errors => errors[0])
 			.BindSuccess(user => SaveUserToDb(user)
 				.Match(
-					Result<User, ValidationError, DatabaseError, EmailSendingError>.FromSuccess,
+					UserResult.FromSuccess,
 					error => error))
 			.MapSuccess(user => user with
 			{
 				Age = 128
 			})
-			.BindSuccess(Result<User, ValidationError, DatabaseError, EmailSendingError>.FromSuccess);
+			.BindSuccess(UserResult.FromSuccess);
 
-	private static Result<User, DatabaseError> SaveUserToDb(User user) => user;
+	private static Result<int, ValidationError> ValidateAge(int age) =>
+		age >= 18
+			? Result<int, ValidationError>.FromSuccess(age)
+			: Result<int, ValidationError>.FromError(new ValidationError("Users must be 18 or older", nameof(CreateUserRequest.Age)));
 
-	private sealed record class CreateUserRequest(string FirstName, string LastName, int Age, string Email);
+	private static Result<string, ValidationError> ValidateEmail(string email) =>
+		email.Contains('@')
+			? Result<string, ValidationError>.FromSuccess(email)
+			: Result<string, ValidationError>.FromError(new ValidationError("Email must contain '@'", nameof(CreateUserRequest.Email)));
 
-	private sealed record class User(string Name, int Age, string Email);
+	public static Result<User, DatabaseError> SaveUserToDb(User user) => user;
 
-	private sealed record class ValidationError(string Error, string FieldName);
+	public sealed record class CreateUserRequest(string FirstName, string LastName, int Age, string Email);
 
-	private sealed record class DatabaseError(Exception Error);
+	public sealed record class User(string Name, int Age, string Email);
 
-	private sealed record class EmailSendingError(Exception Error);
+	public sealed record class ValidationError(string Error, string FieldName);
+
+	public sealed record class DatabaseError(Exception Error);
+
+	public sealed record class EmailSendingError(Exception Error);
 }
