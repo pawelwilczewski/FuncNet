@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 #nullable enable
 
 namespace FuncNet.Union;
-		public static class Union2Ensure
-{public static Union<T0, T1> Ensure0<T0, T1>(this Union<T0, T1> union,
+		public static class Union2Filter
+{public static Union<T0, T1> Filter0<T0, T1>(this Union<T0, T1> union,
 		Func<T0, bool> predicate,
 		Func<Union<T0, T1>> otherwise){
 		var u = union;
@@ -15,7 +15,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static Union<T0, T1> Ensure1<T0, T1>(this Union<T0, T1> union,
+	public static Union<T0, T1> Filter1<T0, T1>(this Union<T0, T1> union,
 		Func<T1, bool> predicate,
 		Func<Union<T0, T1>> otherwise){
 		var u = union;
@@ -24,7 +24,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1>> Ensure0<T0, T1>(this Task<Union<T0, T1>> union,
+	public static async Task<Union<T0, T1>> Filter0<T0, T1>(this Task<Union<T0, T1>> union,
 		Func<T0, Task<bool>> predicate,
 		Func<Task<Union<T0, T1>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -35,7 +35,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1>> Ensure1<T0, T1>(this Task<Union<T0, T1>> union,
+	public static async Task<Union<T0, T1>> Filter1<T0, T1>(this Task<Union<T0, T1>> union,
 		Func<T1, Task<bool>> predicate,
 		Func<Task<Union<T0, T1>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -46,7 +46,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1>> Ensure0<T0, T1>(this Union<T0, T1> union,
+	public static async Task<Union<T0, T1>> Filter0<T0, T1>(this Union<T0, T1> union,
 		Func<T0, Task<bool>> predicate,
 		Func<Task<Union<T0, T1>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -57,7 +57,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1>> Ensure1<T0, T1>(this Union<T0, T1> union,
+	public static async Task<Union<T0, T1>> Filter1<T0, T1>(this Union<T0, T1> union,
 		Func<T1, Task<bool>> predicate,
 		Func<Task<Union<T0, T1>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -68,7 +68,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1>> Ensure0<T0, T1>(this Task<Union<T0, T1>> union,
+	public static async Task<Union<T0, T1>> Filter0<T0, T1>(this Task<Union<T0, T1>> union,
 		Func<T0, bool> predicate,
 		Func<Union<T0, T1>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -79,7 +79,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1>> Ensure1<T0, T1>(this Task<Union<T0, T1>> union,
+	public static async Task<Union<T0, T1>> Filter1<T0, T1>(this Task<Union<T0, T1>> union,
 		Func<T1, bool> predicate,
 		Func<Union<T0, T1>> otherwise,
 		CancellationToken cancellationToken = default){

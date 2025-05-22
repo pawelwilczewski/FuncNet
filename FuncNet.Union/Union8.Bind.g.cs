@@ -18,7 +18,8 @@ namespace FuncNet.Union;
 			4 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT4(u.Value4),
 			5 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT5(u.Value5),
 			6 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT6(u.Value6),
-			_ => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT7(u.Value7),
+			7 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT7(u.Value7),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -35,7 +36,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT4(u.Value4),
 			5 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT5(u.Value5),
 			6 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT6(u.Value6),
-			_ => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT7(u.Value7),
+			7 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT7(u.Value7),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -52,7 +54,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT4(u.Value4),
 			5 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT5(u.Value5),
 			6 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT6(u.Value6),
-			_ => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT7(u.Value7),
+			7 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT7(u.Value7),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -69,7 +72,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT4(u.Value4),
 			5 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT5(u.Value5),
 			6 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT6(u.Value6),
-			_ => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT7(u.Value7),
+			7 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT7(u.Value7),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -86,7 +90,8 @@ namespace FuncNet.Union;
 			4 => binding(u.Value4),
 			5 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT5(u.Value5),
 			6 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT6(u.Value6),
-			_ => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT7(u.Value7),
+			7 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT7(u.Value7),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -103,7 +108,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT4(u.Value4),
 			5 => binding(u.Value5),
 			6 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT6(u.Value6),
-			_ => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT7(u.Value7),
+			7 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT7(u.Value7),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -120,7 +126,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT4(u.Value4),
 			5 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT5(u.Value5),
 			6 => binding(u.Value6),
-			_ => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT7(u.Value7),
+			7 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT7(u.Value7),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -137,7 +144,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT4(u.Value4),
 			5 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT5(u.Value5),
 			6 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT6(u.Value6),
-			_ => binding(u.Value7),
+			7 => binding(u.Value7),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -156,7 +164,8 @@ namespace FuncNet.Union;
 			4 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT4(Task.FromResult(u.Value4)),
 			5 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT5(Task.FromResult(u.Value5)),
 			6 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT6(Task.FromResult(u.Value6)),
-			_ => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			7 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -175,7 +184,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT4(Task.FromResult(u.Value4)),
 			5 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT5(Task.FromResult(u.Value5)),
 			6 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT6(Task.FromResult(u.Value6)),
-			_ => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			7 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -194,7 +204,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT4(Task.FromResult(u.Value4)),
 			5 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT5(Task.FromResult(u.Value5)),
 			6 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT6(Task.FromResult(u.Value6)),
-			_ => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			7 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -213,7 +224,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT4(Task.FromResult(u.Value4)),
 			5 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT5(Task.FromResult(u.Value5)),
 			6 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT6(Task.FromResult(u.Value6)),
-			_ => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			7 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -232,7 +244,8 @@ namespace FuncNet.Union;
 			4 => binding(u.Value4),
 			5 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT5(Task.FromResult(u.Value5)),
 			6 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT6(Task.FromResult(u.Value6)),
-			_ => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			7 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -251,7 +264,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT4(Task.FromResult(u.Value4)),
 			5 => binding(u.Value5),
 			6 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT6(Task.FromResult(u.Value6)),
-			_ => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			7 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -270,7 +284,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT4(Task.FromResult(u.Value4)),
 			5 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT5(Task.FromResult(u.Value5)),
 			6 => binding(u.Value6),
-			_ => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT7(Task.FromResult(u.Value7)),
+			7 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT7(Task.FromResult(u.Value7)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -289,7 +304,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT4(Task.FromResult(u.Value4)),
 			5 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT5(Task.FromResult(u.Value5)),
 			6 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT6(Task.FromResult(u.Value6)),
-			_ => binding(u.Value7),
+			7 => binding(u.Value7),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -308,7 +324,8 @@ namespace FuncNet.Union;
 			4 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT4(Task.FromResult(u.Value4)),
 			5 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT5(Task.FromResult(u.Value5)),
 			6 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT6(Task.FromResult(u.Value6)),
-			_ => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			7 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -327,7 +344,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT4(Task.FromResult(u.Value4)),
 			5 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT5(Task.FromResult(u.Value5)),
 			6 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT6(Task.FromResult(u.Value6)),
-			_ => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			7 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -346,7 +364,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT4(Task.FromResult(u.Value4)),
 			5 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT5(Task.FromResult(u.Value5)),
 			6 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT6(Task.FromResult(u.Value6)),
-			_ => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			7 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -365,7 +384,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT4(Task.FromResult(u.Value4)),
 			5 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT5(Task.FromResult(u.Value5)),
 			6 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT6(Task.FromResult(u.Value6)),
-			_ => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			7 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -384,7 +404,8 @@ namespace FuncNet.Union;
 			4 => binding(u.Value4),
 			5 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT5(Task.FromResult(u.Value5)),
 			6 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT6(Task.FromResult(u.Value6)),
-			_ => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			7 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -403,7 +424,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT4(Task.FromResult(u.Value4)),
 			5 => binding(u.Value5),
 			6 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT6(Task.FromResult(u.Value6)),
-			_ => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			7 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT7(Task.FromResult(u.Value7)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -422,7 +444,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT4(Task.FromResult(u.Value4)),
 			5 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT5(Task.FromResult(u.Value5)),
 			6 => binding(u.Value6),
-			_ => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT7(Task.FromResult(u.Value7)),
+			7 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT7(Task.FromResult(u.Value7)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -441,7 +464,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT4(Task.FromResult(u.Value4)),
 			5 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT5(Task.FromResult(u.Value5)),
 			6 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT6(Task.FromResult(u.Value6)),
-			_ => binding(u.Value7),
+			7 => binding(u.Value7),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -460,7 +484,8 @@ namespace FuncNet.Union;
 			4 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT4(u.Value4),
 			5 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT5(u.Value5),
 			6 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT6(u.Value6),
-			_ => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT7(u.Value7),
+			7 => Union<T0New, T1, T2, T3, T4, T5, T6, T7>.FromT7(u.Value7),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -479,7 +504,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT4(u.Value4),
 			5 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT5(u.Value5),
 			6 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT6(u.Value6),
-			_ => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT7(u.Value7),
+			7 => Union<T0, T1New, T2, T3, T4, T5, T6, T7>.FromT7(u.Value7),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -498,7 +524,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT4(u.Value4),
 			5 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT5(u.Value5),
 			6 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT6(u.Value6),
-			_ => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT7(u.Value7),
+			7 => Union<T0, T1, T2New, T3, T4, T5, T6, T7>.FromT7(u.Value7),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -517,7 +544,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT4(u.Value4),
 			5 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT5(u.Value5),
 			6 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT6(u.Value6),
-			_ => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT7(u.Value7),
+			7 => Union<T0, T1, T2, T3New, T4, T5, T6, T7>.FromT7(u.Value7),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -536,7 +564,8 @@ namespace FuncNet.Union;
 			4 => binding(u.Value4),
 			5 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT5(u.Value5),
 			6 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT6(u.Value6),
-			_ => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT7(u.Value7),
+			7 => Union<T0, T1, T2, T3, T4New, T5, T6, T7>.FromT7(u.Value7),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -555,7 +584,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT4(u.Value4),
 			5 => binding(u.Value5),
 			6 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT6(u.Value6),
-			_ => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT7(u.Value7),
+			7 => Union<T0, T1, T2, T3, T4, T5New, T6, T7>.FromT7(u.Value7),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -574,7 +604,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT4(u.Value4),
 			5 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT5(u.Value5),
 			6 => binding(u.Value6),
-			_ => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT7(u.Value7),
+			7 => Union<T0, T1, T2, T3, T4, T5, T6New, T7>.FromT7(u.Value7),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -593,7 +624,8 @@ namespace FuncNet.Union;
 			4 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT4(u.Value4),
 			5 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT5(u.Value5),
 			6 => Union<T0, T1, T2, T3, T4, T5, T6, T7New>.FromT6(u.Value6),
-			_ => binding(u.Value7),
+			7 => binding(u.Value7),
+			_ => throw new Unreachable(),
 			};
 			
 		}}

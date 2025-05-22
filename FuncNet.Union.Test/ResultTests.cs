@@ -1,10 +1,15 @@
 using System.Diagnostics;
 using System.Globalization;
+using Xunit.Abstractions;
 
 namespace FuncNet.Union.Test;
 
 public class ResultTests
 {
+	private readonly ITestOutputHelper testOutputHelper;
+
+	public ResultTests(ITestOutputHelper testOutputHelper) => this.testOutputHelper = testOutputHelper;
+
 	[Fact]
 	public async Task Match_Works()
 	{
@@ -350,7 +355,7 @@ public class ResultTests
 	}
 
 	[Fact]
-	public void TapAndEnsurePipeline_Works()
+	public void TapAndFilterPipeline_Works()
 	{
 		var messages = new List<string>();
 
@@ -380,7 +385,7 @@ public class ResultTests
 		static string ProcessWithValidation(int input, List<string> logMessages) =>
 			Result<int, string, double>.FromSuccess(input)
 				.TapSuccess(value => { logMessages.Add($"Processing value: {value}"); })
-				.EnsureSuccess(
+				.FilterSuccess(
 					value => value > 0,
 					() =>
 					{
@@ -389,7 +394,7 @@ public class ResultTests
 					})
 				.MapSuccess(value => value * 2)
 				.TapSuccess(value => { logMessages.Add($"Doubled value: {value}"); })
-				.EnsureSuccess(
+				.FilterSuccess(
 					value => value < 100,
 					() =>
 					{
@@ -653,5 +658,51 @@ public class ResultTests
 				: Result<string, string, double>.FromError("Invalid email format");
 	}
 
+	// [Fact]
+	// public async Task CreateUserPipeline_Works()
+	// {
+	// 	var request = new CreateUserRequest("john", "hello", 48, "abc@abc.com");
+	// 	var test = CreateUser(request);
+	//
+	// 	test.Match(
+	// 		user => "User created: " + user,
+	// 		validationError => "HTTP ERROR",
+	// 		databaseError => "|fdfds",
+	// 		emailSendingError => "dfsdf");
+	//
+	// 	testOutputHelper.WriteLine(test.ToString());
+	// }
+
+	// private Result<User, ValidationError, DatabaseError, EmailSendingError> CreateUser(CreateUserRequest request) =>
+	// 	Result.Combine<Result<User, ValidationError, DatabaseError, EmailSendingError>, string, int, string, ValidationError>(
+	// 			$"{request.FirstName} {request.LastName}",
+	// 			Result<int, ValidationError>.FromSuccess(request.Age)
+	// 				.FilterSuccess(
+	// 					age => age >= 18,
+	// 					() => Result<string, ValidationError>.FromError(new ValidationError("Users must be 18 or older", nameof(request.Age)))),
+	// 			Result<string, ValidationError>.FromSuccess(request.Email)
+	// 				.FilterSuccess(
+	// 					email => email.Contains('@'),
+	// 					() => Result<string, ValidationError>.FromError(new ValidationError("Email must contain '@'", nameof(request.Email)))),
+	// 			(name, age, email) => Result<User, ValidationError, DatabaseError, EmailSendingError>.FromSuccess(new User(name, age, email)),
+	// 			errors => errors[0])
+	// 		.BindSuccess<User, User, ValidationError, DatabaseError, EmailSendingError>(user => SaveUserToDb(user))
+	// 		.MapSuccess(user => user with
+	// 		{
+	// 			Age = 128
+	// 		})
+	// 		.BindSuccess<User, User, ValidationError, DatabaseError, EmailSendingError>(
+	// 			user => Result<User, EmailSendingError>.FromSuccess(user));
+
+	private static Result<User, DatabaseError> SaveUserToDb(User user) => user;
+
+	private sealed record class CreateUserRequest(string FirstName, string LastName, int Age, string Email);
+
 	private sealed record class User(string Name, int Age, string Email);
+
+	private sealed record class ValidationError(string Error, string FieldName);
+
+	private sealed record class DatabaseError(Exception Error);
+
+	private sealed record class EmailSendingError(Exception Error);
 }

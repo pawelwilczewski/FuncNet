@@ -12,7 +12,8 @@ namespace FuncNet.Union;
 			return u.Index switch
 		{
 			0 => Result<TSuccessNew, TError0>.FromSuccess(mapping(u.Value0)),
-			_ => Result<TSuccessNew, TError0>.FromError(u.Value1),
+			1 => Result<TSuccessNew, TError0>.FromError(u.Value1),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -23,7 +24,8 @@ namespace FuncNet.Union;
 			return u.Index switch
 		{
 			0 => Result<TSuccess, TError0New>.FromSuccess(u.Value0),
-			_ => Result<TSuccess, TError0New>.FromError(mapping(u.Value1)),
+			1 => Result<TSuccess, TError0New>.FromError(mapping(u.Value1)),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -36,7 +38,8 @@ namespace FuncNet.Union;
 			return await (u.Index switch
 		{
 			0 => Result<TSuccessNew, TError0>.FromSuccess(mapping(u.Value0)),
-			_ => Result<TSuccessNew, TError0>.FromError(Task.FromResult(u.Value1)),
+			1 => Result<TSuccessNew, TError0>.FromError(Task.FromResult(u.Value1)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -49,7 +52,8 @@ namespace FuncNet.Union;
 			return await (u.Index switch
 		{
 			0 => Result<TSuccess, TError0New>.FromSuccess(Task.FromResult(u.Value0)),
-			_ => Result<TSuccess, TError0New>.FromError(mapping(u.Value1)),
+			1 => Result<TSuccess, TError0New>.FromError(mapping(u.Value1)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -62,7 +66,8 @@ namespace FuncNet.Union;
 			return await (u.Index switch
 		{
 			0 => Result<TSuccessNew, TError0>.FromSuccess(mapping(u.Value0)),
-			_ => Result<TSuccessNew, TError0>.FromError(Task.FromResult(u.Value1)),
+			1 => Result<TSuccessNew, TError0>.FromError(Task.FromResult(u.Value1)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -75,7 +80,8 @@ namespace FuncNet.Union;
 			return await (u.Index switch
 		{
 			0 => Result<TSuccess, TError0New>.FromSuccess(Task.FromResult(u.Value0)),
-			_ => Result<TSuccess, TError0New>.FromError(mapping(u.Value1)),
+			1 => Result<TSuccess, TError0New>.FromError(mapping(u.Value1)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -88,7 +94,8 @@ namespace FuncNet.Union;
 			return u.Index switch
 		{
 			0 => Result<TSuccessNew, TError0>.FromSuccess(mapping(u.Value0)),
-			_ => Result<TSuccessNew, TError0>.FromError(u.Value1),
+			1 => Result<TSuccessNew, TError0>.FromError(u.Value1),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -101,7 +108,8 @@ namespace FuncNet.Union;
 			return u.Index switch
 		{
 			0 => Result<TSuccess, TError0New>.FromSuccess(u.Value0),
-			_ => Result<TSuccess, TError0New>.FromError(mapping(u.Value1)),
+			1 => Result<TSuccess, TError0New>.FromError(mapping(u.Value1)),
+			_ => throw new Unreachable(),
 			};
 			
 		}}

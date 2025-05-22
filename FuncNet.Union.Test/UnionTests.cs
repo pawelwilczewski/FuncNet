@@ -345,10 +345,10 @@ public class UnionTests
 	}
 
 	[Fact]
-	public void EnsureVariants_Work()
+	public void FilterVariants_Work()
 	{
 		Union<string, int, double> u1 = "test";
-		var result1 = u1.Ensure0(
+		var result1 = u1.Filter0(
 			s => s.Length > 2,
 			() => Union<string, int, double>.FromT0("error"));
 
@@ -359,7 +359,7 @@ public class UnionTests
 		Assert.Equal("test", original);
 
 		Union<string, int, double> u2 = "a";
-		var result2 = u2.Ensure0(
+		var result2 = u2.Filter0(
 			s => s.Length > 2,
 			() => Union<string, int, double>.FromT1(42));
 
@@ -370,7 +370,7 @@ public class UnionTests
 		Assert.Equal(42, switched);
 
 		Union<string, int, double> u3 = 5;
-		var result3 = u3.Ensure1(
+		var result3 = u3.Filter1(
 			i => i > 10,
 			() => Union<string, int, double>.FromT2(99.9));
 
@@ -381,7 +381,7 @@ public class UnionTests
 		Assert.Equal("double", valueType);
 
 		Union<string, int, double> u4 = 20;
-		var result4 = u4.Ensure1(
+		var result4 = u4.Filter1(
 			i => i > 10,
 			() => Union<string, int, double>.FromT0("should not happen"));
 
@@ -392,10 +392,10 @@ public class UnionTests
 	}
 
 	[Fact]
-	public async Task AsyncEnsureVariants_Work()
+	public async Task AsyncFilterVariants_Work()
 	{
 		var taskUnion = Task.FromResult<Union<string, int, double>>("short");
-		var result1 = await taskUnion.Ensure0(
+		var result1 = await taskUnion.Filter0(
 			async s =>
 			{
 				await Task.Delay(10);
@@ -413,7 +413,7 @@ public class UnionTests
 			_ => 0));
 
 		Union<string, int, double> u2 = 15.5;
-		var result2 = await u2.Ensure2(
+		var result2 = await u2.Filter2(
 			async d =>
 			{
 				await Task.Delay(10);
@@ -432,7 +432,7 @@ public class UnionTests
 	}
 
 	[Fact]
-	public void EnsureInPipeline_Works()
+	public void FilterInPipeline_Works()
 	{
 		var result = ProcessWithValidation(5);
 		Assert.Equal("Processed value: 20", result);
@@ -447,10 +447,10 @@ public class UnionTests
 
 		static string ProcessWithValidation(int input) =>
 			Union<string, int>.FromT1(input)
-				.Ensure1(
+				.Filter1(
 					i => i > 0,
 					() => Union<string, int>.FromT0("Value must be positive"))
-				.Ensure1(
+				.Filter1(
 					i => i < 100,
 					() => Union<string, int>.FromT0("Value too large"))
 				.Match(

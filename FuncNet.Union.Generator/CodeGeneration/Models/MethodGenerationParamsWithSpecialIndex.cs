@@ -9,4 +9,7 @@ internal record class MethodGenerationParamsWithSpecialIndex(
 	Func<IEnumerable<string>> ElementTypeNamesGenerator,
 	UnionGetter GetUnionOnArgument,
 	FactoryMethodNameForTIndex FactoryMethodName,
-	int SpecialIndex) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, ElementTypeNamesGenerator, GetUnionOnArgument, FactoryMethodName);
+	OtherSwitchCaseReturnValue OtherSwitchCaseReturnValue,
+	int SpecialIndex) : MethodGenerationParams(
+	ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, ElementTypeNamesGenerator,
+	GetUnionOnArgument, FactoryMethodName, OtherSwitchCaseReturnValue);

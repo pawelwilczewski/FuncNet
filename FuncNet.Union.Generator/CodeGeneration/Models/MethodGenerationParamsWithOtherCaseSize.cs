@@ -9,4 +9,5 @@ internal record class MethodGenerationParamsWithOtherCaseSize(
 	UnionGetter GetUnionOnArgument,
 	FactoryMethodNameForTIndex FactoryMethodName,
 	Func<IEnumerable<string>> ElementTypeNamesGenerator,
-	int OtherCaseSize) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, ElementTypeNamesGenerator, GetUnionOnArgument, FactoryMethodName);
+	OtherSwitchCaseReturnValue OtherSwitchCaseReturnValue,
+	int OtherCaseSize) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, ElementTypeNamesGenerator, GetUnionOnArgument, FactoryMethodName, OtherSwitchCaseReturnValue);

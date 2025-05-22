@@ -16,7 +16,7 @@ internal static class CombineExtensionsGenerator
 		from optionsCount in Enumerable.Range(2, 5)
 		select new MethodGenerationParamsWithOptionsCount(
 			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName,
-			p.ElementTypeNamesGenerator, p.GetUnionOnArgument, p.FactoryMethodName, optionsCount);
+			p.ElementTypeNamesGenerator, p.GetUnionOnArgument, p.FactoryMethodName, p.OtherSwitchCaseReturnValue, optionsCount);
 
 	private static MethodBuilder GenerateMethod(MethodGenerationParamsWithOptionsCount p)
 	{

@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 #nullable enable
 
 namespace FuncNet.Union;
-		public static class Union7Ensure
-{public static Union<T0, T1, T2, T3, T4, T5, T6> Ensure0<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
+		public static class Union7Filter
+{public static Union<T0, T1, T2, T3, T4, T5, T6> Filter0<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
 		Func<T0, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise){
 		var u = union;
@@ -15,7 +15,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static Union<T0, T1, T2, T3, T4, T5, T6> Ensure1<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
+	public static Union<T0, T1, T2, T3, T4, T5, T6> Filter1<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
 		Func<T1, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise){
 		var u = union;
@@ -24,7 +24,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static Union<T0, T1, T2, T3, T4, T5, T6> Ensure2<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
+	public static Union<T0, T1, T2, T3, T4, T5, T6> Filter2<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
 		Func<T2, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise){
 		var u = union;
@@ -33,7 +33,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static Union<T0, T1, T2, T3, T4, T5, T6> Ensure3<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
+	public static Union<T0, T1, T2, T3, T4, T5, T6> Filter3<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
 		Func<T3, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise){
 		var u = union;
@@ -42,7 +42,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static Union<T0, T1, T2, T3, T4, T5, T6> Ensure4<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
+	public static Union<T0, T1, T2, T3, T4, T5, T6> Filter4<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
 		Func<T4, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise){
 		var u = union;
@@ -51,7 +51,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static Union<T0, T1, T2, T3, T4, T5, T6> Ensure5<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
+	public static Union<T0, T1, T2, T3, T4, T5, T6> Filter5<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
 		Func<T5, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise){
 		var u = union;
@@ -60,7 +60,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static Union<T0, T1, T2, T3, T4, T5, T6> Ensure6<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
+	public static Union<T0, T1, T2, T3, T4, T5, T6> Filter6<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
 		Func<T6, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise){
 		var u = union;
@@ -69,7 +69,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure0<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter0<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
 		Func<T0, Task<bool>> predicate,
 		Func<Task<Union<T0, T1, T2, T3, T4, T5, T6>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -80,7 +80,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure1<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter1<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
 		Func<T1, Task<bool>> predicate,
 		Func<Task<Union<T0, T1, T2, T3, T4, T5, T6>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -91,7 +91,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure2<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter2<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
 		Func<T2, Task<bool>> predicate,
 		Func<Task<Union<T0, T1, T2, T3, T4, T5, T6>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -102,7 +102,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure3<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter3<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
 		Func<T3, Task<bool>> predicate,
 		Func<Task<Union<T0, T1, T2, T3, T4, T5, T6>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -113,7 +113,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure4<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter4<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
 		Func<T4, Task<bool>> predicate,
 		Func<Task<Union<T0, T1, T2, T3, T4, T5, T6>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -124,7 +124,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure5<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter5<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
 		Func<T5, Task<bool>> predicate,
 		Func<Task<Union<T0, T1, T2, T3, T4, T5, T6>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -135,7 +135,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure6<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter6<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
 		Func<T6, Task<bool>> predicate,
 		Func<Task<Union<T0, T1, T2, T3, T4, T5, T6>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -146,7 +146,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure0<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter0<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
 		Func<T0, Task<bool>> predicate,
 		Func<Task<Union<T0, T1, T2, T3, T4, T5, T6>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -157,7 +157,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure1<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter1<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
 		Func<T1, Task<bool>> predicate,
 		Func<Task<Union<T0, T1, T2, T3, T4, T5, T6>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -168,7 +168,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure2<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter2<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
 		Func<T2, Task<bool>> predicate,
 		Func<Task<Union<T0, T1, T2, T3, T4, T5, T6>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -179,7 +179,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure3<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter3<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
 		Func<T3, Task<bool>> predicate,
 		Func<Task<Union<T0, T1, T2, T3, T4, T5, T6>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -190,7 +190,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure4<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter4<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
 		Func<T4, Task<bool>> predicate,
 		Func<Task<Union<T0, T1, T2, T3, T4, T5, T6>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -201,7 +201,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure5<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter5<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
 		Func<T5, Task<bool>> predicate,
 		Func<Task<Union<T0, T1, T2, T3, T4, T5, T6>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -212,7 +212,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure6<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter6<T0, T1, T2, T3, T4, T5, T6>(this Union<T0, T1, T2, T3, T4, T5, T6> union,
 		Func<T6, Task<bool>> predicate,
 		Func<Task<Union<T0, T1, T2, T3, T4, T5, T6>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -223,7 +223,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure0<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter0<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
 		Func<T0, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -234,7 +234,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure1<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter1<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
 		Func<T1, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -245,7 +245,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure2<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter2<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
 		Func<T2, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -256,7 +256,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure3<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter3<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
 		Func<T3, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -267,7 +267,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure4<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter4<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
 		Func<T4, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -278,7 +278,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure5<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter5<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
 		Func<T5, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -289,7 +289,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Ensure6<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
+	public static async Task<Union<T0, T1, T2, T3, T4, T5, T6>> Filter6<T0, T1, T2, T3, T4, T5, T6>(this Task<Union<T0, T1, T2, T3, T4, T5, T6>> union,
 		Func<T6, bool> predicate,
 		Func<Union<T0, T1, T2, T3, T4, T5, T6>> otherwise,
 		CancellationToken cancellationToken = default){

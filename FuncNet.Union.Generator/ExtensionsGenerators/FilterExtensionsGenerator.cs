@@ -6,7 +6,7 @@ namespace FuncNet.Union.Generator.ExtensionsGenerators;
 
 using static UnionMethodAsyncConfigConsts;
 
-internal static class EnsureExtensionsGenerator
+internal static class FilterExtensionsGenerator
 {
 	public static IEnumerable<MethodBuilder> GenerateMethods(UnionExtensionsFileGenerationParams p) =>
 		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
@@ -16,7 +16,7 @@ internal static class EnsureExtensionsGenerator
 		from specialIndex in Enumerable.Range(0, p.UnionSize)
 		select new MethodGenerationParamsWithSpecialIndex(
 			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName,
-			p.ElementTypeNamesGenerator, p.GetUnionOnArgument, p.FactoryMethodName, specialIndex);
+			p.ElementTypeNamesGenerator, p.GetUnionOnArgument, p.FactoryMethodName, p.OtherSwitchCaseReturnValue, specialIndex);
 
 	public static MethodBuilder GenerateMethod(MethodGenerationParamsWithSpecialIndex p) =>
 		new MethodBuilder($"public static {p.ExtendedTypeOfTs().WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}{p.ElementTypeNamesGenerator().ElementAt(p.SpecialIndex)}<{p.TsCommaSeparated()}>")

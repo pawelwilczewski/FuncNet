@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 #nullable enable
 
 namespace FuncNet.Union;
-		public static class Result4Ensure
-{public static Result<TSuccess, TError0, TError1, TError2> EnsureSuccess<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
+		public static class Result4Filter
+{public static Result<TSuccess, TError0, TError1, TError2> FilterSuccess<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
 		Func<TSuccess, bool> predicate,
 		Func<Result<TSuccess, TError0, TError1, TError2>> otherwise){
 		var u = (result).Value;
@@ -15,7 +15,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static Result<TSuccess, TError0, TError1, TError2> EnsureError0<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
+	public static Result<TSuccess, TError0, TError1, TError2> FilterError0<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
 		Func<TError0, bool> predicate,
 		Func<Result<TSuccess, TError0, TError1, TError2>> otherwise){
 		var u = (result).Value;
@@ -24,7 +24,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static Result<TSuccess, TError0, TError1, TError2> EnsureError1<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
+	public static Result<TSuccess, TError0, TError1, TError2> FilterError1<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
 		Func<TError1, bool> predicate,
 		Func<Result<TSuccess, TError0, TError1, TError2>> otherwise){
 		var u = (result).Value;
@@ -33,7 +33,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static Result<TSuccess, TError0, TError1, TError2> EnsureError2<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
+	public static Result<TSuccess, TError0, TError1, TError2> FilterError2<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
 		Func<TError2, bool> predicate,
 		Func<Result<TSuccess, TError0, TError1, TError2>> otherwise){
 		var u = (result).Value;
@@ -42,7 +42,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Result<TSuccess, TError0, TError1, TError2>> EnsureSuccess<TSuccess, TError0, TError1, TError2>(this Task<Result<TSuccess, TError0, TError1, TError2>> result,
+	public static async Task<Result<TSuccess, TError0, TError1, TError2>> FilterSuccess<TSuccess, TError0, TError1, TError2>(this Task<Result<TSuccess, TError0, TError1, TError2>> result,
 		Func<TSuccess, Task<bool>> predicate,
 		Func<Task<Result<TSuccess, TError0, TError1, TError2>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -53,7 +53,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Result<TSuccess, TError0, TError1, TError2>> EnsureError0<TSuccess, TError0, TError1, TError2>(this Task<Result<TSuccess, TError0, TError1, TError2>> result,
+	public static async Task<Result<TSuccess, TError0, TError1, TError2>> FilterError0<TSuccess, TError0, TError1, TError2>(this Task<Result<TSuccess, TError0, TError1, TError2>> result,
 		Func<TError0, Task<bool>> predicate,
 		Func<Task<Result<TSuccess, TError0, TError1, TError2>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -64,7 +64,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Result<TSuccess, TError0, TError1, TError2>> EnsureError1<TSuccess, TError0, TError1, TError2>(this Task<Result<TSuccess, TError0, TError1, TError2>> result,
+	public static async Task<Result<TSuccess, TError0, TError1, TError2>> FilterError1<TSuccess, TError0, TError1, TError2>(this Task<Result<TSuccess, TError0, TError1, TError2>> result,
 		Func<TError1, Task<bool>> predicate,
 		Func<Task<Result<TSuccess, TError0, TError1, TError2>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -75,7 +75,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Result<TSuccess, TError0, TError1, TError2>> EnsureError2<TSuccess, TError0, TError1, TError2>(this Task<Result<TSuccess, TError0, TError1, TError2>> result,
+	public static async Task<Result<TSuccess, TError0, TError1, TError2>> FilterError2<TSuccess, TError0, TError1, TError2>(this Task<Result<TSuccess, TError0, TError1, TError2>> result,
 		Func<TError2, Task<bool>> predicate,
 		Func<Task<Result<TSuccess, TError0, TError1, TError2>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -86,7 +86,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Result<TSuccess, TError0, TError1, TError2>> EnsureSuccess<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
+	public static async Task<Result<TSuccess, TError0, TError1, TError2>> FilterSuccess<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
 		Func<TSuccess, Task<bool>> predicate,
 		Func<Task<Result<TSuccess, TError0, TError1, TError2>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -97,7 +97,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Result<TSuccess, TError0, TError1, TError2>> EnsureError0<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
+	public static async Task<Result<TSuccess, TError0, TError1, TError2>> FilterError0<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
 		Func<TError0, Task<bool>> predicate,
 		Func<Task<Result<TSuccess, TError0, TError1, TError2>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -108,7 +108,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Result<TSuccess, TError0, TError1, TError2>> EnsureError1<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
+	public static async Task<Result<TSuccess, TError0, TError1, TError2>> FilterError1<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
 		Func<TError1, Task<bool>> predicate,
 		Func<Task<Result<TSuccess, TError0, TError1, TError2>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -119,7 +119,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Result<TSuccess, TError0, TError1, TError2>> EnsureError2<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
+	public static async Task<Result<TSuccess, TError0, TError1, TError2>> FilterError2<TSuccess, TError0, TError1, TError2>(this Result<TSuccess, TError0, TError1, TError2> result,
 		Func<TError2, Task<bool>> predicate,
 		Func<Task<Result<TSuccess, TError0, TError1, TError2>>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -130,7 +130,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Result<TSuccess, TError0, TError1, TError2>> EnsureSuccess<TSuccess, TError0, TError1, TError2>(this Task<Result<TSuccess, TError0, TError1, TError2>> result,
+	public static async Task<Result<TSuccess, TError0, TError1, TError2>> FilterSuccess<TSuccess, TError0, TError1, TError2>(this Task<Result<TSuccess, TError0, TError1, TError2>> result,
 		Func<TSuccess, bool> predicate,
 		Func<Result<TSuccess, TError0, TError1, TError2>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -141,7 +141,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Result<TSuccess, TError0, TError1, TError2>> EnsureError0<TSuccess, TError0, TError1, TError2>(this Task<Result<TSuccess, TError0, TError1, TError2>> result,
+	public static async Task<Result<TSuccess, TError0, TError1, TError2>> FilterError0<TSuccess, TError0, TError1, TError2>(this Task<Result<TSuccess, TError0, TError1, TError2>> result,
 		Func<TError0, bool> predicate,
 		Func<Result<TSuccess, TError0, TError1, TError2>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -152,7 +152,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Result<TSuccess, TError0, TError1, TError2>> EnsureError1<TSuccess, TError0, TError1, TError2>(this Task<Result<TSuccess, TError0, TError1, TError2>> result,
+	public static async Task<Result<TSuccess, TError0, TError1, TError2>> FilterError1<TSuccess, TError0, TError1, TError2>(this Task<Result<TSuccess, TError0, TError1, TError2>> result,
 		Func<TError1, bool> predicate,
 		Func<Result<TSuccess, TError0, TError1, TError2>> otherwise,
 		CancellationToken cancellationToken = default){
@@ -163,7 +163,7 @@ namespace FuncNet.Union;
 			
 		}
 
-	public static async Task<Result<TSuccess, TError0, TError1, TError2>> EnsureError2<TSuccess, TError0, TError1, TError2>(this Task<Result<TSuccess, TError0, TError1, TError2>> result,
+	public static async Task<Result<TSuccess, TError0, TError1, TError2>> FilterError2<TSuccess, TError0, TError1, TError2>(this Task<Result<TSuccess, TError0, TError1, TError2>> result,
 		Func<TError2, bool> predicate,
 		Func<Result<TSuccess, TError0, TError1, TError2>> otherwise,
 		CancellationToken cancellationToken = default){

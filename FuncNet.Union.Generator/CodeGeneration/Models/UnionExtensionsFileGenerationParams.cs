@@ -13,7 +13,8 @@ internal sealed record class UnionExtensionsFileGenerationParams(
 	string ThisArgumentName,
 	Func<IEnumerable<string>> ElementTypeNamesGenerator,
 	UnionGetter GetUnionOnArgument,
-	FactoryMethodNameForTIndex FactoryMethodName)
+	FactoryMethodNameForTIndex FactoryMethodName,
+	OtherSwitchCaseReturnValue OtherSwitchCaseReturnValue)
 {
 	public string FileName => $"{ExtendedTypeName}{UnionSize}.{MethodNameOnly}.g.cs";
 }

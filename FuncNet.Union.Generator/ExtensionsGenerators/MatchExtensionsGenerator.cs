@@ -14,7 +14,9 @@ internal static class MatchExtensionsGenerator
 	private static IEnumerable<MethodGenerationParamsWithOtherCaseSize> CreateAllMethodsGenerationParams(UnionExtensionsFileGenerationParams p) =>
 		from asyncConfig in AllPossibleMethodAsyncConfigs
 		from otherCaseSize in Enumerable.Range(1, p.UnionSize - 1)
-		select new MethodGenerationParamsWithOtherCaseSize(p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName, p.GetUnionOnArgument, p.FactoryMethodName, p.ElementTypeNamesGenerator, otherCaseSize);
+		select new MethodGenerationParamsWithOtherCaseSize(
+			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName,
+			p.GetUnionOnArgument, p.FactoryMethodName, p.ElementTypeNamesGenerator, p.OtherSwitchCaseReturnValue, otherCaseSize);
 
 	private static MethodBuilder GenerateMethod(MethodGenerationParamsWithOtherCaseSize p) =>
 		new MethodBuilder($"public static {"TResult".WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}<TResult, {p.TsCommaSeparated()}>")

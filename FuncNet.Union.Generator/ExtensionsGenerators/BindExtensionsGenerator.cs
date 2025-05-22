@@ -16,7 +16,7 @@ internal static class BindExtensionsGenerator
 		from specialIndex in Enumerable.Range(0, p.UnionSize)
 		select new MethodGenerationParamsWithSpecialIndex(
 			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName,
-			p.ElementTypeNamesGenerator, p.GetUnionOnArgument, p.FactoryMethodName, specialIndex);
+			p.ElementTypeNamesGenerator, p.GetUnionOnArgument, p.FactoryMethodName, p.OtherSwitchCaseReturnValue, specialIndex);
 
 	private static MethodBuilder GenerateMethod(MethodGenerationParamsWithSpecialIndex p) =>
 		new MethodBuilder($"public static {p.ExtendedTypeOfTsNew().WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}{p.ElementTypeNamesGenerator().ElementAt(p.SpecialIndex)}<{p.Ts().ElementAt(p.SpecialIndex)}New, {p.TsCommaSeparatedOld()}>")
@@ -27,6 +27,7 @@ internal static class BindExtensionsGenerator
 			.AddThrowIfCanceledIfAsync(p)
 			.AddBodyStatement($"return {new SwitchExpressionBuilder("u.Index")
 				.AddCases(GenerateSwitchExpressionCases(p))
+				.AddCase(new SwitchCaseText("_", p.OtherSwitchCaseReturnValue(p)))
 				.ToString()
 				.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}");
 
@@ -34,7 +35,7 @@ internal static class BindExtensionsGenerator
 		Enumerable.Range(0, p.UnionSize)
 			.Select(i =>
 			{
-				var variable = i == p.UnionSize - 1 ? "_" : $"{i}";
+				var variable = i.ToString();
 				return new SwitchCaseText(
 					variable,
 					GenerateSwitchCaseReturnValue(new SwitchCase(i, variable), p));

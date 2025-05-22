@@ -12,7 +12,8 @@ namespace FuncNet.Union;
 			return u.Index switch
 		{
 			0 => binding(u.Value0),
-			_ => Union<T0New, T1>.FromT1(u.Value1),
+			1 => Union<T0New, T1>.FromT1(u.Value1),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -23,7 +24,8 @@ namespace FuncNet.Union;
 			return u.Index switch
 		{
 			0 => Union<T0, T1New>.FromT0(u.Value0),
-			_ => binding(u.Value1),
+			1 => binding(u.Value1),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -36,7 +38,8 @@ namespace FuncNet.Union;
 			return await (u.Index switch
 		{
 			0 => binding(u.Value0),
-			_ => Union<T0New, T1>.FromT1(Task.FromResult(u.Value1)),
+			1 => Union<T0New, T1>.FromT1(Task.FromResult(u.Value1)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -49,7 +52,8 @@ namespace FuncNet.Union;
 			return await (u.Index switch
 		{
 			0 => Union<T0, T1New>.FromT0(Task.FromResult(u.Value0)),
-			_ => binding(u.Value1),
+			1 => binding(u.Value1),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -62,7 +66,8 @@ namespace FuncNet.Union;
 			return await (u.Index switch
 		{
 			0 => binding(u.Value0),
-			_ => Union<T0New, T1>.FromT1(Task.FromResult(u.Value1)),
+			1 => Union<T0New, T1>.FromT1(Task.FromResult(u.Value1)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -75,7 +80,8 @@ namespace FuncNet.Union;
 			return await (u.Index switch
 		{
 			0 => Union<T0, T1New>.FromT0(Task.FromResult(u.Value0)),
-			_ => binding(u.Value1),
+			1 => binding(u.Value1),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -88,7 +94,8 @@ namespace FuncNet.Union;
 			return u.Index switch
 		{
 			0 => binding(u.Value0),
-			_ => Union<T0New, T1>.FromT1(u.Value1),
+			1 => Union<T0New, T1>.FromT1(u.Value1),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -101,7 +108,8 @@ namespace FuncNet.Union;
 			return u.Index switch
 		{
 			0 => Union<T0, T1New>.FromT0(u.Value0),
-			_ => binding(u.Value1),
+			1 => binding(u.Value1),
+			_ => throw new Unreachable(),
 			};
 			
 		}}

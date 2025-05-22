@@ -17,7 +17,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value3),
 			4 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value4),
 			5 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value5),
-			_ => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value6),
+			6 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value6),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -33,7 +34,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value3),
 			4 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value4),
 			5 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value5),
-			_ => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value6),
+			6 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value6),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -49,7 +51,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(u.Value3),
 			4 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(u.Value4),
 			5 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(u.Value5),
-			_ => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(u.Value6),
+			6 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(u.Value6),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -65,7 +68,8 @@ namespace FuncNet.Union;
 			3 => binding(u.Value3),
 			4 => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5>.FromError(u.Value4),
 			5 => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5>.FromError(u.Value5),
-			_ => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5>.FromError(u.Value6),
+			6 => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5>.FromError(u.Value6),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -81,7 +85,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5>.FromError(u.Value3),
 			4 => binding(u.Value4),
 			5 => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5>.FromError(u.Value5),
-			_ => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5>.FromError(u.Value6),
+			6 => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5>.FromError(u.Value6),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -97,7 +102,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5>.FromError(u.Value3),
 			4 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5>.FromError(u.Value4),
 			5 => binding(u.Value5),
-			_ => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5>.FromError(u.Value6),
+			6 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5>.FromError(u.Value6),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -113,7 +119,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5New>.FromError(u.Value3),
 			4 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5New>.FromError(u.Value4),
 			5 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5New>.FromError(u.Value5),
-			_ => binding(u.Value6),
+			6 => binding(u.Value6),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -131,7 +138,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value3)),
 			4 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value4)),
 			5 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value5)),
-			_ => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			6 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -149,7 +157,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value3)),
 			4 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value4)),
 			5 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value5)),
-			_ => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			6 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -167,7 +176,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value3)),
 			4 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value4)),
 			5 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value5)),
-			_ => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			6 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -185,7 +195,8 @@ namespace FuncNet.Union;
 			3 => binding(u.Value3),
 			4 => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value4)),
 			5 => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value5)),
-			_ => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			6 => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -203,7 +214,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5>.FromError(Task.FromResult(u.Value3)),
 			4 => binding(u.Value4),
 			5 => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5>.FromError(Task.FromResult(u.Value5)),
-			_ => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			6 => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -221,7 +233,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5>.FromError(Task.FromResult(u.Value3)),
 			4 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5>.FromError(Task.FromResult(u.Value4)),
 			5 => binding(u.Value5),
-			_ => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5>.FromError(Task.FromResult(u.Value6)),
+			6 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5>.FromError(Task.FromResult(u.Value6)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -239,7 +252,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5New>.FromError(Task.FromResult(u.Value3)),
 			4 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5New>.FromError(Task.FromResult(u.Value4)),
 			5 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5New>.FromError(Task.FromResult(u.Value5)),
-			_ => binding(u.Value6),
+			6 => binding(u.Value6),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -257,7 +271,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value3)),
 			4 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value4)),
 			5 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value5)),
-			_ => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			6 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -275,7 +290,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value3)),
 			4 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value4)),
 			5 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value5)),
-			_ => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			6 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -293,7 +309,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value3)),
 			4 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value4)),
 			5 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value5)),
-			_ => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			6 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -311,7 +328,8 @@ namespace FuncNet.Union;
 			3 => binding(u.Value3),
 			4 => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value4)),
 			5 => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value5)),
-			_ => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			6 => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -329,7 +347,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5>.FromError(Task.FromResult(u.Value3)),
 			4 => binding(u.Value4),
 			5 => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5>.FromError(Task.FromResult(u.Value5)),
-			_ => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			6 => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5>.FromError(Task.FromResult(u.Value6)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -347,7 +366,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5>.FromError(Task.FromResult(u.Value3)),
 			4 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5>.FromError(Task.FromResult(u.Value4)),
 			5 => binding(u.Value5),
-			_ => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5>.FromError(Task.FromResult(u.Value6)),
+			6 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5>.FromError(Task.FromResult(u.Value6)),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -365,7 +385,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5New>.FromError(Task.FromResult(u.Value3)),
 			4 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5New>.FromError(Task.FromResult(u.Value4)),
 			5 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5New>.FromError(Task.FromResult(u.Value5)),
-			_ => binding(u.Value6),
+			6 => binding(u.Value6),
+			_ => throw new Unreachable(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -383,7 +404,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value3),
 			4 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value4),
 			5 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value5),
-			_ => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value6),
+			6 => Result<TSuccessNew, TError0, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value6),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -401,7 +423,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value3),
 			4 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value4),
 			5 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value5),
-			_ => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value6),
+			6 => Result<TSuccess, TError0New, TError1, TError2, TError3, TError4, TError5>.FromError(u.Value6),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -419,7 +442,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(u.Value3),
 			4 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(u.Value4),
 			5 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(u.Value5),
-			_ => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(u.Value6),
+			6 => Result<TSuccess, TError0, TError1New, TError2, TError3, TError4, TError5>.FromError(u.Value6),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -437,7 +461,8 @@ namespace FuncNet.Union;
 			3 => binding(u.Value3),
 			4 => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5>.FromError(u.Value4),
 			5 => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5>.FromError(u.Value5),
-			_ => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5>.FromError(u.Value6),
+			6 => Result<TSuccess, TError0, TError1, TError2New, TError3, TError4, TError5>.FromError(u.Value6),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -455,7 +480,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5>.FromError(u.Value3),
 			4 => binding(u.Value4),
 			5 => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5>.FromError(u.Value5),
-			_ => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5>.FromError(u.Value6),
+			6 => Result<TSuccess, TError0, TError1, TError2, TError3New, TError4, TError5>.FromError(u.Value6),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -473,7 +499,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5>.FromError(u.Value3),
 			4 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5>.FromError(u.Value4),
 			5 => binding(u.Value5),
-			_ => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5>.FromError(u.Value6),
+			6 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4New, TError5>.FromError(u.Value6),
+			_ => throw new Unreachable(),
 			};
 			
 		}
@@ -491,7 +518,8 @@ namespace FuncNet.Union;
 			3 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5New>.FromError(u.Value3),
 			4 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5New>.FromError(u.Value4),
 			5 => Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5New>.FromError(u.Value5),
-			_ => binding(u.Value6),
+			6 => binding(u.Value6),
+			_ => throw new Unreachable(),
 			};
 			
 		}}
