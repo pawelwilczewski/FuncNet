@@ -1,0 +1,40 @@
+name: FuncNet CI
+
+on:
+    push:
+        branches: [ main ]
+    pull_request:
+        branches: [ main ]
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Setup .NET
+              uses: actions/setup-dotnet@v3
+              with:
+                  dotnet-version: 9.0.x
+            
+            - name: Cache NuGet packages
+              uses: actions/cache@v3
+              with:
+                path: ~/.nuget/packages
+                key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+                restore-keys: ${{ runner.os }}-nuget-
+
+            - name: Restore dependencies
+              run: dotnet restore
+
+            - name: Build
+              run: dotnet build --no-restore
+
+            - name: Test
+              run: dotnet test --no-build --verbosity normal
