@@ -8,7 +8,6 @@
 
     <PropertyGroup>
         <PackageId>FuncNet</PackageId>
-        <Version>0.1.2</Version>
         <Authors>Pawel Wilczewski</Authors>
         <Description>Library of functional utilities to use in C# with notably rich and easy-to-use adhoc unions</Description>
 
@@ -27,5 +26,12 @@
 
     <ItemGroup>
         <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Nerdbank.GitVersioning" Version="3.7.115">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 </Project>
