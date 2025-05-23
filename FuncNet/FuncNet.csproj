@@ -8,7 +8,7 @@
 
     <PropertyGroup>
         <PackageId>FuncNet</PackageId>
-        <Version>1.0.0</Version>
+        <Version>0.1.0</Version>
         <Authors>Pawel Wilczewski</Authors>
         <Description>Library of functional utilities to use in C# with notably rich and easy-to-use adhoc unions</Description>
 
@@ -18,4 +18,14 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <PackageTags>functional;fp;union;discriminatedunion;result;option;monad</PackageTags>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PackageProjectUrl>https://github.com/pawelwilczewski/FuncNet</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 </Project>
