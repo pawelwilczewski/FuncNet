@@ -25,8 +25,11 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore FuncNet/FuncNet.csproj
 
+    - name: Build
+      run: dotnet build FuncNet/FuncNet.csproj --configuration Release --no-restore
+
     - name: Pack
-      run: dotnet pack FuncNet/FuncNet.csproj --configuration Release --no-restore --output nupkgs
+      run: dotnet pack FuncNet/FuncNet.csproj --configuration Release --no-build --output nupkgs
     
     - name: Push to NuGet
       run: dotnet nuget push nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
