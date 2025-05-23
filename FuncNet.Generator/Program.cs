@@ -24,14 +24,16 @@ const string @namespace = "FuncNet";
 	("Tap", TapExtensionsGenerator.GenerateMethods, StaticClassDeclaration, ""),
 	("Filter", FilterExtensionsGenerator.GenerateMethods, StaticClassDeclaration, ""),
 	("Zip", ZipExtensionsGenerator.GenerateMethods, StaticClassDeclaration, "using System.Collections.Generic;\nusing System.Linq;\n"),
-	("Combine", CombineExtensionsGenerator.GenerateMethods, PartialRecordStructDeclaration, "using System.Collections.Generic;\n")
+	("Combine", ResultCombineExtensionsGenerator.GenerateMethods, PartialRecordStructDeclaration, "using System.Collections.Generic;\n"),
+	("ToUnion", ResultToUnionExtensionsGenerator.GenerateMethods, StaticClassDeclaration, ""),
+	("ToOption", ResultToOptionExtensionsGenerator.GenerateMethods, StaticClassDeclaration, "")
 ];
 
 var generationParams =
 	from m in methodGenerators
 	from unionSize in Enumerable.Range(2, maxChoices - 1)
 	from p in GenerateBaseParams(unionSize)
-	where !(p.extendedTypeName == "Union" && m.methodNameOnly == "Combine") // hacky don't generate Combine for Union
+	where !(p.extendedTypeName == "Union" && m.methodNameOnly is "Combine" or "ToUnion" or "ToOption") // hacky
 	select new UnionExtensionsFileGenerationParams(
 		@namespace, m.additionalUsings, m.classDeclaration, p.extendedTypeName, m.methodNameOnly, unionSize,
 		m.generateMethods, p.thisArgumentName, p.elementNamesGenerator, p.unionGetter, p.factoryMethodName, p.defaultSwitchCaseReturnValue);
