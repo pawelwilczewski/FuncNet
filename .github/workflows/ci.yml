@@ -1,54 +1,18 @@
 name: FuncNet CI
 
 on:
-    push:
-        branches: [ main ]
-    pull_request:
-        branches: [ main ]
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 concurrency:
-    group: ${{ github.workflow }}-${{ github.ref }}
-    cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-    build-run-test:
-        runs-on: ubuntu-latest
-        timeout-minutes: 10
-        
-        steps:
-            - uses: actions/checkout@v3
-
-            - name: Setup .NET
-              uses: actions/setup-dotnet@v3
-              with:
-                  dotnet-version: 9.0.x
-            
-            - name: Cache NuGet packages
-              uses: actions/cache@v3
-              with:
-                path: ~/.nuget/packages
-                key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-                restore-keys: ${{ runner.os }}-nuget-
-
-            - name: Restore dependencies
-              run: dotnet restore
-
-            - name: Build
-              run: dotnet build --no-restore
-              
-            - name: Run FuncNet.Generator
-              run: dotnet run --project FuncNet.Generator/FuncNet.Generator.csproj --no-build
-              
-            - name: Check for changes in generated files
-              run: |
-                if [[ -n $(git status --porcelain) ]]; then
-                  echo "Changes detected in generated files after running FuncNet.Generator:"
-                  git status --porcelain
-                  echo "Please regenerate the code and commit the changes."
-                  exit 1
-                else
-                  echo "No changes detected. Generated files are up to date."
-                fi
-
-            - name: Test
-              run: dotnet test --no-build --verbosity normal
+  build-run-test:
+    uses: ./.github/workflows/build-test-validate.yml
+    with:
+      configuration: 'Debug'
+    secrets: inherit
