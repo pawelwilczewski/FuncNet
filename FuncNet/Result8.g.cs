@@ -52,7 +52,4 @@ public readonly partial record struct Result<TSuccess, TError0, TError1, TError2
     public static async Task<Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5, TError6>> FromError(Task<TError4> value) => await value.ConfigureAwait(false);
     public static async Task<Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5, TError6>> FromError(Task<TError5> value) => await value.ConfigureAwait(false);
     public static async Task<Result<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5, TError6>> FromError(Task<TError6> value) => await value.ConfigureAwait(false);
-
-	public Union<TSuccess, TError0, TError1, TError2, TError3, TError4, TError5, TError6> ToUnion() => Value;
-	public Option<TSuccess> ToOption() => IsSuccess ? Option<TSuccess>.Some(Value.Value0!) : Option<TSuccess>.None;
 }

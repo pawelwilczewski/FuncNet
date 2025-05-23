@@ -43,8 +43,5 @@ public readonly partial record struct {ResultOfTs(unionSize)}
 	public static async Task<{ResultOfTs(unionSize)}> FromSuccess(Task<TSuccess> value) => await value.ConfigureAwait(false);
     {JoinRangeToString("\n    ", unionSize - 1, errorIndex =>
 		$"public static async Task<{ResultOfTs(unionSize)}> FromError(Task<TError{errorIndex}> value) => await value.ConfigureAwait(false);")}
-
-	public {ResultBackingUnion(unionSize)} ToUnion() => Value;
-	public Option<TSuccess> ToOption() => IsSuccess ? Option<TSuccess>.Some(Value.Value0!) : Option<TSuccess>.None;
 }}";
 }

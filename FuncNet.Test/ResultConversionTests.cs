@@ -1,6 +1,6 @@
 namespace FuncNet.Test;
 
-public class ConversionTests
+public class ResultConversionTests
 {
 	[Fact]
 	public void ResultToUnion_WhenSuccess_ReturnsUnionWithValue0()
@@ -29,12 +29,12 @@ public class ConversionTests
 	}
 
 	[Fact]
-	public void ResultToUnion_WhenError0_ReturnsUnionWithValue1()
+	public async Task ResultToUnion_WhenError0_ReturnsUnionWithValue1()
 	{
-		var result = Result<int, string, bool>.FromError("error_string");
+		var result = Task.FromResult(Result<int, string, bool>.FromError("error_string"));
 		var union = result.ToUnion();
 
-		var matchResult = union.Match(
+		var matchResult = await union.Match(
 			successVal =>
 			{
 				Assert.Fail("Should be error0 (was success: " + successVal + ")");
@@ -102,12 +102,12 @@ public class ConversionTests
 	}
 
 	[Fact]
-	public void ResultToOption_WhenError0_ReturnsNone()
+	public async Task ResultToOption_WhenError0_ReturnsNone()
 	{
-		var result = Result<int, string, bool>.FromError("another_error");
+		var result = Task.FromResult(Result<int, string, bool>.FromError("another_error"));
 		var option = result.ToOption();
 
-		var matchResult = option.Match(
+		var matchResult = await option.Match(
 			someVal =>
 			{
 				Assert.Fail("Should be None (was Some: " + someVal + ")");

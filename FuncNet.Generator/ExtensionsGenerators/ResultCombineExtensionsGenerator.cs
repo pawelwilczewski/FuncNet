@@ -6,7 +6,7 @@ namespace FuncNet.Generator.ExtensionsGenerators;
 
 using static UnionMethodAsyncConfigConsts;
 
-internal static class CombineExtensionsGenerator
+internal static class ResultCombineExtensionsGenerator
 {
 	public static IEnumerable<MethodBuilder> GenerateMethods(UnionExtensionsFileGenerationParams p) =>
 		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);

@@ -19,4 +19,10 @@ internal static class UnionMethodAsyncConfigConsts
 		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.AppliedMethodReturnType,
 		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.InputUnion
 	];
+
+	public static UnionMethodAsyncConfig[] NoneOrAllMethodAsyncConfigs { get; } =
+	[
+		UnionMethodAsyncConfig.None,
+		UnionMethodAsyncConfig.All
+	];
 }
