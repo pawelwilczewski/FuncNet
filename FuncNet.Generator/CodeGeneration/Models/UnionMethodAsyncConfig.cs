@@ -12,6 +12,8 @@ public enum UnionMethodAsyncConfig
 
 internal static class UnionMethodAsyncConfigConsts
 {
+	public const int MAX_UNION_SIZE = 8;
+
 	public static UnionMethodAsyncConfig[] AllPossibleMethodAsyncConfigs { get; } =
 	[
 		UnionMethodAsyncConfig.None,

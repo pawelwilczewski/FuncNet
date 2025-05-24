@@ -4,10 +4,10 @@ using FuncNet.Generator;
 using FuncNet.Generator.CodeGeneration.Builders;
 using FuncNet.Generator.CodeGeneration.Models;
 using FuncNet.Generator.ExtensionsGenerators;
+using static FuncNet.Generator.CodeGeneration.Models.UnionMethodAsyncConfigConsts;
 
 var startTime = Stopwatch.GetTimestamp();
 
-const int maxChoices = 8;
 const string @namespace = "FuncNet";
 
 (string extendedTypeName, string thisArgumentName, Func<IEnumerable<string>> elementNamesGenerator, UnionGetter unionGetter, FactoryMethodNameForTIndex factoryMethodName, OtherSwitchCaseReturnValue defaultSwitchCaseReturnValue)[] GenerateBaseParams(int unionSize) =>
@@ -26,23 +26,33 @@ const string @namespace = "FuncNet";
 	("Zip", ZipExtensionsGenerator.GenerateMethods, StaticClassDeclaration, "using System.Collections.Generic;\nusing System.Linq;\n"),
 	("Combine", ResultCombineExtensionsGenerator.GenerateMethods, PartialRecordStructDeclaration, "using System.Collections.Generic;\n"),
 	("ToUnion", ResultToUnionExtensionsGenerator.GenerateMethods, StaticClassDeclaration, ""),
-	("ToOption", ResultToOptionExtensionsGenerator.GenerateMethods, StaticClassDeclaration, "")
+	("ToOption", ResultToOptionExtensionsGenerator.GenerateMethods, StaticClassDeclaration, ""),
+	("Extend", ExtendExtensionsGenerator.GenerateMethods, StaticClassDeclaration, "")
 ];
 
 var generationParams =
 	from m in methodGenerators
-	from unionSize in Enumerable.Range(2, maxChoices - 1)
+	from unionSize in Enumerable.Range(2, MAX_UNION_SIZE - 1)
 	from p in GenerateBaseParams(unionSize)
 	where !(p.extendedTypeName == "Union" && m.methodNameOnly is "Combine" or "ToUnion" or "ToOption") // hacky
 	select new UnionExtensionsFileGenerationParams(
 		@namespace, m.additionalUsings, m.classDeclaration, p.extendedTypeName, m.methodNameOnly, unionSize,
 		m.generateMethods, p.thisArgumentName, p.elementNamesGenerator, p.unionGetter, p.factoryMethodName, p.defaultSwitchCaseReturnValue);
 
+generationParams =
+[
+	..generationParams,
+	new UnionExtensionsFileGenerationParams(@namespace, "", OptionStaticClassDeclaration, "Option",
+		"ToResult", 1, OptionToResultExtensionsGenerator.GenerateMethods, "option",
+		() => ["Some"], _ => throw new InvalidOperationException(),
+		i => i == 0 ? "FromSuccess" : "None", ThrowOtherSwitchCaseReturnValue)
+];
+
 var basePath = Path.Join(
 	Path.GetFullPath(Assembly.GetExecutingAssembly().Location),
 	"/../../../../../FuncNet");
 
-Parallel.For(2, maxChoices + 1, unionSize =>
+Parallel.For(2, MAX_UNION_SIZE + 1, unionSize =>
 {
 	File.WriteAllText(
 		Path.Join(basePath, $"Union{unionSize}.g.cs"),
@@ -75,6 +85,9 @@ namespace {p.Namespace};")
 		.AddClass(new ClassBuilder(p.ClassDeclaration(p))
 			.AddMethods(p.GenerateAllMethods(p)))
 		.ToString();
+
+static string OptionStaticClassDeclaration(UnionExtensionsFileGenerationParams p) =>
+	$"public static class {p.ExtendedTypeName}{p.MethodNameOnly}";
 
 static string StaticClassDeclaration(UnionExtensionsFileGenerationParams p) =>
 	$"public static class {p.ExtendedTypeName}{p.UnionSize}{p.MethodNameOnly}";

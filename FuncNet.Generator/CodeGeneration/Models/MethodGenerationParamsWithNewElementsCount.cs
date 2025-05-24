@@ -1,6 +1,6 @@
 namespace FuncNet.Generator.CodeGeneration.Models;
 
-internal record class MethodGenerationParamsWithOtherCaseSize(
+internal record class MethodGenerationParamsWithNewElementsCount(
 	string ExtendedTypeName,
 	string MethodNameOnly,
 	int UnionSize,
@@ -10,4 +10,4 @@ internal record class MethodGenerationParamsWithOtherCaseSize(
 	UnionGetter GetUnionOnArgument,
 	FactoryMethodNameForTIndex FactoryMethodName,
 	OtherSwitchCaseReturnValue OtherSwitchCaseReturnValue,
-	int OtherCaseSize) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, ElementTypeNamesGenerator, GetUnionOnArgument, FactoryMethodName, OtherSwitchCaseReturnValue);
+	int NewElementsCount) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, ElementTypeNamesGenerator, GetUnionOnArgument, FactoryMethodName, OtherSwitchCaseReturnValue);

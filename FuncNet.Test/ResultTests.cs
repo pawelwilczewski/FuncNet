@@ -655,6 +655,46 @@ public class ResultTests
 				: Result<string, string, double>.FromError("Invalid email format");
 	}
 
+	[Fact]
+	public void Extend_WhenSuccess_ReturnsExtendedSuccess()
+	{
+		var initialResult = Result<string, int>.FromSuccess("hello");
+
+		var extendedResult = initialResult.Extend<string, int, double>();
+
+		extendedResult.Match(
+			success =>
+			{
+				Assert.Equal("hello", success);
+				return None.Instance;
+			},
+			error =>
+			{
+				Assert.Fail("Should be Success");
+				return None.Instance;
+			});
+	}
+
+	[Fact]
+	public async Task ExtendAsync_WhenSuccess_ReturnsExtendedSuccess()
+	{
+		var initialResult = Task.FromResult(Result<string, int>.FromSuccess("world"));
+
+		var extendedResult = await initialResult.Extend<string, int, bool>();
+
+		extendedResult.Match(
+			success =>
+			{
+				Assert.Equal("world", success);
+				return None.Instance;
+			},
+			error =>
+			{
+				Assert.Fail("Should be Success");
+				return None.Instance;
+			});
+	}
+
 	[Theory]
 	[InlineData("John", "Doe", 25, "john.doe@example.com", true, null)]
 	[InlineData("Jane", "Smith", 17, "jane.smith@example.com", false, "Age")]
