@@ -282,9 +282,40 @@ public class OptionTests
 		var someEnumerable = someOption.ToEnumerable();
 		var noneEnumerable = noneOption.ToEnumerable();
 
-		Assert.Single(someEnumerable);
-		Assert.Equal("test", someEnumerable.First());
+		Assert.Equal("test", someEnumerable.Single());
 		Assert.Empty(noneEnumerable);
+	}
+
+	[Fact]
+	public void ToResult_WhenSome_ReturnsSuccess()
+	{
+		var option = Option<int>.Some(42);
+		const string error = "Error";
+		var result = option.ToResult(() => error);
+
+		result.Match(
+			s =>
+			{
+				Assert.Equal(42, s);
+				return "ok";
+			},
+			e => throw new Exception("Should be Success"));
+	}
+
+	[Fact]
+	public void ToResult_WhenNone_ReturnsFailure()
+	{
+		var option = Option<int>.None;
+		const string error = "Error";
+		var result = option.ToResult(() => error);
+
+		result.Match(
+			s => throw new Exception("Should be Error"),
+			e =>
+			{
+				Assert.Equal(error, e);
+				return "ok";
+			});
 	}
 
 	[Theory]

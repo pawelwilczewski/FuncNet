@@ -15,8 +15,8 @@ internal static class MatchExtensionsGenerator
 		from asyncConfig in AllPossibleMethodAsyncConfigs
 		from otherCaseSize in Enumerable.Range(1, p.UnionSize - 1)
 		select new MethodGenerationParamsWithOtherCaseSize(
-			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName,
-			p.GetUnionOnArgument, p.FactoryMethodName, p.ElementTypeNamesGenerator, p.OtherSwitchCaseReturnValue, otherCaseSize);
+			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName, p.ElementTypeNamesGenerator,
+			p.GetUnionOnArgument, p.FactoryMethodName, p.OtherSwitchCaseReturnValue, otherCaseSize);
 
 	private static MethodBuilder GenerateMethod(MethodGenerationParamsWithOtherCaseSize p) =>
 		new MethodBuilder($"public static {"TResult".WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}<TResult, {p.TsCommaSeparated()}>")

@@ -547,4 +547,49 @@ public class UnionTests
 
 		Assert.Equal("S:apple,banana|I:5,10|D:20.5", result);
 	}
+
+	[Fact]
+	public void Extend_Works()
+	{
+		var initialResult = Union<string, int>.FromT0("hello");
+
+		var extendedResult = initialResult.Extend<string, int, double>();
+
+		extendedResult.Match(
+			success =>
+			{
+				Assert.Equal("hello", success);
+				return None.Instance;
+			},
+			error =>
+			{
+				Assert.Fail("Should be Success");
+				return None.Instance;
+			});
+	}
+
+	[Fact]
+	public async Task ExtendAsync_Works()
+	{
+		var initialResult = Task.FromResult(Union<int, string>.FromT1("world"));
+
+		var extendedResult = await initialResult.Extend<int, string, bool>();
+
+		extendedResult.Match(
+			success =>
+			{
+				Assert.Fail("Should be T1");
+				return None.Instance;
+			},
+			success =>
+			{
+				Assert.Equal("world", success);
+				return None.Instance;
+			},
+			error =>
+			{
+				Assert.Fail("Should be T1");
+				return None.Instance;
+			});
+	}
 }
