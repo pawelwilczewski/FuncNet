@@ -656,7 +656,7 @@ public class ResultTests
 	}
 
 	[Fact]
-	public void Extend_WhenSuccess_ReturnsExtendedSuccess()
+	public void Extend_Works()
 	{
 		var initialResult = Result<string, int>.FromSuccess("hello");
 
@@ -676,7 +676,7 @@ public class ResultTests
 	}
 
 	[Fact]
-	public async Task ExtendAsync_WhenSuccess_ReturnsExtendedSuccess()
+	public async Task ExtendAsync_Works()
 	{
 		var initialResult = Task.FromResult(Result<string, int>.FromSuccess("world"));
 

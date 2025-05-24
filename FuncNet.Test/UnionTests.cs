@@ -549,7 +549,7 @@ public class UnionTests
 	}
 
 	[Fact]
-	public void Extend_WhenSuccess_ReturnsExtendedSuccess()
+	public void Extend_Works()
 	{
 		var initialResult = Union<string, int>.FromT0("hello");
 
@@ -569,7 +569,7 @@ public class UnionTests
 	}
 
 	[Fact]
-	public async Task ExtendAsync_WhenSuccess_ReturnsExtendedSuccess()
+	public async Task ExtendAsync_Works()
 	{
 		var initialResult = Task.FromResult(Union<int, string>.FromT1("world"));
 

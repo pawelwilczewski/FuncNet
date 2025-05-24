@@ -282,8 +282,7 @@ public class OptionTests
 		var someEnumerable = someOption.ToEnumerable();
 		var noneEnumerable = noneOption.ToEnumerable();
 
-		Assert.Single(someEnumerable);
-		Assert.Equal("test", someEnumerable.First());
+		Assert.Equal("test", someEnumerable.Single());
 		Assert.Empty(noneEnumerable);
 	}
 
