@@ -244,8 +244,8 @@ public class OptionTests
 		var someOption = Option<int>.Some(DEFAULT_VALUE);
 		var noneOption = Option<int>.None;
 
-		var tappedSome = someOption.TapValue(x => sideEffects.Add($"Value: {x}"));
-		var tappedNone = noneOption.TapValue(x => sideEffects.Add("Should not be added"));
+		var tappedSome = someOption.Tap(x => sideEffects.Add($"Value: {x}"));
+		var tappedNone = noneOption.Tap(x => sideEffects.Add("Should not be added"));
 
 		Assert.Equal(DEFAULT_VALUE, tappedSome.Match(value => value, () => -1));
 		Assert.Equal(-1, tappedNone.Match(value => value, () => -1));
@@ -261,8 +261,8 @@ public class OptionTests
 		var taskSomeOption = Task.FromResult(Option<int>.Some(DEFAULT_VALUE));
 		var someOption = Option<int>.Some(24);
 
-		var tappedTaskSome = await taskSomeOption.TapValue(x => sideEffects.Add($"Task value: {x}"));
-		var asyncTappedSome = await someOption.TapValue(async x =>
+		var tappedTaskSome = await taskSomeOption.Tap(x => sideEffects.Add($"Task value: {x}"));
+		var asyncTappedSome = await someOption.Tap(async x =>
 		{
 			await Task.Delay(1);
 			sideEffects.Add($"Async value: {x}");
@@ -303,7 +303,7 @@ public class OptionTests
 				? Option<string>.Some(name)
 				: Option<string>.Some("Name must be at least 2 characters"))
 			.Map(name => name.ToUpper())
-			.TapValue(name => Console.WriteLine($"Processing: {name}"))
+			.Tap(name => Console.WriteLine($"Processing: {name}"))
 			.Match(
 				name => name.Contains(" at least") || name.Contains("cannot")
 					? name
