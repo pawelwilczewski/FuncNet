@@ -8,7 +8,7 @@ namespace FuncNet;
 
 public static class OptionTap
 {
-	public static Option<TValue> TapValue<TValue>(
+	public static Option<TValue> Tap<TValue>(
 		this Option<TValue> option,
 		Action<TValue> action)
 	{
@@ -17,7 +17,7 @@ public static class OptionTap
 		return option;
 	}
 
-	public static async Task<Option<TValue>> TapValue<TValue>(
+	public static async Task<Option<TValue>> Tap<TValue>(
 		this Task<Option<TValue>> option,
 		Func<TValue, Task> action,
 		CancellationToken cancellationToken = default)
@@ -28,7 +28,7 @@ public static class OptionTap
 		return await option.ConfigureAwait(false);
 	}
 
-	public static async Task<Option<TValue>> TapValue<TValue>(
+	public static async Task<Option<TValue>> Tap<TValue>(
 		this Option<TValue> option,
 		Func<TValue, Task> action,
 		CancellationToken cancellationToken = default)
@@ -39,7 +39,7 @@ public static class OptionTap
 		return option;
 	}
 
-	public static async Task<Option<TValue>> TapValue<TValue>(
+	public static async Task<Option<TValue>> Tap<TValue>(
 		this Task<Option<TValue>> option,
 		Action<TValue> action,
 		CancellationToken cancellationToken = default)
