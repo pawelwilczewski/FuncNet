@@ -12,7 +12,7 @@
         <Description>Library of functional utilities to use in C# with notably rich and easy-to-use adhoc unions</Description>
 
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <RepositoryUrl>https://https://github.com/pawelwilczewski/FuncNet</RepositoryUrl>
+        <RepositoryUrl>https://github.com/pawelwilczewski/FuncNet</RepositoryUrl>
 
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
@@ -33,5 +33,15 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+    </ItemGroup>
+
+    <!--    <ItemGroup>-->
+    <!--        <None Remove="$(OutputPath)/../../../../FuncNet.SourceGenerators/FuncNet.SourceGenerators/bin/Debug/netstandard2.0/$(AssemblyName).SourceGenerators.dll"/>-->
+    <!--        <None Include="$(OutputPath)/../../../../FuncNet.SourceGenerators/FuncNet.SourceGenerators/bin/Debug/netstandard2.0/$(AssemblyName).SourceGenerators.dll"-->
+    <!--              Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false"/>-->
+    <!--    </ItemGroup>-->
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="FuncNet.SourceGenerators"/>
     </ItemGroup>
 </Project>

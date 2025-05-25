@@ -8,8 +8,6 @@ using static StringJoinUtils;
 
 public static class UnionGenerator
 {
-	private static readonly Lock lockObj = new();
-
 	public static string GenerateUnionFile(string @namespace, int unionSize) =>
 		$@"using System;
 using System.Threading.Tasks;
@@ -18,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace {@namespace};
 
-public readonly record struct {UnionOfTs(unionSize)}
+public readonly partial record struct {UnionOfTs(unionSize)}
 {{
 	{JoinRangeToString("\n\t", unionSize, i => $"internal T{i} Value{i} {{ get; init; }}")}
 
@@ -29,7 +27,7 @@ public readonly record struct {UnionOfTs(unionSize)}
 	internal object? Value => Index switch
 	{{
 		{JoinRangeToString(",\n\t\t", unionSize, i => $"{i} => Value{i}")},
-		_ => throw new Unreachable()
+		_ => throw new ArgumentOutOfRangeException(nameof(Index))
 	}};
 
 	public Union() => throw new InvalidOperationException();
@@ -45,7 +43,7 @@ public readonly record struct {UnionOfTs(unionSize)}
 		switch (value)
 		{{
 			{JoinRangeToString("\n\t\t\t", unionSize, i => $"case T{i} matchedValue: Value{i} = matchedValue; Index = {i}; break;")}
-			default: throw new Unreachable();
+			default: throw new ArgumentOutOfRangeException(nameof(value));
 		}}
 	}}
 
@@ -80,9 +78,6 @@ public readonly record struct {UnionOfTs(unionSize)}
 	private static string GeneratePermutedImplicitConversion(int unionSize, int[] permutation)
 	{
 		var sourceTypes = string.Join(", ", permutation.Select(i => $"T{i}"));
-
-		var valueMapping = string.Join(", ", Enumerable.Range(0, permutation.Length)
-			.Select(i => $"value{permutation[i]}: other.Value{i}"));
 
 		return $@"public static implicit operator {UnionOfTs(unionSize)}(Union<{sourceTypes}> other) =>
 		new {UnionOfTs(unionSize)}(other.Value);";

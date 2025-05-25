@@ -107,4 +107,4 @@ static string UnionGetterForResult(string argument) => $"({argument}).Value";
 static string UnionFactoryMethodName(int tIndex) => $"FromT{tIndex}";
 static string ResultFactoryMethodName(int tIndex) => tIndex == 0 ? "FromSuccess" : "FromError";
 
-static string ThrowOtherSwitchCaseReturnValue(MethodGenerationParams p) => "throw new Unreachable()";
+static string ThrowOtherSwitchCaseReturnValue(MethodGenerationParams p) => "throw new ArgumentOutOfRangeException()";

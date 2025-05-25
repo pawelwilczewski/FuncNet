@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet.Generator", "FuncNe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet.Test", "FuncNet.Test\FuncNet.Test.csproj", "{059E1CE6-0C05-4855-96BB-B6D39E5D69C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet.SourceGenerators", "FuncNet.SourceGenerators\FuncNet.SourceGenerators\FuncNet.SourceGenerators.csproj", "{940AC01E-A2BB-4EB4-983D-1605B3A8D74C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{059E1CE6-0C05-4855-96BB-B6D39E5D69C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{059E1CE6-0C05-4855-96BB-B6D39E5D69C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{059E1CE6-0C05-4855-96BB-B6D39E5D69C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{940AC01E-A2BB-4EB4-983D-1605B3A8D74C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{940AC01E-A2BB-4EB4-983D-1605B3A8D74C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{940AC01E-A2BB-4EB4-983D-1605B3A8D74C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{940AC01E-A2BB-4EB4-983D-1605B3A8D74C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

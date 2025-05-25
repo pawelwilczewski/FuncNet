@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FuncNet;
 
-public readonly record struct Union<T0, T1, T2>
+public readonly partial record struct Union<T0, T1, T2>
 {
 	internal T0 Value0 { get; init; }
 	internal T1 Value1 { get; init; }
@@ -22,7 +22,7 @@ public readonly record struct Union<T0, T1, T2>
 		0 => Value0,
 		1 => Value1,
 		2 => Value2,
-		_ => throw new Unreachable()
+		_ => throw new ArgumentOutOfRangeException(nameof(Index))
 	};
 
 	public Union() => throw new InvalidOperationException();
@@ -42,7 +42,7 @@ public readonly record struct Union<T0, T1, T2>
 			case T0 matchedValue: Value0 = matchedValue; Index = 0; break;
 			case T1 matchedValue: Value1 = matchedValue; Index = 1; break;
 			case T2 matchedValue: Value2 = matchedValue; Index = 2; break;
-			default: throw new Unreachable();
+			default: throw new ArgumentOutOfRangeException(nameof(value));
 		}
 	}
 

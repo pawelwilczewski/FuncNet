@@ -13,7 +13,7 @@ namespace FuncNet;
 		{
 			0 => Result<TSuccessNew, TError0>.FromSuccess(mapping(u.Value0)),
 			1 => Result<TSuccessNew, TError0>.FromError(u.Value1),
-			_ => throw new Unreachable(),
+			_ => throw new ArgumentOutOfRangeException(),
 			};
 			
 		}
@@ -25,7 +25,7 @@ namespace FuncNet;
 		{
 			0 => Result<TSuccess, TError0New>.FromSuccess(u.Value0),
 			1 => Result<TSuccess, TError0New>.FromError(mapping(u.Value1)),
-			_ => throw new Unreachable(),
+			_ => throw new ArgumentOutOfRangeException(),
 			};
 			
 		}
@@ -39,7 +39,7 @@ namespace FuncNet;
 		{
 			0 => Result<TSuccessNew, TError0>.FromSuccess(mapping(u.Value0)),
 			1 => Result<TSuccessNew, TError0>.FromError(Task.FromResult(u.Value1)),
-			_ => throw new Unreachable(),
+			_ => throw new ArgumentOutOfRangeException(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -53,7 +53,7 @@ namespace FuncNet;
 		{
 			0 => Result<TSuccess, TError0New>.FromSuccess(Task.FromResult(u.Value0)),
 			1 => Result<TSuccess, TError0New>.FromError(mapping(u.Value1)),
-			_ => throw new Unreachable(),
+			_ => throw new ArgumentOutOfRangeException(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -67,7 +67,7 @@ namespace FuncNet;
 		{
 			0 => Result<TSuccessNew, TError0>.FromSuccess(mapping(u.Value0)),
 			1 => Result<TSuccessNew, TError0>.FromError(Task.FromResult(u.Value1)),
-			_ => throw new Unreachable(),
+			_ => throw new ArgumentOutOfRangeException(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -81,7 +81,7 @@ namespace FuncNet;
 		{
 			0 => Result<TSuccess, TError0New>.FromSuccess(Task.FromResult(u.Value0)),
 			1 => Result<TSuccess, TError0New>.FromError(mapping(u.Value1)),
-			_ => throw new Unreachable(),
+			_ => throw new ArgumentOutOfRangeException(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -95,7 +95,7 @@ namespace FuncNet;
 		{
 			0 => Result<TSuccessNew, TError0>.FromSuccess(mapping(u.Value0)),
 			1 => Result<TSuccessNew, TError0>.FromError(u.Value1),
-			_ => throw new Unreachable(),
+			_ => throw new ArgumentOutOfRangeException(),
 			};
 			
 		}
@@ -109,7 +109,7 @@ namespace FuncNet;
 		{
 			0 => Result<TSuccess, TError0New>.FromSuccess(u.Value0),
 			1 => Result<TSuccess, TError0New>.FromError(mapping(u.Value1)),
-			_ => throw new Unreachable(),
+			_ => throw new ArgumentOutOfRangeException(),
 			};
 			
 		}}

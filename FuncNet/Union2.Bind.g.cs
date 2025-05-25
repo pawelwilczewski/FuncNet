@@ -13,7 +13,7 @@ namespace FuncNet;
 		{
 			0 => binding(u.Value0),
 			1 => Union<T0New, T1>.FromT1(u.Value1),
-			_ => throw new Unreachable(),
+			_ => throw new ArgumentOutOfRangeException(),
 			};
 			
 		}
@@ -25,7 +25,7 @@ namespace FuncNet;
 		{
 			0 => Union<T0, T1New>.FromT0(u.Value0),
 			1 => binding(u.Value1),
-			_ => throw new Unreachable(),
+			_ => throw new ArgumentOutOfRangeException(),
 			};
 			
 		}
@@ -39,7 +39,7 @@ namespace FuncNet;
 		{
 			0 => binding(u.Value0),
 			1 => Union<T0New, T1>.FromT1(Task.FromResult(u.Value1)),
-			_ => throw new Unreachable(),
+			_ => throw new ArgumentOutOfRangeException(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -53,7 +53,7 @@ namespace FuncNet;
 		{
 			0 => Union<T0, T1New>.FromT0(Task.FromResult(u.Value0)),
 			1 => binding(u.Value1),
-			_ => throw new Unreachable(),
+			_ => throw new ArgumentOutOfRangeException(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -67,7 +67,7 @@ namespace FuncNet;
 		{
 			0 => binding(u.Value0),
 			1 => Union<T0New, T1>.FromT1(Task.FromResult(u.Value1)),
-			_ => throw new Unreachable(),
+			_ => throw new ArgumentOutOfRangeException(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -81,7 +81,7 @@ namespace FuncNet;
 		{
 			0 => Union<T0, T1New>.FromT0(Task.FromResult(u.Value0)),
 			1 => binding(u.Value1),
-			_ => throw new Unreachable(),
+			_ => throw new ArgumentOutOfRangeException(),
 			}).ConfigureAwait(false);
 			
 		}
@@ -95,7 +95,7 @@ namespace FuncNet;
 		{
 			0 => binding(u.Value0),
 			1 => Union<T0New, T1>.FromT1(u.Value1),
-			_ => throw new Unreachable(),
+			_ => throw new ArgumentOutOfRangeException(),
 			};
 			
 		}
@@ -109,7 +109,7 @@ namespace FuncNet;
 		{
 			0 => Union<T0, T1New>.FromT0(u.Value0),
 			1 => binding(u.Value1),
-			_ => throw new Unreachable(),
+			_ => throw new ArgumentOutOfRangeException(),
 			};
 			
 		}}
