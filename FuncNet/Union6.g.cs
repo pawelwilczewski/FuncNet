@@ -61,6 +61,20 @@ public readonly record struct Union<T0, T1, T2, T3, T4, T5>
 		}
 	}
 
+	public static Union<T0, T1, T2, T3, T4, T5> FromT0(T0 value) => value;
+	public static Union<T0, T1, T2, T3, T4, T5> FromT1(T1 value) => value;
+	public static Union<T0, T1, T2, T3, T4, T5> FromT2(T2 value) => value;
+	public static Union<T0, T1, T2, T3, T4, T5> FromT3(T3 value) => value;
+	public static Union<T0, T1, T2, T3, T4, T5> FromT4(T4 value) => value;
+	public static Union<T0, T1, T2, T3, T4, T5> FromT5(T5 value) => value;
+
+	public static async Task<Union<T0, T1, T2, T3, T4, T5>> FromT0(Task<T0> value) => await value;
+	public static async Task<Union<T0, T1, T2, T3, T4, T5>> FromT1(Task<T1> value) => await value;
+	public static async Task<Union<T0, T1, T2, T3, T4, T5>> FromT2(Task<T2> value) => await value;
+	public static async Task<Union<T0, T1, T2, T3, T4, T5>> FromT3(Task<T3> value) => await value;
+	public static async Task<Union<T0, T1, T2, T3, T4, T5>> FromT4(Task<T4> value) => await value;
+	public static async Task<Union<T0, T1, T2, T3, T4, T5>> FromT5(Task<T5> value) => await value;
+
 	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(T0 value) =>
 		new Union<T0, T1, T2, T3, T4, T5>(0, value0: value);
 	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(T1 value) =>
@@ -75,25 +89,1025 @@ public readonly record struct Union<T0, T1, T2, T3, T4, T5>
 		new Union<T0, T1, T2, T3, T4, T5>(5, value5: value);
 
 	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1> other) =>
-		new Union<T0, T1, T2, T3, T4, T5>(other.Index, other.Value0, other.Value1);
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
 	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T2> other) =>
-		new Union<T0, T1, T2, T3, T4, T5>(other.Index, other.Value0, other.Value1, other.Value2);
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
 	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T2, T3> other) =>
-		new Union<T0, T1, T2, T3, T4, T5>(other.Index, other.Value0, other.Value1, other.Value2, other.Value3);
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2, T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2, T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2, T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2, T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2, T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2, T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2, T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2, T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2, T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T2, T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3, T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3, T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3, T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3, T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3, T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3, T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3, T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3, T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3, T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T3, T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4, T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4, T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4, T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4, T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4, T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4, T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4, T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4, T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4, T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T4, T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5, T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5, T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5, T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5, T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5, T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5, T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5, T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5, T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T5, T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0, T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0, T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0, T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0, T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0, T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0, T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0, T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0, T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T0, T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2, T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2, T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2, T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2, T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2, T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2, T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2, T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2, T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2, T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T2, T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3, T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3, T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3, T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3, T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3, T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3, T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3, T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3, T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3, T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3, T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T3, T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4, T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4, T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4, T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4, T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4, T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4, T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4, T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4, T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4, T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4, T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T4, T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5, T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5, T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5, T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5, T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5, T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5, T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5, T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5, T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5, T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T1, T5, T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0, T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0, T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0, T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0, T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0, T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0, T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0, T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0, T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0, T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T0, T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1, T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1, T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1, T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1, T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1, T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1, T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1, T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1, T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1, T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T1, T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3, T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3, T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3, T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3, T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3, T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3, T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3, T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3, T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3, T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3, T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T3, T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4, T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4, T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4, T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4, T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4, T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4, T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4, T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4, T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4, T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4, T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4, T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T4, T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5, T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5, T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5, T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5, T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5, T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5, T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5, T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5, T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5, T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5, T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T2, T5, T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0, T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0, T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0, T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0, T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0, T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0, T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0, T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0, T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0, T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T0, T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1, T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1, T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1, T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1, T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1, T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1, T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1, T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1, T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1, T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1, T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T1, T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2, T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2, T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2, T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2, T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2, T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2, T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2, T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2, T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2, T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2, T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T2, T5, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4, T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4, T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4, T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4, T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4, T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4, T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4, T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4, T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4, T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4, T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T4, T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5, T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5, T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5, T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5, T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5, T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5, T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5, T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5, T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5, T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5, T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T3, T5, T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0, T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0, T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0, T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0, T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0, T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0, T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0, T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0, T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0, T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T0, T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1, T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1, T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1, T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1, T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1, T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1, T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1, T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1, T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1, T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1, T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T1, T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2, T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2, T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2, T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2, T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2, T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2, T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2, T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2, T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2, T3, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2, T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2, T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T2, T5, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3, T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3, T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3, T0, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3, T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3, T1, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3, T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3, T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3, T2, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3, T5, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3, T5, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T3, T5, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5, T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5, T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5, T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5, T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5, T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5, T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5, T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5, T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5, T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T4, T5, T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0, T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0, T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0, T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0, T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0, T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0, T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0, T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0, T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T0, T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1, T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1, T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1, T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1, T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1, T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1, T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1, T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1, T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1, T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T1, T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2, T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2, T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2, T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2, T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2, T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2, T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2, T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2, T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2, T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2, T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T2, T4, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3, T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3, T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3, T0, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3, T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3, T1, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3, T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3, T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3, T2, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3, T4, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3, T4, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T3, T4, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4, T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4, T0, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4, T0, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4, T1, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4, T1, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4, T2, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4, T2, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4, T3, T0> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4, T3, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T5, T4, T3, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
 	public static implicit operator Union<T0, T1, T2, T3, T4, T5>(Union<T0, T1, T2, T3, T4> other) =>
-		new Union<T0, T1, T2, T3, T4, T5>(other.Index, other.Value0, other.Value1, other.Value2, other.Value3, other.Value4);
-
-	public static Union<T0, T1, T2, T3, T4, T5> FromT0(T0 value) => value;
-	public static Union<T0, T1, T2, T3, T4, T5> FromT1(T1 value) => value;
-	public static Union<T0, T1, T2, T3, T4, T5> FromT2(T2 value) => value;
-	public static Union<T0, T1, T2, T3, T4, T5> FromT3(T3 value) => value;
-	public static Union<T0, T1, T2, T3, T4, T5> FromT4(T4 value) => value;
-	public static Union<T0, T1, T2, T3, T4, T5> FromT5(T5 value) => value;
-
-	public static async Task<Union<T0, T1, T2, T3, T4, T5>> FromT0(Task<T0> value) => await value;
-	public static async Task<Union<T0, T1, T2, T3, T4, T5>> FromT1(Task<T1> value) => await value;
-	public static async Task<Union<T0, T1, T2, T3, T4, T5>> FromT2(Task<T2> value) => await value;
-	public static async Task<Union<T0, T1, T2, T3, T4, T5>> FromT3(Task<T3> value) => await value;
-	public static async Task<Union<T0, T1, T2, T3, T4, T5>> FromT4(Task<T4> value) => await value;
-	public static async Task<Union<T0, T1, T2, T3, T4, T5>> FromT5(Task<T5> value) => await value;
+		new Union<T0, T1, T2, T3, T4, T5>(other.Value);
 }
