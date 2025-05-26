@@ -17,68 +17,52 @@ public sealed class UnionConversionGenerator : IIncrementalGenerator
 				targetTypeCount, Enumerable.Range(0, max).ToImmutableArray()))
 		.ToImmutableArray();
 
-	public void Initialize(IncrementalGeneratorInitializationContext context)
+	public void Initialize(IncrementalGeneratorInitializationContext initializationContext)
 	{
-		var unionTypeDeclarations = context.SyntaxProvider
+		var unionTypeDeclarations = initializationContext.SyntaxProvider
 			.CreateSyntaxProvider(
-				(s, _) => s.ToString().Contains("Union<"),
-				(ctx, _) => ctx.Node.ToString())
-			.Where(text => unionTypeRegex.IsMatch(text));
+				(syntaxNode, _) => syntaxNode.ToString().Contains("Union<"),
+				(context, _) => context.Node);
 
-		context.RegisterSourceOutput(
+		initializationContext.RegisterSourceOutput(
 			unionTypeDeclarations.Collect(),
-			(spc, unionTypes) =>
+			(context, unionTypes) =>
 			{
 				var conversions = GenerateCompatibleConversions(ExtractUnionTypes(unionTypes));
 
 				foreach (var conversion in conversions)
 				{
-					spc.AddSource(conversion.FileName, conversion.Code);
+					context.AddSource(conversion.FileName, conversion.Code);
 				}
 			});
 	}
 
-	private static ISet<string> ExtractUnionTypes(ImmutableArray<string> unionTypeTexts)
+	private static ImmutableHashSet<string> ExtractUnionTypes(ImmutableArray<SyntaxNode> unionTypeNodes) =>
+		unionTypeNodes
+			.Select(node => unionTypeRegex.Matches(node.ToString()))
+			.SelectMany(matches => matches.Cast<Match>()
+				.Where(match => match.Success && match.Groups.Count > 1)
+				.Select(match => match.Groups[1].Value.Trim()))
+			.ToImmutableHashSet();
+
+	private static IEnumerable<ImplicitUnionConversion> GenerateCompatibleConversions(IImmutableSet<string> unionTypeStrings)
 	{
-		var unionTypes = new HashSet<string>();
-
-		foreach (var text in unionTypeTexts)
-		{
-			var matches = unionTypeRegex.Matches(text);
-			foreach (Match match in matches)
-			{
-				if (match.Success && match.Groups.Count > 1)
-				{
-					var typeArgs = match.Groups[1].Value.Trim();
-					unionTypes.Add(typeArgs);
-				}
-			}
-		}
-
-		return unionTypes;
-	}
-
-	private static IEnumerable<ImplicitUnionConversion> GenerateCompatibleConversions(
-		ISet<string> unionTypeStrings)
-	{
-		IEnumerable<(string a, string b)> unionPairsFromCode =
-			from a in unionTypeStrings
-			from b in unionTypeStrings
-			where a != b
-			select (a, b);
-
-		var conversionsFromCode = unionPairsFromCode
-			.Select(unions => (bigger: unions.a.Split(',').Select(t => t.Trim()).ToImmutableArray(), smaller: unions.b.Split(',').Select(t => t.Trim()).ToImmutableArray()))
+		return unionTypeStrings
+			.SelectMany(a => unionTypeStrings.Select(b => (a, b)))
+			.Where(unions => unions.a != unions.b)
+			.Select(unions => (bigger: ToTypesArray(unions.a), smaller: ToTypesArray(unions.b)))
 			.Where(unions => unions.bigger.Length >= unions.smaller.Length)
 			.Where(unions => unions.smaller.All(type => unions.bigger.Contains(type)))
-			.Select(unions => new ImplicitUnionConversionParams(
-				unions.bigger.Length,
-				unions.smaller.Select(type => unions.bigger.IndexOf(type)).ToImmutableArray()));
-
-		return conversionsFromCode
+			.Select(ToUnionConversionParams)
 			.Concat(basicConversions)
 			.Distinct()
 			.Select(GenerateImplicitConversion);
+
+		static ImmutableArray<string> ToTypesArray(string unionGenericTypes) =>
+			unionGenericTypes.Split(',').Select(t => t.Trim()).ToImmutableArray();
+
+		static ImplicitUnionConversionParams ToUnionConversionParams((ImmutableArray<string> bigger, ImmutableArray<string> smaller) unions) =>
+			new(unions.bigger.Length, unions.smaller.Select(type => unions.bigger.IndexOf(type)).ToImmutableArray());
 	}
 
 	private static ImplicitUnionConversion GenerateImplicitConversion(ImplicitUnionConversionParams @params)
