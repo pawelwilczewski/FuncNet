@@ -4,7 +4,7 @@ using FuncNet.Generator.CodeGeneration.Models;
 
 namespace FuncNet.Generator.ExtensionsGenerators;
 
-using static UnionMethodAsyncConfigConsts;
+using static UnionMethodConfigConsts;
 
 internal static class OptionToResultExtensionsGenerator
 {

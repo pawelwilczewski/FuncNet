@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 
-namespace FuncNet.SourceGenerators.Conversions;
+namespace FuncNet.Conversions;
 
 [Generator]
 public sealed class ResultConversionGenerator : IIncrementalGenerator

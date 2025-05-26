@@ -1,4 +1,4 @@
-namespace FuncNet.SourceGenerators.Common;
+namespace FuncNet.Common;
 
 internal static class EnumerableExtensions
 {

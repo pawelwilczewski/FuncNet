@@ -1,10 +1,10 @@
-using System.Diagnostics;
-using FuncNet.Generator;
 using FuncNet.Generator.CodeGeneration.Builders;
 using FuncNet.Generator.CodeGeneration.Models;
 using FuncNet.Generator.ExtensionsGenerators;
 using Microsoft.CodeAnalysis;
-using static FuncNet.Generator.CodeGeneration.Models.UnionMethodAsyncConfigConsts;
+using static FuncNet.Generator.CodeGeneration.Models.UnionMethodConfigConsts;
+
+namespace FuncNet;
 
 [Generator]
 public sealed class ExtensionsGenerator : ISourceGenerator
@@ -13,10 +13,6 @@ public sealed class ExtensionsGenerator : ISourceGenerator
 
 	public void Execute(GeneratorExecutionContext context)
 	{
-		var startTime = Stopwatch.GetTimestamp();
-
-		const string @namespace = "FuncNet";
-
 		(string extendedTypeName, string thisArgumentName, Func<IEnumerable<string>> elementNamesGenerator, UnionGetter unionGetter, FactoryMethodNameForTIndex factoryMethodName, OtherSwitchCaseReturnValue defaultSwitchCaseReturnValue)[] GenerateBaseParams(int unionSize) =>
 		[
 			("Union", "union", UnionElementNamesGenerator(unionSize), UnionGetterForUnion, UnionFactoryMethodName, ThrowOtherSwitchCaseReturnValue),
@@ -43,73 +39,22 @@ public sealed class ExtensionsGenerator : ISourceGenerator
 			from p in GenerateBaseParams(unionSize)
 			where !(p.extendedTypeName == "Union" && m.methodNameOnly is "Combine" or "ToUnion" or "ToOption") // hacky
 			select new UnionExtensionsFileGenerationParams(
-				@namespace, m.additionalUsings, m.classDeclaration, p.extendedTypeName, m.methodNameOnly, unionSize,
+				NAMESPACE, m.additionalUsings, m.classDeclaration, p.extendedTypeName, m.methodNameOnly, unionSize,
 				m.generateMethods, p.thisArgumentName, p.elementNamesGenerator, p.unionGetter, p.factoryMethodName, p.defaultSwitchCaseReturnValue);
 
 		generationParams =
 		[
 			..generationParams,
-			new UnionExtensionsFileGenerationParams(@namespace, "", OptionStaticClassDeclaration, "Option",
+			new UnionExtensionsFileGenerationParams(NAMESPACE, "", OptionStaticClassDeclaration, "Option",
 				"ToResult", 1, OptionToResultExtensionsGenerator.GenerateMethods, "option",
 				() => ["Some"], _ => throw new InvalidOperationException(),
 				i => i == 0 ? "FromSuccess" : "None", ThrowOtherSwitchCaseReturnValue)
 		];
 
-		for (var unionSize = 2; unionSize <= MAX_UNION_SIZE; ++unionSize)
-		{
-			context.AddSource($"Union{unionSize}", UnionGenerator.GenerateUnionFile(@namespace, unionSize));
-
-			context.AddSource($"Result{unionSize}", ResultGenerator.GenerateResultFile(@namespace, unionSize));
-		}
-
 		foreach (var p in generationParams)
 		{
 			context.AddSource(p.FileName, GenerateSourceFile(p));
 		}
-
-		context.AddSource("None", @"
-namespace FuncNet;
-
-public readonly record struct None
-{
-	public static None Instance { get; } = new();
-}");
-
-		context.AddSource("Option", @"
-#nullable enable
-
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace FuncNet;
-
-public readonly record struct Option<TValue>
-{
-	public static Option<TValue> None { get; } = new(default, false);
-
-	internal TValue? Value0 { get; init; }
-	private bool HasValue { get; }
-	internal int Index => HasValue ? 0 : 1;
-
-	private Option(TValue? value, bool hasValue)
-	{
-		Value0 = value;
-		HasValue = hasValue;
-	}
-
-	public static Option<TValue> Some(TValue value) => new(value, true);
-	public static async Task<Option<TValue>> Some(Task<TValue> value) => new(await value.ConfigureAwait(false), true);
-
-	public static Option<TValue> FromNullable(TValue? value) => new(value, value is not null);
-
-	public static async Task<Option<TValue>> FromNullable(Task<TValue?> value)
-	{
-		var v = await value.ConfigureAwait(false);
-		return new Option<TValue>(v, v is not null);
-	}
-
-	public IEnumerable<TValue> ToEnumerable() => HasValue ? [Value0!] : [];
-}");
 
 		context.AddSource("Option.Bind", @"
 #nullable enable

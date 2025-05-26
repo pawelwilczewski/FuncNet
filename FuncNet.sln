@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet", "FuncNet\FuncNet.csproj", "{3FE4D667-7415-4904-A711-E919CD0AFDE9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet.Test", "FuncNet.Test\FuncNet.Test.csproj", "{059E1CE6-0C05-4855-96BB-B6D39E5D69C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet.SourceGenerators", "FuncNet.SourceGenerators\FuncNet.SourceGenerators\FuncNet.SourceGenerators.csproj", "{940AC01E-A2BB-4EB4-983D-1605B3A8D74C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet", "FuncNet\FuncNet.csproj", "{940AC01E-A2BB-4EB4-983D-1605B3A8D74C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet.Examples", "FuncNet.Examples\FuncNet.Examples.csproj", "{8F845DC6-56C9-4A0E-8907-9A446E4BA181}"
 EndProject
@@ -14,10 +12,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3FE4D667-7415-4904-A711-E919CD0AFDE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3FE4D667-7415-4904-A711-E919CD0AFDE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3FE4D667-7415-4904-A711-E919CD0AFDE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3FE4D667-7415-4904-A711-E919CD0AFDE9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{059E1CE6-0C05-4855-96BB-B6D39E5D69C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{059E1CE6-0C05-4855-96BB-B6D39E5D69C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{059E1CE6-0C05-4855-96BB-B6D39E5D69C7}.Release|Any CPU.ActiveCfg = Release|Any CPU

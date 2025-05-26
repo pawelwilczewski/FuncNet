@@ -1,4 +1,4 @@
-namespace FuncNet.SourceGenerators.Conversions;
+namespace FuncNet.Conversions;
 
 internal sealed class ImplicitUnionConversion
 {

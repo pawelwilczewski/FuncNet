@@ -4,9 +4,9 @@ using FuncNet.Generator.CodeGeneration.Models;
 
 namespace FuncNet.Generator.ExtensionsGenerators;
 
-using static UnionMethodAsyncConfigConsts;
+using static UnionMethodConfigConsts;
 
-internal static class MapExtensionsGenerator
+internal static class BindExtensionsGenerator
 {
 	public static IEnumerable<MethodBuilder> GenerateMethods(UnionExtensionsFileGenerationParams p) =>
 		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
@@ -21,7 +21,7 @@ internal static class MapExtensionsGenerator
 	private static MethodBuilder GenerateMethod(MethodGenerationParamsWithSpecialIndex p) =>
 		new MethodBuilder($"public static {p.ExtendedTypeOfTsNew().WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}{p.ElementTypeNamesGenerator().ElementAt(p.SpecialIndex)}<{p.Ts().ElementAt(p.SpecialIndex)}New, {p.TsCommaSeparatedOld()}>")
 			.AddArgument($"this {p.ExtendedTypeOfTsOld().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} {p.ThisArgumentName}")
-			.AddArgument($"Func<{p.Ts().ElementAt(p.SpecialIndex)}Old, {$"{p.Ts().ElementAt(p.SpecialIndex)}New".WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> mapping")
+			.AddArgument($"Func<{p.Ts().ElementAt(p.SpecialIndex)}Old, {p.ExtendedTypeOfTsNew().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> binding")
 			.AddCancellationTokenIfAsync(p)
 			.AddBodyStatement($"var u = {p.GetUnionOnArgument(p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion)))}")
 			.AddThrowIfCanceledIfAsync(p)
@@ -42,7 +42,7 @@ internal static class MapExtensionsGenerator
 			});
 
 	private static string GenerateSwitchCaseReturnValue(SwitchCase @case, MethodGenerationParamsWithSpecialIndex p) =>
-		(@case.Index == p.SpecialIndex ? $"mapping(u.Value{@case.Index})" : $"u.Value{@case.Index}")
+		(@case.Index == p.SpecialIndex ? $"binding(u.Value{@case.Index})" : $"u.Value{@case.Index}")
 		.WrapInTaskFromResultIf(@case.Index != p.SpecialIndex && p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))
-		.WrapInNewExtendedTypeFromT(@case, p);
+		.WrapInNewExtendedTypeFromTIfNotSpecial(@case, p);
 }

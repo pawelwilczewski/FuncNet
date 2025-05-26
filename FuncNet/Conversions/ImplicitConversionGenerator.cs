@@ -4,12 +4,12 @@ using FuncNet.Generator.CodeGeneration;
 using FuncNet.Generator.CodeGeneration.Models;
 using Microsoft.CodeAnalysis;
 
-namespace FuncNet.SourceGenerators.Conversions;
+namespace FuncNet.Conversions;
 
 internal sealed class ImplicitConversionGenerator
 {
 	private static readonly ImmutableArray<ImplicitUnionConversionParams> basicConversions =
-		(from targetTypeCount in Enumerable.Range(3, UnionMethodAsyncConfigConsts.MAX_UNION_SIZE - 2)
+		(from targetTypeCount in Enumerable.Range(3, UnionMethodConfigConsts.MAX_UNION_SIZE - 2)
 			from max in Enumerable.Range(2, targetTypeCount - 2)
 			select new ImplicitUnionConversionParams(
 				targetTypeCount, Enumerable.Range(0, max).ToImmutableArray()))

@@ -10,9 +10,10 @@ public enum UnionMethodAsyncConfig
 	AppliedMethodReturnType = 1 << 2
 }
 
-internal static class UnionMethodAsyncConfigConsts
+internal static class UnionMethodConfigConsts
 {
 	public const int MAX_UNION_SIZE = 8;
+	public const string NAMESPACE = "FuncNet";
 
 	public static UnionMethodAsyncConfig[] AllPossibleMethodAsyncConfigs { get; } =
 	[

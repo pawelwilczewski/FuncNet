@@ -3,11 +3,11 @@
   "profiles": {
     "Examples": {
       "commandName": "DebugRoslynComponent",
-      "targetProject": "../../FuncNet.Examples/FuncNet.Examples.csproj"
+      "targetProject": "../FuncNet.Examples/FuncNet.Examples.csproj"
     },
     "Tests": {
       "commandName": "DebugRoslynComponent",
-      "targetProject": "../../FuncNet.Test/FuncNet.Test.csproj"
+      "targetProject": "../FuncNet.Test/FuncNet.Test.csproj"
     }
   }
 }
