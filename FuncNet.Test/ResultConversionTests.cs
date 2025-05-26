@@ -159,6 +159,6 @@ public class ResultConversionTests
 					t.DeclaredMethods)
 				.Where(m => m.Name == "op_Implicit"
 					&& m.ReturnType.ToString().Contains("Result`3")),
-			m => m.GetParameters().First().ParameterType.ToString().Contains("Result`3[TError2"));
+			m => m.GetParameters().First().ParameterType.ToString().Contains("Result`3[TError1"));
 	}
 }
