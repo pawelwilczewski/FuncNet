@@ -331,11 +331,11 @@ public class UnionTests
 				.Tap1(i => logList.Add($"Processing input: {i}"))
 				.Bind1(i => i == 0
 					? Union<string, int, double>.FromT0("Input was zero")
-					: Union<string, int, double>.FromT2(i * 2.0))
+					: i * 2.0)
 				.Tap2(d => logList.Add($"After conversion: {d:F1}"))
 				.Bind2(d => d > 100
 					? Union<string, int, double>.FromT0("Value too large")
-					: Union<string, int, double>.FromT2(d * 0.75))
+					: d * 0.75)
 				.Tap0(err => logList.Add($"Error detected: {err}"))
 				.Tap2(result => logList.Add($"Final result: {result:F1}"))
 				.Match(

@@ -7,21 +7,41 @@ using Microsoft.CodeAnalysis;
 namespace FuncNet.SourceGenerators;
 
 [Generator]
-public sealed class UnionConversionGenerator2 : ISourceGenerator
+public sealed class UnionConversionGenerator2 : IIncrementalGenerator
 {
 	private static readonly Regex unionTypeRegex = new("Union<([^<>]+)>", RegexOptions.Compiled);
 
-	public void Initialize(GeneratorInitializationContext context) { }
+	public void Initialize(IncrementalGeneratorInitializationContext context)
+	{
+		var unionTypeDeclarations = context.SyntaxProvider
+			.CreateSyntaxProvider(
+				(s, _) => s.ToString().Contains("Union<"),
+				(ctx, _) => ctx.Node.ToString())
+			.Where(text => unionTypeRegex.IsMatch(text));
 
-	public void Execute(GeneratorExecutionContext context)
+		context.RegisterSourceOutput(
+			unionTypeDeclarations.Collect(),
+			(spc, unionTypes) =>
+			{
+				var extractedTypes = ExtractUnionTypes(unionTypes);
+				var conversions = GenerateCompatibleConversions(extractedTypes);
+
+				foreach (var conversion in conversions)
+				{
+					spc.AddSource(
+						$"Union{conversion.targetTypeCount}_From_{conversion.sourceTypes}",
+						conversion.code);
+				}
+			});
+	}
+
+	private ISet<string> ExtractUnionTypes(ImmutableArray<string> unionTypeTexts)
 	{
 		var unionTypes = new HashSet<string>();
 
-		foreach (var tree in context.Compilation.SyntaxTrees)
+		foreach (var text in unionTypeTexts)
 		{
-			var sourceText = tree.GetText().ToString();
-			var matches = unionTypeRegex.Matches(sourceText);
-
+			var matches = unionTypeRegex.Matches(text);
 			foreach (Match match in matches)
 			{
 				if (match.Success && match.Groups.Count > 1)
@@ -32,12 +52,7 @@ public sealed class UnionConversionGenerator2 : ISourceGenerator
 			}
 		}
 
-		var conversions = GenerateCompatibleConversions(unionTypes);
-
-		foreach (var conversion in conversions)
-		{
-			context.AddSource($"Union{conversion.targetTypeCount}_From_{conversion.sourceTypes}", conversion.code);
-		}
+		return unionTypes;
 	}
 
 	private IEnumerable<(string code, string sourceTypes, int targetTypeCount)> GenerateCompatibleConversions(
