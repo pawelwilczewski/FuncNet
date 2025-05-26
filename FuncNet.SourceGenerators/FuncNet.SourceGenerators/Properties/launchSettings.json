@@ -1,7 +1,11 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "DebugRoslynSourceGeneratorTest": {
+    "Examples": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "../../FuncNet.Examples/FuncNet.Examples.csproj"
+    },
+    "Tests": {
       "commandName": "DebugRoslynComponent",
       "targetProject": "../../FuncNet.Test/FuncNet.Test.csproj"
     }

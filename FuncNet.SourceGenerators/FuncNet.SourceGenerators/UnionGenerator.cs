@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.CodeAnalysis;
+using FuncNet.Generator.CodeGeneration;
 
-namespace FuncNet.SourceGenerators;
+namespace FuncNet.Generator;
 
-[Generator]
-public sealed class UnionGenerator : ISourceGenerator
+using static GenericsGenerationUtils;
+using static StringJoinUtils;
+
+public static class UnionGenerator
 {
 	public static string GenerateUnionFile(string @namespace, int unionSize) =>
 		$@"using System;
@@ -58,42 +57,7 @@ public readonly partial record struct {UnionOfTs(unionSize)}
 		new {UnionOfTs(unionSize)}({i}, value{i}: value);")}
 }}";
 
-	private static string JoinToString<T>(IEnumerable<T> range, string separator, Func<T, string> toString) =>
-		string.Join(separator, range.Select(toString));
-
-	public static string JoinRangeToString(string separator, int start, int count, Func<int, string> toString) =>
-		count < 0 ? string.Empty : JoinToString(Enumerable.Range(start, count), separator, toString);
-
-	public static string JoinRangeToString(string separator, int count, Func<int, string> toString) =>
-		JoinRangeToString(separator, 0, count, toString);
-
-	public static string CommaSeparatedTs(int start, int count) =>
-		JoinRangeToString(", ", start, count, i => $"T{i}");
-
-	private static string CommaSeparatedErrorTs(int count) =>
-		CommaSeparatedErrorTs(0, count);
-
-	private static string CommaSeparatedErrorTs(int start, int count) =>
-		string.Join(", ", Enumerable.Range(start, count).Select(i => $"TError{i}"));
-
-	public static string UnionOfTs(int unionSize) => UnionOfTs(0, unionSize);
-	public static string UnionOfTs(int start, int count) => $"Union<{CommaSeparatedTs(start, count)}>";
-
-	public static string ResultOfTs(int unionSize) => $"Result<{ResultTs(unionSize)}>";
-
-	public static string ResultTs(int count) => count < 2
-		? throw new ArgumentOutOfRangeException(nameof(count))
-		: $"TSuccess, {CommaSeparatedErrorTs(count - 1)}";
-
-	public static string ResultBackingUnion(int unionSize) => $"Union<{ResultTs(unionSize)}>";
-
-	public void Initialize(GeneratorInitializationContext context) { }
-
-	public void Execute(GeneratorExecutionContext context)
-	{
-		for (var i = 1; i < 9; ++i)
-		{
-			context.AddSource($"Union{i}", GenerateUnionFile("FuncNet", i));
-		}
-	}
+	// {JoinRangeToString("\n\t", 2, unionSize - 2, otherUnionSize =>
+	// $@"public static implicit operator {UnionOfTs(unionSize)}({UnionOfTs(otherUnionSize)} other) =>
+	// new {UnionOfTs(unionSize)}(other.Index, {JoinRangeToString(", ", otherUnionSize, i => $"other.Value{i}")});")}
 }

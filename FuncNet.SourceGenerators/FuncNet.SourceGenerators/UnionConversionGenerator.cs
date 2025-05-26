@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
@@ -17,10 +13,19 @@ public sealed class UnionConversionGenerator : IIncrementalGenerator
 			.SelectMany((compilation, _) => compilation.GetDiagnostics())
 			.Where(d => d.Id == "CS0029" && d.GetMessage().Contains("Union<"));
 
-		context.RegisterSourceOutput(diagnostics, GenerateMissingConversion);
+		// var conversions =
+		// 	context.CompilationProvider
+		// 		.SelectMany((c, _) => c.GetDiagnostics())
+		// 		.Where(d => d.Id == "CS0029" && d.GetMessage().Contains("Union<"))
+		//
+		// 		// .Select(d => ExtractTypes(d.GetMessage()))
+		// 		.Collect()                               // IEnumerable<(string src,string dst)>
+		// 		.SelectMany((x, token) => x.Distinct()); // one item per distinct pair
+
+		// context.RegisterSourceOutput(diagnostics, GenerateMissingConversion);
 	}
 
-	private void GenerateMissingConversion(SourceProductionContext context, Diagnostic diagnostic)
+	private static void GenerateMissingConversion(SourceProductionContext context, Diagnostic diagnostic)
 	{
 		var message = diagnostic.GetMessage();
 
@@ -43,7 +48,7 @@ public sealed class UnionConversionGenerator : IIncrementalGenerator
 		var sourceTypeGenericParams = sourceTypes.Select(type => Array.IndexOf(targetTypes, type));
 
 		// Add the generated code
-		context.AddSource($"Union{targetType.Count(c => c == ',') + 1}_From_{string.Join("", sourceTypeGenericParams)}.g.cs", conversion);
+		context.AddSource($"Union{targetType.Count(c => c == ',') + 1}_From_{string.Join("", sourceTypeGenericParams)}", conversion);
 	}
 
 	private static string GenerateImplicitConversion(string sourceType, string targetType)
