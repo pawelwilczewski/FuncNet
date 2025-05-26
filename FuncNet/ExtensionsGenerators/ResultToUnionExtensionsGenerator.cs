@@ -1,8 +1,8 @@
-using FuncNet.Generator.CodeGeneration;
-using FuncNet.Generator.CodeGeneration.Builders;
-using FuncNet.Generator.CodeGeneration.Models;
+using FuncNet.CodeGeneration;
+using FuncNet.CodeGeneration.Builders;
+using FuncNet.CodeGeneration.Models;
 
-namespace FuncNet.Generator.ExtensionsGenerators;
+namespace FuncNet.ExtensionsGenerators;
 
 using static UnionMethodConfigConsts;
 using static GenericsGenerationUtils;

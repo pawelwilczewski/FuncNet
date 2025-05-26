@@ -1,6 +1,6 @@
-using FuncNet.Generator.CodeGeneration.Builders;
+using FuncNet.CodeGeneration.Builders;
 
-namespace FuncNet.Generator.CodeGeneration.Models;
+namespace FuncNet.CodeGeneration.Models;
 
 internal sealed record class UnionExtensionsFileGenerationParams(
 	string Namespace,

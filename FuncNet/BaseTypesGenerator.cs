@@ -1,6 +1,5 @@
-using FuncNet.Generator;
 using Microsoft.CodeAnalysis;
-using static FuncNet.Generator.CodeGeneration.Models.UnionMethodConfigConsts;
+using static FuncNet.CodeGeneration.Models.UnionMethodConfigConsts;
 
 namespace FuncNet;
 

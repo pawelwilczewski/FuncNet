@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using System.Text.RegularExpressions;
-using FuncNet.Generator.CodeGeneration;
-using FuncNet.Generator.CodeGeneration.Models;
+using FuncNet.CodeGeneration;
+using FuncNet.CodeGeneration.Models;
 using Microsoft.CodeAnalysis;
 
 namespace FuncNet.Conversions;

@@ -1,8 +1,8 @@
-using FuncNet.Generator.CodeGeneration.Builders;
-using FuncNet.Generator.CodeGeneration.Models;
-using FuncNet.Generator.ExtensionsGenerators;
+using FuncNet.CodeGeneration.Builders;
+using FuncNet.CodeGeneration.Models;
+using FuncNet.ExtensionsGenerators;
 using Microsoft.CodeAnalysis;
-using static FuncNet.Generator.CodeGeneration.Models.UnionMethodConfigConsts;
+using static FuncNet.CodeGeneration.Models.UnionMethodConfigConsts;
 
 namespace FuncNet;
 

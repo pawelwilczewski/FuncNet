@@ -1,7 +1,7 @@
-using FuncNet.Generator.CodeGeneration.Builders;
-using FuncNet.Generator.CodeGeneration.Models;
+using FuncNet.CodeGeneration.Builders;
+using FuncNet.CodeGeneration.Models;
 
-namespace FuncNet.Generator.CodeGeneration;
+namespace FuncNet.CodeGeneration;
 
 internal static class MethodBuilderExtensions
 {

@@ -1,4 +1,4 @@
-namespace FuncNet.Generator.CodeGeneration;
+namespace FuncNet.CodeGeneration;
 
 using static StringJoinUtils;
 

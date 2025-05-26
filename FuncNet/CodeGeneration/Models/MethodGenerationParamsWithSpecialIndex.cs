@@ -1,4 +1,4 @@
-namespace FuncNet.Generator.CodeGeneration.Models;
+namespace FuncNet.CodeGeneration.Models;
 
 internal record class MethodGenerationParamsWithSpecialIndex(
 	string ExtendedTypeName,

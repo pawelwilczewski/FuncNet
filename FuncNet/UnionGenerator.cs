@@ -1,6 +1,6 @@
-using FuncNet.Generator.CodeGeneration;
+using FuncNet.CodeGeneration;
 
-namespace FuncNet.Generator;
+namespace FuncNet;
 
 using static GenericsGenerationUtils;
 using static StringJoinUtils;

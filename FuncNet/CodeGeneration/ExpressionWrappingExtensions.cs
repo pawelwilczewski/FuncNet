@@ -1,4 +1,4 @@
-namespace FuncNet.Generator.CodeGeneration;
+namespace FuncNet.CodeGeneration;
 
 internal static class ExpressionWrappingExtensions
 {
