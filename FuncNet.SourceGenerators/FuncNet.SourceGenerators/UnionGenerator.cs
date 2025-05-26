@@ -56,8 +56,4 @@ public readonly partial record struct {UnionOfTs(unionSize)}
 		$@"public static implicit operator {UnionOfTs(unionSize)}(T{i} value) =>
 		new {UnionOfTs(unionSize)}({i}, value{i}: value);")}
 }}";
-
-	// {JoinRangeToString("\n\t", 2, unionSize - 2, otherUnionSize =>
-	// $@"public static implicit operator {UnionOfTs(unionSize)}({UnionOfTs(otherUnionSize)} other) =>
-	// new {UnionOfTs(unionSize)}(other.Index, {JoinRangeToString(", ", otherUnionSize, i => $"other.Value{i}")});")}
 }
