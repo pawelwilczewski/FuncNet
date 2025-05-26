@@ -32,17 +32,14 @@ public class ResultTests
 	[Fact]
 	public void Bind_WithSuccess_Works()
 	{
-		var result = Result<int, string, float>.FromSuccess(42);
+		var finalValue = Result<int, string, float>.FromSuccess(42)
+			.BindSuccess(value => Result<bool, string, float>.FromSuccess(true))
+			.Match(
+				success => success,
+				error => throw new UnreachableException(),
+				otherErrors => throw new UnreachableException());
 
-		var bound = result.BindSuccess(
-			value => Result<string, string, float>.FromSuccess($"Value: {value}"));
-
-		var finalValue = bound.Match(
-			success => success,
-			error => throw new UnreachableException(),
-			otherErrors => throw new UnreachableException());
-
-		Assert.Equal("Value: 42", finalValue);
+		Assert.True(finalValue);
 	}
 
 	[Fact]
@@ -51,7 +48,7 @@ public class ResultTests
 		var result = Result<int, string, float>.FromError("Original error");
 
 		var bound = result.BindSuccess(
-			value => Result<string, string, float>.FromSuccess($"Value: {value}"));
+			value => Result<double, string, float>.FromSuccess(23.43));
 
 		var finalValue = bound.Match(
 			success => throw new UnreachableException(),
@@ -64,11 +61,11 @@ public class ResultTests
 	[Fact]
 	public async Task AsyncBindVariants_Work()
 	{
-		var taskResult = Task.FromResult(Result<int, string, float>.FromSuccess(10));
+		var taskResult = Task.FromResult(Result<int, bool, float>.FromSuccess(10));
 		var boundTaskAsync = await taskResult.BindSuccess(async value =>
 		{
 			await Task.Yield();
-			return Result<double, string, float>.FromSuccess(value * 2.5);
+			return Result<double, bool, float>.FromSuccess(value * 2.5);
 		});
 
 		var taskAsyncValue = boundTaskAsync.Match(
@@ -78,11 +75,11 @@ public class ResultTests
 
 		Assert.Equal(25.0, taskAsyncValue);
 
-		var result = Result<int, string, float>.FromSuccess(7);
+		var result = Result<int, bool, float>.FromSuccess(7);
 		var boundAsync = await result.BindSuccess(async value =>
 		{
 			await Task.Yield();
-			return Result<string, string, float>.FromSuccess($"Processed: {value * 3}");
+			return Result<string, bool, float>.FromSuccess($"Processed: {value * 3}");
 		});
 
 		var asyncValue = boundAsync.Match(
@@ -92,9 +89,9 @@ public class ResultTests
 
 		Assert.Equal("Processed: 21", asyncValue);
 
-		var errorTaskResult = Task.FromResult(Result<int, string, float>.FromError(3.14f));
+		var errorTaskResult = Task.FromResult(Result<int, bool, float>.FromError(3.14f));
 		var boundTask = await errorTaskResult.BindSuccess(
-			value => Result<string, string, float>.FromSuccess(value.ToString()));
+			value => Result<string, bool, float>.FromSuccess(value.ToString()));
 
 		var errorPassThrough = boundTask.Match(
 			success => throw new UnreachableException(),
@@ -107,23 +104,23 @@ public class ResultTests
 	[Fact]
 	public async Task BindPipeline_Works()
 	{
-		Assert.Equal("Success: 36", await Process(Result<int, string, double>.FromSuccess(12)));
-		Assert.Equal("Input error", await Process(Result<int, string, double>.FromError("Input error")));
-		Assert.Equal("Processing error: Value too large", await Process(Result<int, string, double>.FromSuccess(150)));
+		Assert.Equal("Success: 36", await Process(Result<int, SomeError, double>.FromSuccess(12)));
+		Assert.Equal("Input error", await Process(Result<int, SomeError, double>.FromError(new SomeError("Input error"))));
+		Assert.Equal("Processing error: Value too large", await Process(Result<int, SomeError, double>.FromSuccess(150)));
 		return;
 
-		async Task<string> Process(Result<int, string, double> input) => await input
+		async Task<string> Process(Result<int, SomeError, double> input) => await input
 			.BindSuccess(async value =>
 			{
 				await Task.Yield();
 				return value > 100
-					? Result<int, string, double>.FromError("Processing error: Value too large")
-					: Result<int, string, double>.FromSuccess(value * 3);
+					? Result<int, SomeError, double>.FromError(new SomeError("Processing error: Value too large"))
+					: Result<int, SomeError, double>.FromSuccess(value * 3);
 			})
-			.BindSuccess(value => Result<string, string, double>.FromSuccess($"Success: {value}"))
+			.BindSuccess(value => Result<string, SomeError, double>.FromSuccess($"Success: {value}"))
 			.Match(
 				success => success,
-				error => error,
+				error => error.Message,
 				otherErrors => $"Other error: {otherErrors}");
 	}
 
@@ -164,7 +161,7 @@ public class ResultTests
 		var unchanged = await successResult.BindError0(async errorCode =>
 		{
 			await Task.Yield();
-			return Result<string, string, float>.FromError("Transformed error");
+			return Result<string, SomeError, float>.FromError(new SomeError("Transformed error"));
 		});
 
 		var unchangedValue = unchanged.Match(
@@ -302,23 +299,23 @@ public class ResultTests
 	[Fact]
 	public void CombinedPipeline_WithMapAndBind_Works()
 	{
-		Assert.Equal("FINAL: 72", ProcessPipeline(Result<int, string, double>.FromSuccess(7)));
-		Assert.Equal("Error: Input error", ProcessPipeline(Result<int, string, double>.FromError("Input error")));
-		Assert.Equal("Error: Value is negative", ProcessPipeline(Result<int, string, double>.FromSuccess(-5)));
-		Assert.Equal("Other error: 99.5", ProcessPipeline(Result<int, string, double>.FromError(99.5)));
+		Assert.Equal("FINAL: 72", ProcessPipeline(Result<int, SomeError, double>.FromSuccess(7)));
+		Assert.Equal("Error: Input error", ProcessPipeline(Result<int, SomeError, double>.FromError(new SomeError("Input error"))));
+		Assert.Equal("Error: Value is negative", ProcessPipeline(Result<int, SomeError, double>.FromSuccess(-5)));
+		Assert.Equal("Other error: 99.5", ProcessPipeline(Result<int, SomeError, double>.FromError(99.5)));
 		return;
 
-		string ProcessPipeline(Result<int, string, double> input) =>
+		string ProcessPipeline(Result<int, SomeError, double> input) =>
 			input.MapSuccess(value => value * 2)
 				.BindSuccess(value => value < 0
-					? Result<int, string, double>.FromError("Value is negative")
-					: Result<int, string, double>.FromSuccess(value + 10))
-				.MapError0(errorMsg => $"Error: {errorMsg}")
+					? Result<int, SomeError, double>.FromError(new SomeError("Value is negative"))
+					: Result<int, SomeError, double>.FromSuccess(value + 10))
+				.MapError0(errorMsg => new SomeError($"Error: {errorMsg.Message}"))
 				.MapSuccess(value => value * 3)
-				.BindSuccess(value => Result<string, string, double>.FromSuccess($"FINAL: {value}"))
+				.BindSuccess(value => Result<string, SomeError, double>.FromSuccess($"FINAL: {value}"))
 				.Match(
 					success => success,
-					error => error,
+					error => error.Message,
 					otherErrors => $"Other error: {otherErrors}");
 	}
 
@@ -409,8 +406,8 @@ public class ResultTests
 	[Fact]
 	public void Combine_AllSuccess_CallsCombineSuccess()
 	{
-		var result1 = Result<int, string, double>.FromSuccess(10);
-		var result2 = Result<string, string, double>.FromSuccess("test");
+		var result1 = Result<int, SomeError, double>.FromSuccess(10);
+		var result2 = Result<string, SomeError, double>.FromSuccess("test");
 
 		var combined = Result.Combine(
 			result1,
@@ -451,7 +448,7 @@ public class ResultTests
 	public void Combine_BothErrors_CollectsAllErrors()
 	{
 		var result1 = Result<int, string, double>.FromError("Error 1");
-		var result2 = Result<string, string, double>.FromError("Error 2");
+		var result2 = Result<bool, string, double>.FromError("Error 2");
 
 		var combined = Result.Combine(
 			result1,
@@ -466,7 +463,7 @@ public class ResultTests
 	public void Combine_MixedErrorTypes_CollectsTypedErrors()
 	{
 		var result1 = Result<int, string, double>.FromError(123.45);
-		var result2 = Result<string, string, double>.FromError("Error string");
+		var result2 = Result<bool, string, double>.FromError("Error string");
 
 		var combined = Result.Combine(
 			result1,
@@ -480,9 +477,9 @@ public class ResultTests
 	[Fact]
 	public void Combine_ThreeResults_AllSuccess()
 	{
-		var result1 = Result<int, string, double>.FromSuccess(10);
-		var result2 = Result<string, string, double>.FromSuccess("test");
-		var result3 = Result<bool, string, double>.FromSuccess(true);
+		var result1 = Result<int, SomeError, double>.FromSuccess(10);
+		var result2 = Result<string, SomeError, double>.FromSuccess("test");
+		var result3 = Result<bool, SomeError, double>.FromSuccess(true);
 
 		var combined = Result.Combine(
 			result1,
@@ -498,7 +495,7 @@ public class ResultTests
 	public void Combine_ThreeResults_MixedErrors()
 	{
 		var result1 = Result<int, string, double>.FromSuccess(10);
-		var result2 = Result<string, string, double>.FromError("Error 2");
+		var result2 = Result<bool, string, double>.FromError("Error 2");
 		var result3 = Result<bool, string, double>.FromError(99.9);
 
 		var combined = Result.Combine(
@@ -515,15 +512,15 @@ public class ResultTests
 	public async Task Combine_Async_AllSuccess()
 	{
 		var result1 = Task.FromResult(Result<int, string, double>.FromSuccess(10));
-		var result2 = Task.FromResult(Result<string, string, double>.FromSuccess("test"));
+		var result2 = Task.FromResult(Result<bool, string, double>.FromSuccess(true));
 
 		var combined = await Result.Combine(
 			result1,
 			result2,
-			async (num, str) =>
+			async (num, boolean) =>
 			{
 				await Task.Yield();
-				return $"{str}-{num}";
+				return $"{boolean}-{num}";
 			},
 			async (errors0, errors1) =>
 			{
@@ -531,14 +528,14 @@ public class ResultTests
 				return "Error case should not be reached";
 			});
 
-		Assert.Equal("test-10", combined);
+		Assert.Equal("True-10", combined);
 	}
 
 	[Fact]
 	public async Task Combine_Async_WithErrors()
 	{
-		var result1 = Task.FromResult(Result<int, string, double>.FromError("Error 1"));
-		var result2 = Task.FromResult(Result<string, string, double>.FromError(123.45));
+		var result1 = Task.FromResult(Result<int, SomeError, double>.FromError(new SomeError("Error 1")));
+		var result2 = Task.FromResult(Result<string, SomeError, double>.FromError(123.45));
 
 		var combined = await Result.Combine(
 			result1,
@@ -560,8 +557,8 @@ public class ResultTests
 	[Fact]
 	public async Task Combine_Async_WithCancellation()
 	{
-		var result1 = Task.FromResult(Result<int, string, double>.FromSuccess(10));
-		var result2 = Task.FromResult(Result<string, string, double>.FromSuccess("test"));
+		var result1 = Task.FromResult(Result<int, SomeError, double>.FromSuccess(10));
+		var result2 = Task.FromResult(Result<string, SomeError, double>.FromSuccess("test"));
 		var cts = new CancellationTokenSource();
 
 		var combined = Result.Combine(
@@ -634,25 +631,25 @@ public class ResultTests
 			invalidAgeValidation,
 			invalidEmailValidation,
 			(name, age, email) => Result<User, string>.FromSuccess(new User(name, age, email)),
-			(stringErrors, doubleErrors) => string.Join(", ", stringErrors));
+			(stringErrors, doubleErrors) => string.Join(", ", stringErrors.Select(error => error.Message)));
 
 		Assert.Equal("Name cannot be empty, Age must be positive, Invalid email format", invalidResult);
 		return;
 
-		static Result<string, string, double> ValidateName(string name) =>
+		static Result<string, SomeError, double> ValidateName(string name) =>
 			!string.IsNullOrEmpty(name)
-				? Result<string, string, double>.FromSuccess(name)
-				: Result<string, string, double>.FromError("Name cannot be empty");
+				? Result<string, SomeError, double>.FromSuccess(name)
+				: Result<string, SomeError, double>.FromError(new SomeError("Name cannot be empty"));
 
-		static Result<int, string, double> ValidateAge(int age) =>
+		static Result<int, SomeError, double> ValidateAge(int age) =>
 			age > 0
-				? Result<int, string, double>.FromSuccess(age)
-				: Result<int, string, double>.FromError("Age must be positive");
+				? Result<int, SomeError, double>.FromSuccess(age)
+				: Result<int, SomeError, double>.FromError(new SomeError("Age must be positive"));
 
-		static Result<string, string, double> ValidateEmail(string email) =>
+		static Result<string, SomeError, double> ValidateEmail(string email) =>
 			email.Contains('@')
-				? Result<string, string, double>.FromSuccess(email)
-				: Result<string, string, double>.FromError("Invalid email format");
+				? Result<string, SomeError, double>.FromSuccess(email)
+				: Result<string, SomeError, double>.FromError(new SomeError("Invalid email format"));
 	}
 
 	[Fact]
@@ -755,6 +752,8 @@ public class ResultTests
 			: Result<string, ValidationError>.FromError(new ValidationError("Email must contain '@'", nameof(CreateUserRequest.Email)));
 
 	public static Result<User, DatabaseError> SaveUserToDb(User user) => user;
+
+	private readonly record struct SomeError(string Message);
 
 	public sealed record class CreateUserRequest(string FirstName, string LastName, int Age, string Email);
 

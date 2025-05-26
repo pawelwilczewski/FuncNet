@@ -34,14 +34,4 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
-
-    <!--    <ItemGroup>-->
-    <!--        <None Remove="$(OutputPath)/../../../../FuncNet.SourceGenerators/FuncNet.SourceGenerators/bin/Debug/netstandard2.0/$(AssemblyName).SourceGenerators.dll"/>-->
-    <!--        <None Include="$(OutputPath)/../../../../FuncNet.SourceGenerators/FuncNet.SourceGenerators/bin/Debug/netstandard2.0/$(AssemblyName).SourceGenerators.dll"-->
-    <!--              Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false"/>-->
-    <!--    </ItemGroup>-->
-
-    <ItemGroup>
-        <InternalsVisibleTo Include="FuncNet.SourceGenerators"/>
-    </ItemGroup>
 </Project>

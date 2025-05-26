@@ -24,3 +24,5 @@ internal static class GenericsGenerationUtils
 
 	public static string ResultBackingUnion(int unionSize) => $"Union<{ResultTs(unionSize)}>";
 }
+
+public delegate string GenerateGenericTypeNameForTIndex(int tIndex);

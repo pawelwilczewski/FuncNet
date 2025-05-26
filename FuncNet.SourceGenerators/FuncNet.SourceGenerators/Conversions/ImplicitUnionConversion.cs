@@ -6,9 +6,9 @@ internal sealed class ImplicitUnionConversion
 
 	public string FileName { get; }
 
-	public ImplicitUnionConversion(string code, ImplicitUnionConversionParams paramsUsed)
+	public ImplicitUnionConversion(string code, ImplicitUnionConversionParams paramsUsed, string typeName)
 	{
 		Code = code;
-		FileName = $"Union{paramsUsed.ConversionTargetGenericSize}_From_{string.Join("", paramsUsed.ConversionSourceGenericArgsOrder)}";
+		FileName = $"{typeName}{paramsUsed.ConversionTargetGenericSize}_From_{string.Join("", paramsUsed.ConversionSourceGenericArgsOrder)}";
 	}
 }

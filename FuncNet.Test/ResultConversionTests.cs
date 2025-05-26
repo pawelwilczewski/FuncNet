@@ -133,4 +133,32 @@ public class ResultConversionTests
 
 		Assert.Equal("none", matchResult);
 	}
+
+	[Fact]
+	public void ResultFromResult_Works()
+	{
+		Result<int, string, bool> a = Result<int, bool, string>.FromSuccess(123);
+		Assert.True(a.Value.Is0);
+
+		Result<int, string, bool, DateTime, int, double, float> b = Result<int, bool, float, double>.FromError(123.0f);
+		Assert.True(a.Value.Is0);
+	}
+
+	[Fact]
+	public void ResultFromAnotherResult_NotPermitted_WouldNotCompile()
+	{
+		// if the results below were unions, it would be fine to implicitly convert between them
+		// however, given the semantic meaning of TSuccess of Result, it shouldn't be allowed for TResult
+		Result<int, string, bool> a = 123;
+		Result<bool, int, string> b = true;
+
+		// check if there is an implicit conversion from Result<int, string, bool> to Result<bool, int, string>
+		// ^ there shouldn't be
+		Assert.DoesNotContain(typeof(ResultConversionTests).Assembly.DefinedTypes
+				.SelectMany(t =>
+					t.DeclaredMethods)
+				.Where(m => m.Name == "op_Implicit"
+					&& m.ReturnType.ToString().Contains("Result`3")),
+			m => m.GetParameters().First().ParameterType.ToString().Contains("Result`3[TError2"));
+	}
 }

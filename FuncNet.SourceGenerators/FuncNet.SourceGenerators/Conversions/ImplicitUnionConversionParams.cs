@@ -6,12 +6,6 @@ internal readonly record struct ImplicitUnionConversionParams(
 	int ConversionTargetGenericSize,
 	IImmutableList<int> ConversionSourceGenericArgsOrder)
 {
-	public string TargetGenericParamsCommaSeparated =>
-		string.Join(", ", Enumerable.Range(0, ConversionTargetGenericSize).Select(i => $"T{i}"));
-
-	public string SourceGenericParamsCommaSeparated =>
-		string.Join(", ", ConversionSourceGenericArgsOrder.Select(i => $"T{i}"));
-
 	public bool Equals(ImplicitUnionConversionParams other) =>
 		ConversionTargetGenericSize == other.ConversionTargetGenericSize
 		&& ConversionSourceGenericArgsOrder.SequenceEqual(ConversionSourceGenericArgsOrder);
