@@ -9,6 +9,8 @@
 
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <IsRoslynComponent>true</IsRoslynComponent>
+        <IncludeBuildOutput>true</IncludeBuildOutput>
+        <DevelopmentDependency>false</DevelopmentDependency>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -46,5 +48,9 @@
 
     <ItemGroup>
         <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false"/>
     </ItemGroup>
 </Project>
