@@ -1,69 +1,52 @@
-﻿using FuncNet;
+﻿namespace FuncNet.Examples;
 
-Union<string, int> small0 = "abc";
-Union<string, int> small1 = 42;
+internal sealed class Program
+{
+	public static void Main(string[] args)
+	{
+		var result = CreateUser(
+			"John Doe",
+			name => string.IsNullOrEmpty(name)
+				? new ValidationError("Name can't be empty")
+				: name,
+			user => Random.Shared.Next() % 2 == 0
+				? new DatabaseError("Lost connection")
+				: user);
 
-// Assert.True(small0.Is0);
-// Assert.True(small1.Is1);
+		result.Match(
+			user =>
+			{
+				Console.WriteLine($"User created: {user.Name}");
+				return None.Instance;
+			},
+			validationError =>
+			{
+				Console.WriteLine($"Validation error: {validationError.Message}");
+				return None.Instance;
+			},
+			databaseError =>
+			{
+				Console.WriteLine($"Database error: {databaseError.Message}");
+				return None.Instance;
+			});
+	}
 
-Union<string, int> cross0 = Union<int, string>.FromT0(42);
-Union<string, int> cross1 = Union<int, string>.FromT1("abc");
+	private static Result<User, ValidationError, DatabaseError> CreateUser(
+		string name,
+		Func<string, Result<string, ValidationError>> validateName,
+		Func<User, Result<User, DatabaseError>> saveToDb) =>
+		Result<string, ValidationError>.FromSuccess(name)
+			.BindSuccess(validateName)
+			.MapSuccess(validatedName => new User(validatedName))
+			.Extend<User, ValidationError, DatabaseError>()
+			.BindSuccess(user => saveToDb(user)
+				.Match(
+					Result<User, ValidationError, DatabaseError>.FromSuccess,
+					databaseError => databaseError));
+}
 
-// Assert.True(cross0.Is1);
-// Assert.True(cross1.Is0);
+internal readonly record struct User(string Name);
 
-Union<string, int, double, bool, float, char> big0 = "abc";
+internal readonly record struct ValidationError(string Message);
 
-Union<string, int, double, bool, float, char> big1 = 42;
-Union<string, int, double, bool, float, char> big2 = Union<string, int>.FromT0("abc");
-
-Union<string, int, double, bool, float, char> big3 = Union<string, int>.FromT1(42);
-Union<string, int, double, bool, float, char> big4 = Union<string, double, int, bool, char>.FromT1(3.14);
-
-//
-// Assert.True(big0.Is0);
-// Assert.True(big1.Is1);
-// Assert.True(big2.Is0);
-// Assert.True(big3.Is1);
-// Assert.True(big4.Is2);
-//
-Union<string, int, double, bool, float, char> permuted2_0 = Union<int, string>.FromT0(42);
-Union<string, int, double, bool, float, char> permuted2_1 = Union<string, int>.FromT0("abc");
-
-//
-// Assert.True(permuted2_0.Is1);
-// Assert.True(permuted2_1.Is0);
-//
-Union<string, int, double, bool, float, char> permuted3_0 = Union<double, string, int>.FromT0(3.14);
-Union<string, int, double, bool, float, char> permuted3_1 = Union<int, double, string>.FromT0(42);
-Union<string, int, double, bool, float, char> permuted3_2 = Union<string, double, int>.FromT1(3.14);
-
-//
-// Assert.True(permuted3_0.Is2);
-// Assert.True(permuted3_1.Is1);
-// Assert.True(permuted3_2.Is2);
-//
-Union<string, int, double, bool, float, char> permuted4_0 = Union<bool, int, string, double>.FromT0(true);
-Union<string, int, double, bool, float, char> permuted4_1 = Union<double, bool, int, string>.FromT2(42);
-Union<string, int, double, bool, float, char> permuted4_2 = Union<string, double, bool, int>.FromT3(42);
-
-//
-// Assert.True(permuted4_0.Is3);
-// Assert.True(permuted4_1.Is1);
-// Assert.True(permuted4_2.Is1);
-//
-Union<int, string> intermediate = Union<string, int>.FromT1(42);
-Union<string, int, double, bool, float, char> multiHop = intermediate;
-
-//
-// Assert.True(intermediate.Is0);
-// Assert.True(multiHop.Is1);
-//
-Union<string, int> originalUnion = 42;
-Union<string, int, double> convertedUnion = originalUnion;
-
-//
-// Assert.Equal(originalUnion.Is1, convertedUnion.Is1);
-
-Union<int, string, float, double, DateTime, bool, char, long> Method() =>
-	Union<double, int, string, char, float, DateTime>.FromT2("Fdfsdf");
+internal readonly record struct DatabaseError(string Message);
