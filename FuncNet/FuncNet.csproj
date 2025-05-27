@@ -1,9 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
         <LangVersion>latest</LangVersion>
         <WarningsAsErrors>8509</WarningsAsErrors>
+
+        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+        <IsRoslynComponent>true</IsRoslynComponent>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -12,20 +17,24 @@
         <Description>Library of functional utilities to use in C# with notably rich and easy-to-use adhoc unions</Description>
 
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <RepositoryUrl>https://https://github.com/pawelwilczewski/FuncNet</RepositoryUrl>
+        <RepositoryUrl>https://github.com/pawelwilczewski/FuncNet</RepositoryUrl>
 
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <IsPackable>true</IsPackable>
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageTags>functional;fp;union;discriminatedunion;result;option;monad</PackageTags>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PackageTags>functional;fp;union;discriminatedunion;taggedunion;result;option;monad;rop;railway;oriented;programming;pipeline</PackageTags>
         <PackageProjectUrl>https://github.com/pawelwilczewski/FuncNet</PackageProjectUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="..\README.md" Pack="true" PackagePath="\"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.0" PrivateAssets="all"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -33,5 +42,9 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 </Project>
