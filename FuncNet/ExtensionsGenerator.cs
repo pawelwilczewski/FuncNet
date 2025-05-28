@@ -54,10 +54,10 @@ public sealed class ExtensionsGenerator : ISourceGenerator
 
 		foreach (var p in generationParams)
 		{
-			context.AddSourceIfNotExists(p.FileName, GenerateSourceFile(p));
+			context.AddSourceIfNotExistsOrPartial(p.FileName, GenerateSourceFile(p));
 		}
 
-		context.AddSourceIfNotExists("Option.Bind", @"
+		context.AddSourceIfNotExistsOrPartial("Option.Bind", @"
 #nullable enable
 
 using System;
@@ -123,7 +123,7 @@ public static class OptionBind
 	}
 }");
 
-		context.AddSourceIfNotExists("Option.Map", @"
+		context.AddSourceIfNotExistsOrPartial("Option.Map", @"
 #nullable enable
 
 using System;
@@ -189,7 +189,7 @@ public static class OptionMap
 	}
 }");
 
-		context.AddSourceIfNotExists("Option.Filter", @"
+		context.AddSourceIfNotExistsOrPartial("Option.Filter", @"
 #nullable enable
 
 using System;
@@ -247,7 +247,7 @@ public static class OptionFilter
 	}
 }");
 
-		context.AddSourceIfNotExists("Option.Tap", @"
+		context.AddSourceIfNotExistsOrPartial("Option.Tap", @"
 #nullable enable
 
 using System;
@@ -301,7 +301,7 @@ public static class OptionTap
 	}
 }");
 
-		context.AddSourceIfNotExists("Option.Match", @"
+		context.AddSourceIfNotExistsOrPartial("Option.Match", @"
 #nullable enable
 
 using System;

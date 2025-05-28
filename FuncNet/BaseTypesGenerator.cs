@@ -13,11 +13,11 @@ internal sealed class BaseTypesGenerator : ISourceGenerator
 	{
 		for (var unionSize = 2; unionSize <= MAX_UNION_SIZE; ++unionSize)
 		{
-			context.AddSourceIfNotExists($"Union{unionSize}", UnionGenerator.GenerateUnionFile(NAMESPACE, unionSize));
-			context.AddSourceIfNotExists($"Result{unionSize}", ResultGenerator.GenerateResultFile(NAMESPACE, unionSize));
+			context.AddSourceIfNotExistsOrPartial($"Union{unionSize}", UnionGenerator.GenerateUnionFile(NAMESPACE, unionSize));
+			context.AddSourceIfNotExistsOrPartial($"Result{unionSize}", ResultGenerator.GenerateResultFile(NAMESPACE, unionSize));
 		}
 
-		context.AddSourceIfNotExists("None", @"
+		context.AddSourceIfNotExistsOrPartial("None", @"
 namespace FuncNet;
 
 public readonly record struct None
@@ -25,7 +25,7 @@ public readonly record struct None
 	public static None Instance { get; } = new();
 }");
 
-		context.AddSourceIfNotExists("Option", @"
+		context.AddSourceIfNotExistsOrPartial("Option", @"
 #nullable enable
 
 using System.Collections.Generic;

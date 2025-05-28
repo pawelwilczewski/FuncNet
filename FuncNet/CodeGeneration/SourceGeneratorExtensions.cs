@@ -4,11 +4,17 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace FuncNet.CodeGeneration;
 
-public static class SourceGeneratorExtensions
+internal static class SourceGeneratorExtensions
 {
-	public static void AddSourceIfNotExists(this GeneratorExecutionContext context, string hintName, string source)
+	public static void AddSourceIfNotExistsOrPartial(this GeneratorExecutionContext context, string hintName, string source)
 	{
-		if (TryGetFullyQualifiedTypeName(source, out var typeName)
+		if (!TryExtractTypeDeclarationSyntax(source, out var typeDeclaration))
+		{
+			throw new Exception($"Cannot extract type declaration from source: {source}");
+		}
+
+		if (!typeDeclaration!.IsPartial()
+			&& TryGetFullyQualifiedTypeName(typeDeclaration!, out var typeName)
 			&& TypeExists(context.Compilation, typeName!))
 		{
 			return;
@@ -17,24 +23,32 @@ public static class SourceGeneratorExtensions
 		context.AddSource(hintName, source);
 	}
 
-	private static bool TryGetFullyQualifiedTypeName(string source, out string? typeName)
+	private static bool IsPartial(this TypeDeclarationSyntax typeDeclaration)
+	{
+		return typeDeclaration.Modifiers.Any(m => m.IsKind(SyntaxKind.PartialKeyword));
+	}
+
+	private static bool TryGetFullyQualifiedTypeName(TypeDeclarationSyntax typeDeclaration, out string? typeName)
 	{
 		typeName = null;
 
+		if (typeDeclaration.Modifiers.Any(m => m.IsKind(SyntaxKind.PartialKeyword))) return false;
+
+		typeName = typeDeclaration.Identifier.ValueText;
+		if (typeDeclaration.Arity > 0) typeName += $"`{typeDeclaration.Arity}";
+
+		var namespaceName = typeDeclaration.GetNamespace();
+		typeName = string.IsNullOrEmpty(namespaceName) ? typeName : $"{namespaceName}.{typeName}";
+		return true;
+	}
+
+	private static bool TryExtractTypeDeclarationSyntax(string source, out TypeDeclarationSyntax? typeDeclarationSyntax)
+	{
 		var syntaxTree = CSharpSyntaxTree.ParseText(source);
 		var root = syntaxTree.GetRoot();
 
-		var typeDeclaration = root.DescendantNodes().OfType<TypeDeclarationSyntax>().FirstOrDefault();
-		if (typeDeclaration is null) return false;
-
-		var namespaceName = typeDeclaration.GetNamespace();
-
-		typeName = typeDeclaration.Identifier.ValueText;
-		var arity = typeDeclaration.TypeParameterList?.Parameters.Count ?? 0;
-		if (arity > 0) typeName += $"`{arity}";
-
-		typeName = string.IsNullOrEmpty(namespaceName) ? typeName : $"{namespaceName}.{typeName}";
-		return true;
+		typeDeclarationSyntax = root.DescendantNodes().OfType<TypeDeclarationSyntax>().FirstOrDefault();
+		return typeDeclarationSyntax is not null;
 	}
 
 	private static bool TypeExists(Compilation compilation, string fullyQualifiedTypeName)
