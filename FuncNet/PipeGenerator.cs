@@ -10,7 +10,7 @@ internal sealed class PipeGenerator : ISourceGenerator
 
 	public void Execute(GeneratorExecutionContext context)
 	{
-		context.AddSourceIfNotExistsOrPartial("PipeExtensions",
+		context.AddSourceIfNotExists("PipeExtensions",
 			@"using System;
 using System.Threading.Tasks;
 

@@ -6,26 +6,20 @@ namespace FuncNet.CodeGeneration;
 
 internal static class SourceGeneratorExtensions
 {
-	public static void AddSourceIfNotExistsOrPartial(this GeneratorExecutionContext context, string hintName, string source)
+	public static void AddSourceIfNotExists(this GeneratorExecutionContext context, string hintName, string source)
 	{
 		if (!TryExtractTypeDeclarationSyntax(source, out var typeDeclaration))
 		{
 			throw new Exception($"Cannot extract type declaration from source: {source}");
 		}
 
-		if (!typeDeclaration!.IsPartial()
-			&& TryGetFullyQualifiedTypeName(typeDeclaration!, out var typeName)
+		if (TryGetFullyQualifiedTypeName(typeDeclaration!, out var typeName)
 			&& TypeExists(context.Compilation, typeName!))
 		{
 			return;
 		}
 
 		context.AddSource(hintName, source);
-	}
-
-	private static bool IsPartial(this TypeDeclarationSyntax typeDeclaration)
-	{
-		return typeDeclaration.Modifiers.Any(m => m.IsKind(SyntaxKind.PartialKeyword));
 	}
 
 	private static bool TryGetFullyQualifiedTypeName(TypeDeclarationSyntax typeDeclaration, out string? typeName)
