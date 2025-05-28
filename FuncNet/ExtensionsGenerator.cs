@@ -1,3 +1,4 @@
+using FuncNet.CodeGeneration;
 using FuncNet.CodeGeneration.Builders;
 using FuncNet.CodeGeneration.Models;
 using FuncNet.ExtensionsGenerators;
@@ -53,10 +54,10 @@ public sealed class ExtensionsGenerator : ISourceGenerator
 
 		foreach (var p in generationParams)
 		{
-			context.AddSource(p.FileName, GenerateSourceFile(p));
+			context.AddSourceIfNotExists(p.FileName, GenerateSourceFile(p));
 		}
 
-		context.AddSource("Option.Bind", @"
+		context.AddSourceIfNotExists("Option.Bind", @"
 #nullable enable
 
 using System;
@@ -122,7 +123,7 @@ public static class OptionBind
 	}
 }");
 
-		context.AddSource("Option.Map", @"
+		context.AddSourceIfNotExists("Option.Map", @"
 #nullable enable
 
 using System;
@@ -188,7 +189,7 @@ public static class OptionMap
 	}
 }");
 
-		context.AddSource("Option.Filter", @"
+		context.AddSourceIfNotExists("Option.Filter", @"
 #nullable enable
 
 using System;
@@ -246,7 +247,7 @@ public static class OptionFilter
 	}
 }");
 
-		context.AddSource("Option.Tap", @"
+		context.AddSourceIfNotExists("Option.Tap", @"
 #nullable enable
 
 using System;
@@ -300,7 +301,7 @@ public static class OptionTap
 	}
 }");
 
-		context.AddSource("Option.Match", @"
+		context.AddSourceIfNotExists("Option.Match", @"
 #nullable enable
 
 using System;

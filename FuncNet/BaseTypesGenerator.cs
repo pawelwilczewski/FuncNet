@@ -1,3 +1,4 @@
+using FuncNet.CodeGeneration;
 using Microsoft.CodeAnalysis;
 using static FuncNet.CodeGeneration.Models.UnionMethodConfigConsts;
 
@@ -12,11 +13,11 @@ internal sealed class BaseTypesGenerator : ISourceGenerator
 	{
 		for (var unionSize = 2; unionSize <= MAX_UNION_SIZE; ++unionSize)
 		{
-			context.AddSource($"Union{unionSize}", UnionGenerator.GenerateUnionFile(NAMESPACE, unionSize));
-			context.AddSource($"Result{unionSize}", ResultGenerator.GenerateResultFile(NAMESPACE, unionSize));
+			context.AddSourceIfNotExists($"Union{unionSize}", UnionGenerator.GenerateUnionFile(NAMESPACE, unionSize));
+			context.AddSourceIfNotExists($"Result{unionSize}", ResultGenerator.GenerateResultFile(NAMESPACE, unionSize));
 		}
 
-		context.AddSource("None", @"
+		context.AddSourceIfNotExists("None", @"
 namespace FuncNet;
 
 public readonly record struct None
@@ -24,7 +25,7 @@ public readonly record struct None
 	public static None Instance { get; } = new();
 }");
 
-		context.AddSource("Option", @"
+		context.AddSourceIfNotExists("Option", @"
 #nullable enable
 
 using System.Collections.Generic;

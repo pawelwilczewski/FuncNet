@@ -1,3 +1,4 @@
+using FuncNet.CodeGeneration;
 using Microsoft.CodeAnalysis;
 
 namespace FuncNet;
@@ -9,7 +10,7 @@ internal sealed class PipeGenerator : ISourceGenerator
 
 	public void Execute(GeneratorExecutionContext context)
 	{
-		context.AddSource("PipeExtensions",
+		context.AddSourceIfNotExists("PipeExtensions",
 			@"using System;
 using System.Threading.Tasks;
 
