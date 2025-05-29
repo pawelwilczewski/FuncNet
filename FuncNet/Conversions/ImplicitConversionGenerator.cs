@@ -33,6 +33,37 @@ internal sealed class ImplicitConversionGenerator
 
 	public void Initialize(IncrementalGeneratorInitializationContext initializationContext)
 	{
+		var allRelevantSyntaxTreeInfos =
+			initializationContext.CompilationProvider.Select((compilation, cancellationToken) =>
+			{
+				var infos = new List<SyntaxTreeInfo>();
+
+				// Add syntax trees from the current project
+				foreach (var tree in compilation.SyntaxTrees)
+				{
+					infos.Add(new SyntaxTreeInfo(tree.FilePath, tree.GetText(cancellationToken).ToString()));
+				}
+
+				// Add syntax trees from referenced projects (if they are CompilationReferences)
+				foreach (var reference in compilation.References)
+				{
+					if (reference is CompilationReference compRef)
+					{
+						var referencedCompilation = compRef.Compilation;
+						foreach (var tree in referencedCompilation.SyntaxTrees)
+						{
+							infos.Add(new SyntaxTreeInfo(tree.FilePath, tree.GetText(cancellationToken).ToString()));
+						}
+					}
+				}
+
+#pragma warning disable RS1035
+				File.AppendAllLines("C:/temp/infos.txt", infos.Select(info => info.ToString()));
+#pragma warning restore RS1035
+
+				return infos.ToImmutableArray();
+			});
+
 		var unionTypeDeclarations = initializationContext.SyntaxProvider
 			.CreateSyntaxProvider(
 				(syntaxNode, _) => syntaxNode.ToString().Contains($"{typeName}<"),
@@ -97,4 +128,6 @@ public readonly partial record struct {typeName}<{targetTypeParams}>
 			{string.Join(",\n\t\t\t", @params.ConversionSourceGenericArgsOrder.Select(i => $"t{i} => t{i}"))});
 }}", @params, typeName);
 	}
+
+	private sealed record class SyntaxTreeInfo(string FilePath, string SourceText);
 }
