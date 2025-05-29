@@ -34,7 +34,7 @@ internal sealed class ImplicitConversionGenerator
 	public void Initialize(IncrementalGeneratorInitializationContext initializationContext)
 	{
 		var allRelevantSyntaxTreeInfos =
-			initializationContext.CompilationProvider.Select((compilation, cancellationToken) =>
+			initializationContext.CompilationProvider.SelectMany((compilation, cancellationToken) =>
 			{
 				var infos = new List<SyntaxTreeInfo>();
 
@@ -57,12 +57,27 @@ internal sealed class ImplicitConversionGenerator
 					}
 				}
 
-#pragma warning disable RS1035
-				File.AppendAllLines("C:/temp/infos.txt", infos.Select(info => info.ToString()));
-#pragma warning restore RS1035
-
 				return infos.ToImmutableArray();
 			});
+
+		var test = allRelevantSyntaxTreeInfos.Collect();
+
+		initializationContext.RegisterSourceOutput(test, (sourceProductionContext, allData) =>
+		{
+			if (allData.IsEmpty)
+			{
+				return;
+			}
+
+#pragma warning disable RS1035
+			File.AppendAllLines("C:/temp/infos.txt",
+			[
+				$"--- Start {DateTime.Now} --- ",
+				..allData.Select(info => info.FilePath),
+				"--- End ---\n"
+			]);
+#pragma warning restore RS1035
+		});
 
 		var unionTypeDeclarations = initializationContext.SyntaxProvider
 			.CreateSyntaxProvider(
