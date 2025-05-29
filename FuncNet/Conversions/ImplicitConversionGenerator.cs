@@ -72,7 +72,7 @@ internal sealed class ImplicitConversionGenerator
 #pragma warning disable RS1035
 			File.AppendAllLines("C:/temp/infos.txt",
 			[
-				$"--- Start {DateTime.Now} --- ",
+				$"--- Start {DateTime.Now} --- {typeof(ImplicitConversionGenerator).Assembly.FullName} --- ",
 				..allData.Select(info => info.FilePath),
 				"--- End ---\n"
 			]);
