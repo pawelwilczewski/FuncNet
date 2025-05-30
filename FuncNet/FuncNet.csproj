@@ -2,6 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
         <LangVersion>latest</LangVersion>
         <WarningsAsErrors>8509</WarningsAsErrors>
     </PropertyGroup>
@@ -9,16 +11,17 @@
     <PropertyGroup>
         <PackageId>FuncNet</PackageId>
         <Authors>Pawel Wilczewski</Authors>
-        <Description>Library of functional utilities to use in C# with notably rich and easy-to-use adhoc unions</Description>
-
+        <Description>Library of functional utilities to use in C# with notably rich and easy-to-use
+            adhoc Union and Result types and automated cross-Union conversions.
+        </Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <RepositoryUrl>https://https://github.com/pawelwilczewski/FuncNet</RepositoryUrl>
-
+        <RepositoryUrl>https://github.com/pawelwilczewski/FuncNet</RepositoryUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <IsPackable>true</IsPackable>
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageTags>functional;fp;union;discriminatedunion;result;option;monad</PackageTags>
+        <PackageTags>functional;fp;union;discriminatedunion;taggedunion;result;option;monad;sourcegenerator;conversion;rop;railway;oriented;programming;pipeline</PackageTags>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageProjectUrl>https://github.com/pawelwilczewski/FuncNet</PackageProjectUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -34,4 +37,11 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\FuncNet.SourceGenerators\FuncNet.SourceGenerators.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false"/>
+    </ItemGroup>
+
 </Project>
