@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FuncNet;
 
-public readonly record struct Union<T0, T1, T2, T3, T4, T5, T6, T7>
+public readonly partial record struct Union<T0, T1, T2, T3, T4, T5, T6, T7>
 {
 	internal T0 Value0 { get; init; }
 	internal T1 Value1 { get; init; }
@@ -87,19 +87,6 @@ public readonly record struct Union<T0, T1, T2, T3, T4, T5, T6, T7>
 		new Union<T0, T1, T2, T3, T4, T5, T6, T7>(6, value6: value);
 	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6, T7>(T7 value) =>
 		new Union<T0, T1, T2, T3, T4, T5, T6, T7>(7, value7: value);
-
-	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6, T7>(Union<T0, T1> other) =>
-		new Union<T0, T1, T2, T3, T4, T5, T6, T7>(other.Index, other.Value0, other.Value1);
-	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6, T7>(Union<T0, T1, T2> other) =>
-		new Union<T0, T1, T2, T3, T4, T5, T6, T7>(other.Index, other.Value0, other.Value1, other.Value2);
-	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6, T7>(Union<T0, T1, T2, T3> other) =>
-		new Union<T0, T1, T2, T3, T4, T5, T6, T7>(other.Index, other.Value0, other.Value1, other.Value2, other.Value3);
-	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6, T7>(Union<T0, T1, T2, T3, T4> other) =>
-		new Union<T0, T1, T2, T3, T4, T5, T6, T7>(other.Index, other.Value0, other.Value1, other.Value2, other.Value3, other.Value4);
-	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6, T7>(Union<T0, T1, T2, T3, T4, T5> other) =>
-		new Union<T0, T1, T2, T3, T4, T5, T6, T7>(other.Index, other.Value0, other.Value1, other.Value2, other.Value3, other.Value4, other.Value5);
-	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6, T7>(Union<T0, T1, T2, T3, T4, T5, T6> other) =>
-		new Union<T0, T1, T2, T3, T4, T5, T6, T7>(other.Index, other.Value0, other.Value1, other.Value2, other.Value3, other.Value4, other.Value5, other.Value6);
 
 	public static Union<T0, T1, T2, T3, T4, T5, T6, T7> FromT0(T0 value) => value;
 	public static Union<T0, T1, T2, T3, T4, T5, T6, T7> FromT1(T1 value) => value;

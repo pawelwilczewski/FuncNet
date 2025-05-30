@@ -23,8 +23,6 @@ public readonly partial record struct Result<TSuccess, TError0, TError1>
     public static implicit operator Result<TSuccess, TError0, TError1>(TError0 value) => new Result<TSuccess, TError0, TError1>(value);
     public static implicit operator Result<TSuccess, TError0, TError1>(TError1 value) => new Result<TSuccess, TError0, TError1>(value);
 
-    public static implicit operator Result<TSuccess, TError0, TError1>(Result<TSuccess, TError0> other) => new Result<TSuccess, TError0, TError1>(other.Value);
-
     public static Result<TSuccess, TError0, TError1> FromSuccess(TSuccess value) => value;
     public static Result<TSuccess, TError0, TError1> FromError(TError0 value) => value;
     public static Result<TSuccess, TError0, TError1> FromError(TError1 value) => value;

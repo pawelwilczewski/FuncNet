@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FuncNet;
 
-public readonly record struct Union<T0, T1>
+public readonly partial record struct Union<T0, T1>
 {
 	internal T0 Value0 { get; init; }
 	internal T1 Value1 { get; init; }
@@ -45,8 +45,6 @@ public readonly record struct Union<T0, T1>
 		new Union<T0, T1>(0, value0: value);
 	public static implicit operator Union<T0, T1>(T1 value) =>
 		new Union<T0, T1>(1, value1: value);
-
-	
 
 	public static Union<T0, T1> FromT0(T0 value) => value;
 	public static Union<T0, T1> FromT1(T1 value) => value;

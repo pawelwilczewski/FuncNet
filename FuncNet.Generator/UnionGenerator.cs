@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace {@namespace};
 
-public readonly record struct {UnionOfTs(unionSize)}
+public readonly partial record struct {UnionOfTs(unionSize)}
 {{
 	{JoinRangeToString("\n\t", unionSize, i => $"internal T{i} Value{i} {{ get; init; }}")}
 
@@ -49,10 +49,6 @@ public readonly record struct {UnionOfTs(unionSize)}
 	{JoinRangeToString("\n\t", unionSize, i =>
 		$@"public static implicit operator {UnionOfTs(unionSize)}(T{i} value) =>
 		new {UnionOfTs(unionSize)}({i}, value{i}: value);")}
-
-	{JoinRangeToString("\n\t", 2, unionSize - 2, otherUnionSize =>
-		$@"public static implicit operator {UnionOfTs(unionSize)}({UnionOfTs(otherUnionSize)} other) =>
-		new {UnionOfTs(unionSize)}(other.Index, {JoinRangeToString(", ", otherUnionSize, i => $"other.Value{i}")});")}
 
 	{JoinRangeToString("\n\t", unionSize, i =>
 		$"public static {UnionOfTs(unionSize)} FromT{i}(T{i} value) => value;")}
