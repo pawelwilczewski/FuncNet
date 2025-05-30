@@ -1,10 +1,10 @@
 using System.Collections.Immutable;
 using System.Text.RegularExpressions;
-using FuncNet.CodeGeneration;
-using FuncNet.CodeGeneration.Models;
+using FuncNet.SourceGenerators.CodeGeneration;
+using FuncNet.SourceGenerators.CodeGeneration.Models;
 using Microsoft.CodeAnalysis;
 
-namespace FuncNet.Conversions;
+namespace FuncNet.SourceGenerators.Conversions;
 
 internal sealed class ImplicitConversionGenerator
 {

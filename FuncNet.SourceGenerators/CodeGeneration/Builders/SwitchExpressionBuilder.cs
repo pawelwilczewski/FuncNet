@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace FuncNet.CodeGeneration.Builders;
+namespace FuncNet.SourceGenerators.CodeGeneration.Builders;
 
 internal sealed class SwitchExpressionBuilder
 {

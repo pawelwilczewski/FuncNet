@@ -1,6 +1,7 @@
+using FuncNet.SourceGenerators.Conversions;
 using Microsoft.CodeAnalysis;
 
-namespace FuncNet.Conversions;
+namespace FuncNet.SourceGenerators;
 
 [Generator]
 public sealed class UnionConversionGenerator : IIncrementalGenerator

@@ -1,4 +1,4 @@
-namespace FuncNet.CodeGeneration.Models;
+namespace FuncNet.SourceGenerators.CodeGeneration.Models;
 
 [Flags]
 public enum UnionMethodAsyncConfig

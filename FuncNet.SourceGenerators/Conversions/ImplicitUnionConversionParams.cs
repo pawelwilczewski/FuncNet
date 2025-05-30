@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 
-namespace FuncNet.Conversions;
+namespace FuncNet.SourceGenerators.Conversions;
 
 internal readonly record struct ImplicitUnionConversionParams(
 	int ConversionTargetGenericSize,

@@ -1,4 +1,4 @@
-namespace FuncNet.CodeGeneration.Builders;
+namespace FuncNet.SourceGenerators.CodeGeneration.Builders;
 
 internal sealed class ClassBuilder
 {
