@@ -45,4 +45,11 @@
                           PrivateAssets="all"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="..\FuncNet.SourceGenerators\bin\$(Configuration)\netstandard2.0\FuncNet.SourceGenerators.dll"
+              Pack="true"
+              PackagePath="analyzers/dotnet/cs"
+              Visible="false"/>
+    </ItemGroup>
+
 </Project>
