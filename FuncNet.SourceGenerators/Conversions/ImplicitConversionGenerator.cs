@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using System.Text.RegularExpressions;
-using FuncNet.SourceGenerators.CodeGeneration;
 using FuncNet.SourceGenerators.CodeGeneration.Models;
 using Microsoft.CodeAnalysis;
 
@@ -33,52 +32,6 @@ internal sealed class ImplicitConversionGenerator
 
 	public void Initialize(IncrementalGeneratorInitializationContext initializationContext)
 	{
-		var allRelevantSyntaxTreeInfos =
-			initializationContext.CompilationProvider.SelectMany((compilation, cancellationToken) =>
-			{
-				var infos = new List<SyntaxTreeInfo>();
-
-				// Add syntax trees from the current project
-				foreach (var tree in compilation.SyntaxTrees)
-				{
-					infos.Add(new SyntaxTreeInfo(tree.FilePath, tree.GetText(cancellationToken).ToString()));
-				}
-
-				// Add syntax trees from referenced projects (if they are CompilationReferences)
-				foreach (var reference in compilation.References)
-				{
-					if (reference is CompilationReference compRef)
-					{
-						var referencedCompilation = compRef.Compilation;
-						foreach (var tree in referencedCompilation.SyntaxTrees)
-						{
-							infos.Add(new SyntaxTreeInfo(tree.FilePath, tree.GetText(cancellationToken).ToString()));
-						}
-					}
-				}
-
-				return infos.ToImmutableArray();
-			});
-
-		var test = allRelevantSyntaxTreeInfos.Collect();
-
-		initializationContext.RegisterSourceOutput(test, (sourceProductionContext, allData) =>
-		{
-			if (allData.IsEmpty)
-			{
-				return;
-			}
-
-#pragma warning disable RS1035
-			File.AppendAllLines("C:/temp/infos.txt",
-			[
-				$"--- Start {DateTime.Now} --- {typeof(ImplicitConversionGenerator).Assembly.FullName} --- ",
-				..allData.Select(info => info.FilePath),
-				"--- End ---\n"
-			]);
-#pragma warning restore RS1035
-		});
-
 		var unionTypeDeclarations = initializationContext.SyntaxProvider
 			.CreateSyntaxProvider(
 				(syntaxNode, _) => syntaxNode.ToString().Contains($"{typeName}<"),
@@ -114,8 +67,8 @@ internal sealed class ImplicitConversionGenerator
 			.Where(unions => unions.bigger.Length >= unions.smaller.Length)
 			.Where(unions => unions.smaller.All(type => unions.bigger.Contains(type)))
 			.Select(ToUnionConversionParams)
-			.Concat(basicConversions)
 			.Distinct()
+			.Except(basicConversions)
 			.Where(filterConversionParams)
 			.Select(GenerateImplicitConversion);
 
@@ -143,6 +96,4 @@ public readonly partial record struct {typeName}<{targetTypeParams}>
 			{string.Join(",\n\t\t\t", @params.ConversionSourceGenericArgsOrder.Select(i => $"t{i} => t{i}"))});
 }}", @params, typeName);
 	}
-
-	private sealed record class SyntaxTreeInfo(string FilePath, string SourceText);
 }

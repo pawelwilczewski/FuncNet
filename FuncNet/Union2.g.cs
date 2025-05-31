@@ -46,6 +46,8 @@ public readonly partial record struct Union<T0, T1>
 	public static implicit operator Union<T0, T1>(T1 value) =>
 		new Union<T0, T1>(1, value1: value);
 
+	
+
 	public static Union<T0, T1> FromT0(T0 value) => value;
 	public static Union<T0, T1> FromT1(T1 value) => value;
 

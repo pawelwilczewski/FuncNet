@@ -81,6 +81,17 @@ public readonly partial record struct Union<T0, T1, T2, T3, T4, T5, T6>
 	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6>(T6 value) =>
 		new Union<T0, T1, T2, T3, T4, T5, T6>(6, value6: value);
 
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6>(Union<T0, T1> other) =>
+		new Union<T0, T1, T2, T3, T4, T5, T6>(other.Index, other.Value0, other.Value1);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6>(Union<T0, T1, T2> other) =>
+		new Union<T0, T1, T2, T3, T4, T5, T6>(other.Index, other.Value0, other.Value1, other.Value2);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6>(Union<T0, T1, T2, T3> other) =>
+		new Union<T0, T1, T2, T3, T4, T5, T6>(other.Index, other.Value0, other.Value1, other.Value2, other.Value3);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6>(Union<T0, T1, T2, T3, T4> other) =>
+		new Union<T0, T1, T2, T3, T4, T5, T6>(other.Index, other.Value0, other.Value1, other.Value2, other.Value3, other.Value4);
+	public static implicit operator Union<T0, T1, T2, T3, T4, T5, T6>(Union<T0, T1, T2, T3, T4, T5> other) =>
+		new Union<T0, T1, T2, T3, T4, T5, T6>(other.Index, other.Value0, other.Value1, other.Value2, other.Value3, other.Value4, other.Value5);
+
 	public static Union<T0, T1, T2, T3, T4, T5, T6> FromT0(T0 value) => value;
 	public static Union<T0, T1, T2, T3, T4, T5, T6> FromT1(T1 value) => value;
 	public static Union<T0, T1, T2, T3, T4, T5, T6> FromT2(T2 value) => value;

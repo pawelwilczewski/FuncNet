@@ -33,6 +33,9 @@ public readonly partial record struct {ResultOfTs(unionSize)}
     {JoinRangeToString("\n    ", unionSize - 1, errorIndex =>
 		$"public static implicit operator {ResultOfTs(unionSize)}(TError{errorIndex} value) => new {ResultOfTs(unionSize)}(value);")}
 
+    {JoinRangeToString("\n    ", 2, unionSize - 2, otherUnionSize =>
+		$"public static implicit operator {ResultOfTs(unionSize)}({ResultOfTs(otherUnionSize)} other) => new {ResultOfTs(unionSize)}(other.Value);")}
+
     public static {ResultOfTs(unionSize)} FromSuccess(TSuccess value) => value;
     {JoinRangeToString("\n    ", unionSize - 1, errorIndex =>
 		$"public static {ResultOfTs(unionSize)} FromError(TError{errorIndex} value) => value;")}
