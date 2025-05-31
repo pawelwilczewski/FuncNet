@@ -92,7 +92,7 @@ namespace FuncNet;
 public readonly partial record struct {typeName}<{targetTypeParams}>
 {{
     public static implicit operator {typeName}<{targetTypeParams}>({typeName}<{sourceTypeParams}> source) =>
-		source.Match<{typeName}<{targetTypeParams}>, {sourceTypeParams}>(
+		{typeName}{@params.ConversionSourceGenericArgsOrder.Count}Match.Match<{typeName}<{targetTypeParams}>, {sourceTypeParams}>(source,
 			{string.Join(",\n\t\t\t", @params.ConversionSourceGenericArgsOrder.Select(i => $"t{i} => t{i}"))});
 }}", @params, typeName);
 	}
