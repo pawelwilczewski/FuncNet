@@ -10,7 +10,7 @@
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <IsRoslynComponent>true</IsRoslynComponent>
         <IncludeBuildOutput>true</IncludeBuildOutput>
-        <DevelopmentDependency>false</DevelopmentDependency>
+        <DevelopmentDependency>true</DevelopmentDependency>
     </PropertyGroup>
 
     <PropertyGroup>
