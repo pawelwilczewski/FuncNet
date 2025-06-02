@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 
 namespace FuncNet.Conversions;
 
-internal sealed class ImplicitConversionGenerator
+internal sealed class ImplicitConversionGenerator : IIncrementalGenerator
 {
 	private static readonly ImmutableArray<ImplicitUnionConversionParams> basicConversions =
 		(from targetTypeCount in Enumerable.Range(3, UnionMethodConfigConsts.MAX_UNION_SIZE - 2)
@@ -38,10 +38,20 @@ internal sealed class ImplicitConversionGenerator
 				(syntaxNode, _) => syntaxNode.ToString().Contains($"{typeName}<"),
 				(context, _) => context.Node);
 
-		initializationContext.RegisterSourceOutput(
-			unionTypeDeclarations.Collect(),
-			(context, unionTypes) =>
+		var compilationAndUnionTypes = initializationContext.CompilationProvider
+			.Combine(unionTypeDeclarations.Collect());
+
+		initializationContext.RegisterSourceOutput(compilationAndUnionTypes,
+			(context, source) =>
 			{
+				var compilation = source.Left;
+				var unionTypes = source.Right;
+
+				var hasFuncNetReference = compilation.ReferencedAssemblyNames
+					.Any(assemblyIdentity => assemblyIdentity.Name.Equals("FuncNet", StringComparison.OrdinalIgnoreCase));
+
+				if (!hasFuncNetReference) return;
+
 				var conversions = GenerateCompatibleConversions(ExtractUnionTypes(unionTypes));
 
 				foreach (var conversion in conversions)
