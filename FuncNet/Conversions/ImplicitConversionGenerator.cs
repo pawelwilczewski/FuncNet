@@ -38,20 +38,10 @@ internal sealed class ImplicitConversionGenerator : IIncrementalGenerator
 				(syntaxNode, _) => syntaxNode.ToString().Contains($"{typeName}<"),
 				(context, _) => context.Node);
 
-		var compilationAndUnionTypes = initializationContext.CompilationProvider
-			.Combine(unionTypeDeclarations.Collect());
-
-		initializationContext.RegisterSourceOutput(compilationAndUnionTypes,
-			(context, source) =>
+		initializationContext.RegisterSourceOutput(
+			unionTypeDeclarations.Collect(),
+			(context, unionTypes) =>
 			{
-				var compilation = source.Left;
-				var unionTypes = source.Right;
-
-				var hasFuncNetReference = compilation.ReferencedAssemblyNames
-					.Any(assemblyIdentity => assemblyIdentity.Name.Equals("FuncNet", StringComparison.OrdinalIgnoreCase));
-
-				if (!hasFuncNetReference) return;
-
 				var conversions = GenerateCompatibleConversions(ExtractUnionTypes(unionTypes));
 
 				foreach (var conversion in conversions)

@@ -1,4 +1,3 @@
-using FuncNet.CodeGeneration;
 using Microsoft.CodeAnalysis;
 using static FuncNet.CodeGeneration.Models.UnionMethodConfigConsts;
 
@@ -13,8 +12,8 @@ internal sealed class BaseTypesGenerator : ISourceGenerator
 	{
 		for (var unionSize = 2; unionSize <= MAX_UNION_SIZE; ++unionSize)
 		{
-			context.AddSourceIfNotExists($"Union{unionSize}", UnionGenerator.GenerateUnionFile(NAMESPACE, unionSize));
-			context.AddSourceIfNotExists($"Result{unionSize}", ResultGenerator.GenerateResultFile(NAMESPACE, unionSize));
+			context.AddSource($"Union{unionSize}", UnionGenerator.GenerateUnionFile(NAMESPACE, unionSize));
+			context.AddSource($"Result{unionSize}", ResultGenerator.GenerateResultFile(NAMESPACE, unionSize));
 		}
 	}
 }
