@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace FuncNet;
+namespace FuncNet.Analyzers;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
