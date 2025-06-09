@@ -24,14 +24,14 @@ $ReleaseDirectories = Get-ChildItem -Path $SearchRoot -Directory -Recurse -Filte
 
 if ($ReleaseDirectories.Count -eq 0) {
     Write-Host "No 'Release' directories found under $SearchRoot."
-    Write-Host "Script finished. No files were copied."
+    Write-Host "Script finished. No files were moved."
     exit 0
 }
 
 Write-Host "Found $($ReleaseDirectories.Count) 'Release' director(y/ies). Searching for .nupkg files within them..."
 
-$copiedFilesCount = 0
-$filesToCopy = New-Object System.Collections.Generic.List[System.IO.FileInfo]
+$movedFilesCount = 0
+$filesToMove = New-Object System.Collections.Generic.List[System.IO.FileInfo]
 
 foreach ($dir in $ReleaseDirectories) {
     $nupkgFilesInDir = @(Get-ChildItem -Path $dir.FullName -Filter "*.nupkg" -File -ErrorAction SilentlyContinue)
@@ -49,7 +49,7 @@ foreach ($dir in $ReleaseDirectories) {
 
             if ($match) {
                 Write-Host "    -> Matches filter, will be processed."
-                $filesToCopy.Add($file)
+                $filesToMove.Add($file)
             } else {
                 Write-Host "    -> Does not match filter, will be skipped."
             }
@@ -57,35 +57,35 @@ foreach ($dir in $ReleaseDirectories) {
     }
 }
 
-if ($filesToCopy.Count -eq 0) {
+if ($filesToMove.Count -eq 0) {
     Write-Host "No .nupkg files matching the project filter found in any of the 'Release' directories."
-    Write-Host "Script finished. No files were copied."
+    Write-Host "Script finished. No files were moved."
     exit 0
 }
 
 Write-Host "--------------------------------------------------"
-Write-Host "Found a total of $($filesToCopy.Count) .nupkg file(s) matching the filter to process."
+Write-Host "Found a total of $($filesToMove.Count) .nupkg file(s) matching the filter to process."
 Write-Host "--------------------------------------------------"
 
-foreach ($nupkgFile in $filesToCopy) {
+foreach ($nupkgFile in $filesToMove) {
     $DestinationPath = Join-Path -Path $LocalNuGetFeed -ChildPath $nupkgFile.Name
-    Write-Host "Attempting to copy '$($nupkgFile.FullName)'"
+    Write-Host "Attempting to move '$($nupkgFile.FullName)'"
     Write-Host "                 to '$DestinationPath'..."
     try {
-        Copy-Item -Path $nupkgFile.FullName -Destination $DestinationPath -Force -ErrorAction Stop
-        Write-Host "Successfully copied '$($nupkgFile.Name)'."
-        $copiedFilesCount++
+        Move-Item -Path $nupkgFile.FullName -Destination $DestinationPath -Force -ErrorAction Stop
+        Write-Host "Successfully moved '$($nupkgFile.Name)'."
+        $movedFilesCount++
     }
     catch {
-        Write-Error "Failed to copy '$($nupkgFile.FullName)'. Error: $($_.Exception.Message)"
+        Write-Error "Failed to move '$($nupkgFile.FullName)'. Error: $($_.Exception.Message)"
     }
     Write-Host ""
 }
 
 Write-Host "--------------------------------------------------"
-if ($copiedFilesCount -gt 0) {
-    Write-Host "Successfully copied $copiedFilesCount .nupkg file(s) to $LocalNuGetFeed."
+if ($movedFilesCount -gt 0) {
+    Write-Host "Successfully moved $movedFilesCount .nupkg file(s) to $LocalNuGetFeed."
 } else {
-    Write-Host "No .nupkg files were successfully copied."
+    Write-Host "No .nupkg files were successfully moved."
 }
 Write-Host "Script finished."
