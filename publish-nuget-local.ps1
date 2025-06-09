@@ -1,4 +1,5 @@
 $LocalNuGetFeed = "C:\dev\LocalNuGetFeed"
+$AllowedProjectNamePrefixes = @("FuncNet", "FuncNet.Analyzers")
 
 $SearchRoot = $PSScriptRoot 
 if ($null -eq $PSScriptRoot -or $PSScriptRoot -eq "") {
@@ -30,27 +31,43 @@ if ($ReleaseDirectories.Count -eq 0) {
 Write-Host "Found $($ReleaseDirectories.Count) 'Release' director(y/ies). Searching for .nupkg files within them..."
 
 $copiedFilesCount = 0
-$filesToMove = New-Object System.Collections.Generic.List[System.IO.FileInfo]
+$filesToCopy = New-Object System.Collections.Generic.List[System.IO.FileInfo]
 
 foreach ($dir in $ReleaseDirectories) {
     $nupkgFilesInDir = @(Get-ChildItem -Path $dir.FullName -Filter "*.nupkg" -File -ErrorAction SilentlyContinue)
     if ($nupkgFilesInDir.Count -gt 0) {
-        Write-Host "Found $($nupkgFilesInDir.Count) .nupkg file(s) in $($dir.FullName)"
-        $filesToMove.AddRange([System.IO.FileInfo[]]$nupkgFilesInDir)
+        Write-Host "Found $($nupkgFilesInDir.Count) .nupkg file(s) in $($dir.FullName):"
+        foreach ($file in $nupkgFilesInDir) {
+            Write-Host "  - Checking file: $($file.Name)" 
+            $match = $false
+            foreach ($prefix in $AllowedProjectNamePrefixes) {
+                if ($file.Name.StartsWith($prefix + ".") -and $file.Name.Substring($prefix.Length + 1) -match "^\d") {
+                    $match = $true
+                    break
+                }
+            }
+
+            if ($match) {
+                Write-Host "    -> Matches filter, will be processed."
+                $filesToCopy.Add($file)
+            } else {
+                Write-Host "    -> Does not match filter, will be skipped."
+            }
+        }
     }
 }
 
-if ($filesToMove.Count -eq 0) {
-    Write-Host "No .nupkg files found in any of the 'Release' directories."
+if ($filesToCopy.Count -eq 0) {
+    Write-Host "No .nupkg files matching the project filter found in any of the 'Release' directories."
     Write-Host "Script finished. No files were copied."
     exit 0
 }
 
 Write-Host "--------------------------------------------------"
-Write-Host "Found a total of $($filesToMove.Count) .nupkg file(s) to process."
+Write-Host "Found a total of $($filesToCopy.Count) .nupkg file(s) matching the filter to process."
 Write-Host "--------------------------------------------------"
 
-foreach ($nupkgFile in $filesToMove) {
+foreach ($nupkgFile in $filesToCopy) {
     $DestinationPath = Join-Path -Path $LocalNuGetFeed -ChildPath $nupkgFile.Name
     Write-Host "Attempting to copy '$($nupkgFile.FullName)'"
     Write-Host "                 to '$DestinationPath'..."
