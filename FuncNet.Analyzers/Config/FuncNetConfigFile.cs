@@ -2,7 +2,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace FuncNet.Analyzers;
+namespace FuncNet.Analyzers.Config;
 
 internal sealed record class FuncNetConfigFile
 {

@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Composition;
 using System.Runtime.CompilerServices;
+using FuncNet.Analyzers.Config;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -51,9 +52,7 @@ public class UnionRegistrationCodeFixProvider : CodeFixProvider
 			rootProject, FuncNetConfigFile.FILE_NAME, cancellationToken);
 
 		var newCommentText = $"// {unionTypeStringToAdd}";
-		if (funcNetFileConfig.SyntaxRoot.DescendantTrivia()
-			.Any(t => t.IsKind(SyntaxKind.SingleLineCommentTrivia)
-				&& t.ToString().Trim() == newCommentText.Trim()))
+		if (funcNetFileConfig.SyntaxRoot.)
 		{
 			return solution;
 		}
