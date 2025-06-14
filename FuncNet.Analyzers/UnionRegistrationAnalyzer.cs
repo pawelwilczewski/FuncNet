@@ -11,9 +11,8 @@ namespace FuncNet.Analyzers;
 internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 {
 	public const string DIAGNOSTIC_ID = "FN0001";
-	private const string CATEGORY = "FuncNet";
-	private const string DOMAIN_PROJECT_NAME = "Domain";
-	public const string TARGET_FILE_NAME = "FuncNetConfig.cs";
+	private const string CATEGORY = nameof(FuncNet);
+	private const string CONFIG_PROJECT_NAME = "Root";
 
 	private static readonly Regex unionTypeRegex = new(".*FuncNet.Union<(.*)>", RegexOptions.Compiled);
 
@@ -24,7 +23,7 @@ internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 		CATEGORY,
 		DiagnosticSeverity.Warning,
 		true,
-		"Union types should be registered in the Domain project's _UnionConversions.cs file to enable source generation of necessary conversions/helpers.");
+		$"Union types should be registered in the {CONFIG_PROJECT_NAME} project's _UnionConversions.cs file to enable source generation of necessary conversions/helpers.");
 
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(rule);
 
@@ -70,8 +69,8 @@ internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 					genericNameNode.Identifier.GetLocation(),
 					properties,
 					unionTypeDisplayString,
-					DOMAIN_PROJECT_NAME,
-					TARGET_FILE_NAME);
+					CONFIG_PROJECT_NAME,
+					FuncNetConfigFile.FILE_NAME);
 				context.ReportDiagnostic(diagnostic);
 			}
 		}

@@ -13,7 +13,7 @@ public enum UnionMethodAsyncConfig
 internal static class UnionMethodConfigConsts
 {
 	public const int MAX_UNION_SIZE = 8;
-	public const string NAMESPACE = "FuncNet";
+	public const string NAMESPACE = nameof(FuncNet);
 
 	public static UnionMethodAsyncConfig[] AllPossibleMethodAsyncConfigs { get; } =
 	[
