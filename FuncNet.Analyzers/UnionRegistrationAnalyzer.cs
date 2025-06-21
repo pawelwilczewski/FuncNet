@@ -24,7 +24,7 @@ internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 		CATEGORY,
 		DiagnosticSeverity.Warning,
 		true,
-		$"Union types should be registered in the {CONFIG_PROJECT_NAME} project's _UnionConversions.cs file to enable source generation of necessary conversions/helpers.");
+		$"Union types should be registered in the {CONFIG_PROJECT_NAME} project's {FuncNetConfigFile.FILE_NAME} file to enable source generation of necessary conversions/helpers.");
 
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(rule);
 
