@@ -5,9 +5,6 @@ using FuncNet.Analyzers.Config;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Formatting;
 
 namespace FuncNet.Analyzers;
 
@@ -42,54 +39,17 @@ public class UnionRegistrationCodeFixProvider : CodeFixProvider
 
 	private static async Task<Solution> AddOrUpdateUnionRegistrationFileAsync(
 		Solution solution,
-		string unionTypeStringToAdd,
+		string unionTypeName,
 		CancellationToken cancellationToken)
 	{
-		var rootProject = await GetRootProject(solution, cancellationToken);
+		var rootProject = await GetRootProject(solution, cancellationToken).ConfigureAwait(false);
 		if (rootProject == null) return solution;
 
 		var funcNetFileConfig = await FuncNetConfigFile.GetOrCreate(
-			rootProject, FuncNetConfigFile.FILE_NAME, cancellationToken);
+				rootProject, FuncNetConfigFile.FILE_NAME, cancellationToken)
+			.ConfigureAwait(false);
 
-		var newCommentText = $"// {unionTypeStringToAdd}";
-		if (funcNetFileConfig.SyntaxRoot.)
-		{
-			return solution;
-		}
-
-		var funcNetNamespace = funcNetFileConfig.SyntaxRoot.DescendantNodes()
-			.OfType<NamespaceDeclarationSyntax>()
-			.FirstOrDefault(n => n.Name.ToString() == nameof(FuncNet));
-
-		var newCommentTriviaWithLineEnding = SyntaxFactory.TriviaList(
-			SyntaxFactory.Comment(newCommentText),
-			SyntaxFactory.CarriageReturnLineFeed);
-
-		if (funcNetNamespace != null)
-		{
-			var closeBrace = funcNetNamespace.CloseBraceToken;
-			var newLeadingTrivia = closeBrace.LeadingTrivia.AddRange(newCommentTriviaWithLineEnding);
-			var newCloseBrace = closeBrace.WithLeadingTrivia(newLeadingTrivia);
-			var updatedNamespace = funcNetNamespace.WithCloseBraceToken(newCloseBrace);
-			funcNetFileConfig = funcNetFileConfig.WithSyntaxRoot(root =>
-				root.ReplaceNode(funcNetNamespace, updatedNamespace));
-		}
-		else
-		{
-			funcNetNamespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(nameof(FuncNet)))
-				.WithOpenBraceToken(SyntaxFactory.Token(SyntaxKind.OpenBraceToken))
-				.WithCloseBraceToken(
-					SyntaxFactory.Token(SyntaxKind.CloseBraceToken)
-						.WithLeadingTrivia(newCommentTriviaWithLineEnding));
-			funcNetFileConfig = funcNetFileConfig.WithSyntaxRoot(root =>
-				root.AddMembers(funcNetNamespace));
-		}
-
-		funcNetFileConfig = funcNetFileConfig.WithSyntaxRoot(root =>
-			(CompilationUnitSyntax)Formatter.Format(
-				root, solution.Workspace, solution.Workspace.Options, cancellationToken));
-
-		return funcNetFileConfig.Document.Project.Solution;
+		return funcNetFileConfig.WithUnionRegistration(unionTypeName, solution.Workspace).Document.Project.Solution;
 	}
 
 	private static async Task<Project?> GetRootProject(Solution solution, CancellationToken cancellationToken) =>
@@ -113,9 +73,4 @@ public class UnionRegistrationCodeFixProvider : CodeFixProvider
 	}
 
 	private sealed record class ProjectWithCompilation(Project Project, Compilation Compilation);
-
-	private sealed record class ConfigFileInfo(
-		CompilationUnitSyntax CompilationRoot,
-		DocumentId Id,
-		Document? Document);
 }

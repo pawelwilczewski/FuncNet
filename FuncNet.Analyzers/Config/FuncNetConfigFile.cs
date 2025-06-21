@@ -1,6 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
 
 namespace FuncNet.Analyzers.Config;
 
@@ -10,7 +11,7 @@ internal sealed record class FuncNetConfigFile
 
 	public Document Document { get; init; }
 
-	public CompilationUnitSyntax SyntaxRoot
+	private CompilationUnitSyntax SyntaxRoot
 	{
 		get
 		{
@@ -26,10 +27,49 @@ internal sealed record class FuncNetConfigFile
 	private FuncNetConfigFile(Document document) =>
 		Document = document;
 
-	public bool HasSingleComment(string comment) =>
+	private bool HasSingleComment(string comment) =>
 		SyntaxRoot.DescendantTrivia()
 			.Any(t => t.IsKind(SyntaxKind.SingleLineCommentTrivia)
 				&& t.ToString().Contains(comment.Trim()));
+
+	public FuncNetConfigFile WithUnionRegistration(string unionTypeName, Workspace workspace)
+	{
+		if (HasSingleComment(unionTypeName)) return this;
+
+		var newCommentTriviaWithLineEnding = SyntaxFactory.TriviaList(
+			SyntaxFactory.Comment(unionTypeName),
+			SyntaxFactory.CarriageReturnLineFeed);
+
+		var funcNetNamespace = SyntaxRoot.DescendantNodes()
+			.OfType<NamespaceDeclarationSyntax>()
+			.FirstOrDefault(n => n.Name.ToString() == nameof(FuncNet));
+
+		var result = this;
+		if (funcNetNamespace != null)
+		{
+			var closeBrace = funcNetNamespace.CloseBraceToken;
+			var newLeadingTrivia = closeBrace.LeadingTrivia.AddRange(newCommentTriviaWithLineEnding);
+			var newCloseBrace = closeBrace.WithLeadingTrivia(newLeadingTrivia);
+			var updatedNamespace = funcNetNamespace.WithCloseBraceToken(newCloseBrace);
+			result = result.WithSyntaxRoot(root =>
+				root.ReplaceNode(funcNetNamespace, updatedNamespace));
+		}
+		else
+		{
+			funcNetNamespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(nameof(FuncNet)))
+				.WithOpenBraceToken(SyntaxFactory.Token(SyntaxKind.OpenBraceToken))
+				.WithCloseBraceToken(
+					SyntaxFactory.Token(SyntaxKind.CloseBraceToken)
+						.WithLeadingTrivia(newCommentTriviaWithLineEnding));
+			result = result.WithSyntaxRoot(root =>
+				root.AddMembers(funcNetNamespace));
+		}
+
+		result = result.WithSyntaxRoot(root =>
+			(CompilationUnitSyntax)Formatter.Format(root, workspace, workspace.Options));
+
+		return result;
+	}
 
 	public static async Task<FuncNetConfigFile> GetOrCreate(
 		Project rootProject,
@@ -58,7 +98,7 @@ internal sealed record class FuncNetConfigFile
 		return new FuncNetConfigFile(document);
 	}
 
-	public FuncNetConfigFile WithSyntaxRoot(Func<CompilationUnitSyntax, CompilationUnitSyntax> mapRoot) =>
+	private FuncNetConfigFile WithSyntaxRoot(Func<CompilationUnitSyntax, CompilationUnitSyntax> mapRoot) =>
 		this with
 		{
 			Document = Document.WithSyntaxRoot(mapRoot(SyntaxRoot))
