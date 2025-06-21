@@ -20,7 +20,7 @@ internal sealed record class FuncNetConfigFile
 				throw new Exception("Unreachable: should always have syntax tree cached");
 			}
 
-			return (CompilationUnitSyntax)syntaxTree!.GetRoot();
+			return (CompilationUnitSyntax)syntaxTree.GetRoot();
 		}
 	}
 

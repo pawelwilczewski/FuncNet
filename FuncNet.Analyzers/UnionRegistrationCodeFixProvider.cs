@@ -56,10 +56,8 @@ public class UnionRegistrationCodeFixProvider : CodeFixProvider
 		(await AllProjectsWithCompilationFromSolution(solution, cancellationToken)
 			.FirstOrDefaultAsync(HasReferenceToFuncNet, cancellationToken))?.Project;
 
-	private static bool HasReferenceToFuncNet(ProjectWithCompilation project)
-	{
-		return project.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == nameof(FuncNet));
-	}
+	private static bool HasReferenceToFuncNet(ProjectWithCompilation project) =>
+		project.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == nameof(FuncNet));
 
 	private static async IAsyncEnumerable<ProjectWithCompilation> AllProjectsWithCompilationFromSolution(
 		Solution solution,
