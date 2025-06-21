@@ -72,12 +72,11 @@ internal sealed record class FuncNetConfigFile
 	}
 
 	public static async Task<FuncNetConfigFile> GetOrCreate(
-		Project rootProject,
-		string targetFileName,
+		Project configFileProject,
 		CancellationToken cancellationToken)
 	{
-		var document = rootProject.Documents.FirstOrDefault(doc =>
-			doc.Name.Equals(targetFileName, StringComparison.OrdinalIgnoreCase));
+		var document = configFileProject.Documents.FirstOrDefault(doc =>
+			doc.Name.Equals(FILE_NAME, StringComparison.OrdinalIgnoreCase));
 
 		if (document is null)
 		{
@@ -87,9 +86,9 @@ internal sealed record class FuncNetConfigFile
 ";
 			var root = SyntaxFactory.ParseCompilationUnit(initialFileContent);
 
-			var projectDirectory = Path.GetDirectoryName(rootProject.FilePath)!;
+			var projectDirectory = Path.GetDirectoryName(configFileProject.FilePath)!;
 			var newFilePath = Path.Combine(projectDirectory, FILE_NAME);
-			document = rootProject.AddDocument(FILE_NAME, root, filePath: newFilePath);
+			document = configFileProject.AddDocument(FILE_NAME, root, filePath: newFilePath);
 		}
 
 		// ensure syntax tree is cached

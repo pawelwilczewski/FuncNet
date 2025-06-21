@@ -45,8 +45,7 @@ public class UnionRegistrationCodeFixProvider : CodeFixProvider
 		var rootProject = await GetRootProject(solution, cancellationToken).ConfigureAwait(false);
 		if (rootProject == null) return solution;
 
-		var funcNetFileConfig = await FuncNetConfigFile.GetOrCreate(
-				rootProject, FuncNetConfigFile.FILE_NAME, cancellationToken)
+		var funcNetFileConfig = await FuncNetConfigFile.GetOrCreate(rootProject, cancellationToken)
 			.ConfigureAwait(false);
 
 		return funcNetFileConfig.WithUnionRegistration(unionTypeName, solution.Workspace).Document.Project.Solution;

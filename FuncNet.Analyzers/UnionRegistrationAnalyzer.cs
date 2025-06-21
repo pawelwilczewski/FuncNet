@@ -35,7 +35,7 @@ internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 		context.RegisterCompilationStartAction(CompilationStart);
 	}
 
-	private void CompilationStart(CompilationStartAnalysisContext compilationStartContext)
+	private static void CompilationStart(CompilationStartAnalysisContext compilationStartContext)
 	{
 		var registeredUnionStrings = new HashSet<string>();
 
@@ -52,28 +52,27 @@ internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 		var semanticModel = context.SemanticModel;
 
 		var symbol = semanticModel.GetSymbolInfo(genericNameNode, context.CancellationToken).Symbol;
-
-		if (symbol is INamedTypeSymbol namedTypeSymbol
-			&& unionTypeRegex.IsMatch(namedTypeSymbol.ConstructedFrom
-				.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat))
-			&& namedTypeSymbol.IsGenericType)
+		if (symbol is not INamedTypeSymbol namedTypeSymbol
+			|| !unionTypeRegex.IsMatch(
+				namedTypeSymbol.ConstructedFrom.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat))
+			|| !namedTypeSymbol.IsGenericType)
 		{
-			var unionTypeDisplayString = namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
-
-			if (!registeredUnions.Contains(unionTypeDisplayString))
-			{
-				var properties = ImmutableDictionary<string, string?>.Empty
-					.Add("UnionTypeString", unionTypeDisplayString);
-
-				var diagnostic = Diagnostic.Create(
-					rule,
-					genericNameNode.Identifier.GetLocation(),
-					properties,
-					unionTypeDisplayString,
-					CONFIG_PROJECT_NAME,
-					FuncNetConfigFile.FILE_NAME);
-				context.ReportDiagnostic(diagnostic);
-			}
+			return;
 		}
+
+		var unionTypeDisplayString = namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+		if (registeredUnions.Contains(unionTypeDisplayString)) return;
+
+		var properties = ImmutableDictionary<string, string?>.Empty
+			.Add("UnionTypeString", unionTypeDisplayString);
+
+		var diagnostic = Diagnostic.Create(
+			rule,
+			genericNameNode.Identifier.GetLocation(),
+			properties,
+			unionTypeDisplayString,
+			CONFIG_PROJECT_NAME,
+			FuncNetConfigFile.FILE_NAME);
+		context.ReportDiagnostic(diagnostic);
 	}
 }
