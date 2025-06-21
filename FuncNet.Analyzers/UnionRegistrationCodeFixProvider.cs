@@ -29,8 +29,8 @@ public class UnionRegistrationCodeFixProvider : CodeFixProvider
 		context.RegisterCodeFix(
 			CodeAction.Create(
 				$"Register '{unionTypeString}' in Root project's {FuncNetConfigFile.FILE_NAME}",
-				c => AddOrUpdateUnionRegistrationFileAsync(
-					context.Document.Project.Solution, unionTypeString!, c),
+				cancellationToken => AddOrUpdateUnionRegistrationFileAsync(
+					context.Document.Project.Solution, unionTypeString!, cancellationToken),
 				nameof(UnionRegistrationCodeFixProvider) + "_" + unionTypeString),
 			diagnostic);
 
@@ -52,13 +52,14 @@ public class UnionRegistrationCodeFixProvider : CodeFixProvider
 	}
 
 	private static async Task<Project?> GetRootProject(Solution solution, CancellationToken cancellationToken) =>
-		(await AllProjectsWithCompilationFromSolution(solution, cancellationToken)
-			.FirstOrDefaultAsync(HasReferenceToFuncNet, cancellationToken))?.Project;
+		(await AllProjectsWithCompilationInSolution(solution, cancellationToken)
+			.FirstOrDefaultAsync(HasReferenceToFuncNet, cancellationToken)
+			.ConfigureAwait(false))?.Project;
 
 	private static bool HasReferenceToFuncNet(ProjectWithCompilation project) =>
 		project.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == nameof(FuncNet));
 
-	private static async IAsyncEnumerable<ProjectWithCompilation> AllProjectsWithCompilationFromSolution(
+	private static async IAsyncEnumerable<ProjectWithCompilation> AllProjectsWithCompilationInSolution(
 		Solution solution,
 		[EnumeratorCancellation] CancellationToken cancellationToken)
 	{
