@@ -19,21 +19,22 @@ if (-not (Test-Path $LocalNuGetFeed)) {
     }
 }
 
-Write-Host "Searching for 'Release' directories under: $SearchRoot"
-$ReleaseDirectories = Get-ChildItem -Path $SearchRoot -Directory -Recurse -Filter "Release" -ErrorAction SilentlyContinue
+Write-Host "Searching for 'Release' and 'Debug' directories under: $SearchRoot"
+$BuildDirectories = Get-ChildItem -Path $SearchRoot -Directory -Recurse -Filter "Release" -ErrorAction SilentlyContinue
+$BuildDirectories += Get-ChildItem -Path $SearchRoot -Directory -Recurse -Filter "Debug" -ErrorAction SilentlyContinue
 
-if ($ReleaseDirectories.Count -eq 0) {
-    Write-Host "No 'Release' directories found under $SearchRoot."
+if ($BuildDirectories.Count -eq 0) {
+    Write-Host "No 'Release' or 'Debug' directories found under $SearchRoot."
     Write-Host "Script finished. No files were moved."
     exit 0
 }
 
-Write-Host "Found $($ReleaseDirectories.Count) 'Release' director(y/ies). Searching for .nupkg files within them..."
+Write-Host "Found $($BuildDirectories.Count) build director(y/ies). Searching for .nupkg files within them..."
 
 $movedFilesCount = 0
 $filesToMove = New-Object System.Collections.Generic.List[System.IO.FileInfo]
 
-foreach ($dir in $ReleaseDirectories) {
+foreach ($dir in $BuildDirectories) {
     $nupkgFilesInDir = @(Get-ChildItem -Path $dir.FullName -Filter "*.nupkg" -File -ErrorAction SilentlyContinue)
     if ($nupkgFilesInDir.Count -gt 0) {
         Write-Host "Found $($nupkgFilesInDir.Count) .nupkg file(s) in $($dir.FullName):"
@@ -58,7 +59,7 @@ foreach ($dir in $ReleaseDirectories) {
 }
 
 if ($filesToMove.Count -eq 0) {
-    Write-Host "No .nupkg files matching the project filter found in any of the 'Release' directories."
+    Write-Host "No .nupkg files matching the project filter found in any of the build directories."
     Write-Host "Script finished. No files were moved."
     exit 0
 }
