@@ -13,7 +13,6 @@ internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 {
 	public const string DIAGNOSTIC_ID = "FN0001";
 	private const string CATEGORY = nameof(FuncNet);
-	private const string CONFIG_PROJECT_NAME = "Root";
 
 	public const string UNION_TYPE_PROPERTY_NAME = "UnionTypeString";
 
@@ -22,11 +21,11 @@ internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 	private static readonly DiagnosticDescriptor rule = new(
 		DIAGNOSTIC_ID,
 		"Union type not registered",
-		"The Union type '{0}' is used but not registered in {1}/{2}. Consider registering it.",
+		"The Union type '{0}' is used but not registered in {1}. Consider registering it.",
 		CATEGORY,
 		DiagnosticSeverity.Warning,
 		true,
-		$"Union types should be registered in the {CONFIG_PROJECT_NAME} project's {FuncNetConfig.FILE_NAME} file to enable source generation of necessary conversions/helpers.");
+		$"Union types should be registered in {FuncNetConfig.FILE_NAME} file to enable source generation of necessary conversions/helpers.");
 
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(rule);
 
@@ -73,7 +72,6 @@ internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 			genericNameNode.Identifier.GetLocation(),
 			properties,
 			unionTypeDisplayString,
-			CONFIG_PROJECT_NAME,
 			FuncNetConfig.FILE_NAME);
 		context.ReportDiagnostic(diagnostic);
 	}

@@ -9,14 +9,14 @@ namespace FuncNet.Analyzers;
 
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(UnionRegistrationCodeFixProvider))]
 [Shared]
-public class UnionRegistrationCodeFixProvider : CodeFixProvider
+public sealed class UnionRegistrationCodeFixProvider : CodeFixProvider
 {
-	public sealed override ImmutableArray<string> FixableDiagnosticIds =>
+	public override ImmutableArray<string> FixableDiagnosticIds =>
 		ImmutableArray.Create(UnionRegistrationAnalyzer.DIAGNOSTIC_ID);
 
-	public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
+	public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
-	public sealed override Task RegisterCodeFixesAsync(CodeFixContext context)
+	public override Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
 		var diagnostic = context.Diagnostics.First();
 		if (!diagnostic.Properties.TryGetValue(UnionRegistrationAnalyzer.UNION_TYPE_PROPERTY_NAME, out var unionTypeString)
