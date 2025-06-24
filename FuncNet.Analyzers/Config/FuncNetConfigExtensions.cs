@@ -27,7 +27,7 @@ internal static class FuncNetConfigExtensions
 				filePath: Path.Combine(solution.FilePath!, FuncNetConfig.FILE_NAME));
 		}
 
-		configDocument = configProject.AdditionalDocuments.First(document => document.Id == configFileId);
+		configDocument = solution.GetProject(configProject.Id)!.GetAdditionalDocument(configFileId)!;
 		var configText = await configDocument.GetTextAsync(cancellationToken).ConfigureAwait(false);
 		var content = SimpleJson.SimpleJson.DeserializeObject<FuncNetConfigFileContent>(configText!.ToString())
 			?? new FuncNetConfigFileContent(ImmutableList<string>.Empty);
