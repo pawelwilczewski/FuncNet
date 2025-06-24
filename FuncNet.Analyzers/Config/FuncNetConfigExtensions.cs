@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
-using System.Text.Json;
 using Microsoft.CodeAnalysis;
 
 namespace FuncNet.Analyzers.Config;
@@ -24,13 +23,13 @@ internal static class FuncNetConfigExtensions
 			solution = solution.AddAdditionalDocument(
 				configFileId,
 				FuncNetConfig.FILE_NAME,
-				JsonSerializer.Serialize(new FuncNetConfigFileContent(ImmutableList<string>.Empty)),
+				SimpleJson.SimpleJson.SerializeObject(new FuncNetConfigFileContent(ImmutableList<string>.Empty)),
 				filePath: Path.Combine(solution.FilePath!, FuncNetConfig.FILE_NAME));
 		}
 
 		configDocument = configProject.AdditionalDocuments.First(document => document.Id == configFileId);
 		var configText = await configDocument.GetTextAsync(cancellationToken).ConfigureAwait(false);
-		var content = JsonSerializer.Deserialize<FuncNetConfigFileContent>(configText!.ToString())
+		var content = SimpleJson.SimpleJson.DeserializeObject<FuncNetConfigFileContent>(configText!.ToString())
 			?? new FuncNetConfigFileContent(ImmutableList<string>.Empty);
 
 		return new FuncNetConfig(solution, configDocument, content);
