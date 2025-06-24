@@ -47,12 +47,14 @@ public class UnionRegistrationCodeFixProvider : CodeFixProvider
 
 		var funcNetFileConfig = await FuncNetConfigFile.GetOrCreate(rootProject, cancellationToken)
 			.ConfigureAwait(false);
+		var updatedFuncNetFileConfig = funcNetFileConfig.WithUnionRegistration(unionTypeName, solution.Workspace);
 
-		return funcNetFileConfig.WithUnionRegistration(unionTypeName, solution.Workspace).Document.Project.Solution;
+		return updatedFuncNetFileConfig.Document.Project.Solution;
 	}
 
 	private static async Task<Project?> GetRootProject(Solution solution, CancellationToken cancellationToken) =>
 		(await AllProjectsWithCompilationInSolution(solution, cancellationToken)
+			.Where(project => !project.Project.Name.Contains(".Test"))
 			.FirstOrDefaultAsync(HasReferenceToFuncNet, cancellationToken)
 			.ConfigureAwait(false))?.Project;
 

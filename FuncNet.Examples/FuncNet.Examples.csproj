@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\FuncNet\FuncNet.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+        <ProjectReference Include="..\FuncNet\FuncNet.csproj" OutputItemType="Analyzer"/>
         <ProjectReference Include="..\FuncNet.Analyzers\FuncNet.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
     </ItemGroup>
 </Project>
