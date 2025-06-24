@@ -15,6 +15,8 @@ internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 	private const string CATEGORY = nameof(FuncNet);
 	private const string CONFIG_PROJECT_NAME = "Root";
 
+	public const string UNION_TYPE_PROPERTY_NAME = "UnionTypeString";
+
 	private static readonly Regex unionTypeRegex = new(".*FuncNet.Union<(.*)>", RegexOptions.Compiled);
 
 	private static readonly DiagnosticDescriptor rule = new(
@@ -24,7 +26,7 @@ internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 		CATEGORY,
 		DiagnosticSeverity.Warning,
 		true,
-		$"Union types should be registered in the {CONFIG_PROJECT_NAME} project's {FuncNetConfigFile.FILE_NAME} file to enable source generation of necessary conversions/helpers.");
+		$"Union types should be registered in the {CONFIG_PROJECT_NAME} project's {FuncNetConfig.FILE_NAME} file to enable source generation of necessary conversions/helpers.");
 
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(rule);
 
@@ -64,7 +66,7 @@ internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 		if (registeredUnions.Contains(unionTypeDisplayString)) return;
 
 		var properties = ImmutableDictionary<string, string?>.Empty
-			.Add("UnionTypeString", unionTypeDisplayString);
+			.Add(UNION_TYPE_PROPERTY_NAME, unionTypeDisplayString);
 
 		var diagnostic = Diagnostic.Create(
 			rule,
@@ -72,7 +74,7 @@ internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 			properties,
 			unionTypeDisplayString,
 			CONFIG_PROJECT_NAME,
-			FuncNetConfigFile.FILE_NAME);
+			FuncNetConfig.FILE_NAME);
 		context.ReportDiagnostic(diagnostic);
 	}
 }

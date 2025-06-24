@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using System.Composition;
-using System.Runtime.CompilerServices;
 using FuncNet.Analyzers.Config;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -20,7 +19,7 @@ public class UnionRegistrationCodeFixProvider : CodeFixProvider
 	public sealed override Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
 		var diagnostic = context.Diagnostics.First();
-		if (!diagnostic.Properties.TryGetValue("UnionTypeString", out var unionTypeString)
+		if (!diagnostic.Properties.TryGetValue(UnionRegistrationAnalyzer.UNION_TYPE_PROPERTY_NAME, out var unionTypeString)
 			|| string.IsNullOrEmpty(unionTypeString))
 		{
 			return Task.CompletedTask;
@@ -28,7 +27,7 @@ public class UnionRegistrationCodeFixProvider : CodeFixProvider
 
 		context.RegisterCodeFix(
 			CodeAction.Create(
-				$"Register '{unionTypeString}' in Root project's {FuncNetConfigFile.FILE_NAME}",
+				$"Register '{unionTypeString}' in {FuncNetConfig.FILE_NAME}",
 				cancellationToken => AddOrUpdateUnionRegistrationFileAsync(
 					context.Document.Project.Solution, unionTypeString!, cancellationToken),
 				nameof(UnionRegistrationCodeFixProvider) + "_" + unionTypeString),
@@ -42,35 +41,7 @@ public class UnionRegistrationCodeFixProvider : CodeFixProvider
 		string unionTypeName,
 		CancellationToken cancellationToken)
 	{
-		var rootProject = await GetRootProject(solution, cancellationToken).ConfigureAwait(false);
-		if (rootProject == null) return solution;
-
-		var funcNetFileConfig = await FuncNetConfigFile.GetOrCreate(rootProject, cancellationToken)
-			.ConfigureAwait(false);
-		var updatedFuncNetFileConfig = funcNetFileConfig.WithUnionRegistration(unionTypeName, solution.Workspace);
-
-		return updatedFuncNetFileConfig.Document.Project.Solution;
+		var config = await solution.GetOrCreateFuncNetConfig(cancellationToken).ConfigureAwait(false);
+		return config.WithUnionRegistration(new UnionRegistration(unionTypeName)).Solution;
 	}
-
-	private static async Task<Project?> GetRootProject(Solution solution, CancellationToken cancellationToken) =>
-		(await AllProjectsWithCompilationInSolution(solution, cancellationToken)
-			.Where(project => !project.Project.Name.Contains(".Test"))
-			.FirstOrDefaultAsync(HasReferenceToFuncNet, cancellationToken)
-			.ConfigureAwait(false))?.Project;
-
-	private static bool HasReferenceToFuncNet(ProjectWithCompilation project) =>
-		project.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == nameof(FuncNet));
-
-	private static async IAsyncEnumerable<ProjectWithCompilation> AllProjectsWithCompilationInSolution(
-		Solution solution,
-		[EnumeratorCancellation] CancellationToken cancellationToken)
-	{
-		foreach (var project in solution.Projects)
-		{
-			var compilation = await project.GetCompilationAsync(cancellationToken);
-			yield return new ProjectWithCompilation(project, compilation!);
-		}
-	}
-
-	private sealed record class ProjectWithCompilation(Project Project, Compilation Compilation);
 }

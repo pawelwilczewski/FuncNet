@@ -4,6 +4,9 @@ internal sealed class Program
 {
 	public static void Main(string[] args)
 	{
+		Union<int, string, bool> test = 213;
+		var test2 = Union<int, string, bool, DateTime>.FromT0(232);
+
 		var result = CreateUser(
 			"John Doe",
 			name => string.IsNullOrEmpty(name)

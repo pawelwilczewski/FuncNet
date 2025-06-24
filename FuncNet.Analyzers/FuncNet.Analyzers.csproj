@@ -39,6 +39,7 @@
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.0" PrivateAssets="all"/>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.3.0"/>
         <PackageReference Include="System.Linq.Async" Version="6.0.1"/>
+        <PackageReference Include="System.Text.Json" Version="9.0.6"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -55,4 +56,12 @@
     <ItemGroup>
         <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false"/>
     </ItemGroup>
+
+    <Target Name="AddAnalyzerDependenciesToPackage" BeforeTargets="GetPackageContents">
+        <ItemGroup>
+            <AnalyzerDependency Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.Extension)' == '.dll' and '%(ReferenceCopyLocalPaths.Filename)' != '$(AssemblyName)'"/>
+            <None Include="@(AnalyzerDependency)" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false"/>
+        </ItemGroup>
+    </Target>
+
 </Project>
