@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 
@@ -23,14 +22,14 @@ internal static class FuncNetConfigExtensions
 			solution = solution.AddAdditionalDocument(
 				configFileId,
 				FuncNetConfig.FILE_NAME,
-				SimpleJson.SimpleJson.SerializeObject(new FuncNetConfigFileContent(ImmutableList<string>.Empty)),
+				SimpleJson.SimpleJson.SerializeObject(new FuncNetConfigFileContent()),
 				filePath: Path.Combine(solution.FilePath!, FuncNetConfig.FILE_NAME));
 		}
 
 		configDocument = solution.GetProject(configProject.Id)!.GetAdditionalDocument(configFileId)!;
 		var configText = await configDocument.GetTextAsync(cancellationToken).ConfigureAwait(false);
 		var content = SimpleJson.SimpleJson.DeserializeObject<FuncNetConfigFileContent>(configText!.ToString())
-			?? new FuncNetConfigFileContent(ImmutableList<string>.Empty);
+			?? new FuncNetConfigFileContent();
 
 		return new FuncNetConfig(solution, configDocument, content);
 	}
