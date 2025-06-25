@@ -40,8 +40,11 @@ internal static class FuncNetConfigExtensions
 		.FirstOrDefault(HasReferenceToFuncNet)
 		?.Project;
 
-	private static bool HasReferenceToFuncNet(this ProjectWithCompilation project) =>
-		project.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == nameof(FuncNet));
+	private static bool HasReferenceToFuncNet(this ProjectWithCompilation project)
+	{
+		return project.Project.Documents.Any(document => document.Name == "Result3.cs");
+		return project.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == nameof(FuncNet));
+	}
 
 	private static async Task<ImmutableList<ProjectWithCompilation>> AllProjectsWithCompilation(
 		this Solution solution,
