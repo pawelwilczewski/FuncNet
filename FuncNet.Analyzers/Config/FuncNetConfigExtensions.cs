@@ -1,4 +1,4 @@
-using System.Runtime.CompilerServices;
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 
 namespace FuncNet.Analyzers.Config;
@@ -10,7 +10,7 @@ internal static class FuncNetConfigExtensions
 		var configProject = await solution.GetFuncNetReferencingProject(cancellationToken);
 		if (configProject is null)
 		{
-			throw new InvalidOperationException("Not FuncNet-referencing project. Make sure FuncNet is installed.");
+			throw new InvalidOperationException("No FuncNet-referencing project found. Make sure FuncNet is installed.");
 		}
 
 		var configDocument = configProject.AdditionalDocuments
@@ -23,7 +23,7 @@ internal static class FuncNetConfigExtensions
 				configFileId,
 				FuncNetConfig.FILE_NAME,
 				SimpleJson.SimpleJson.SerializeObject(new FuncNetConfigFileContent()),
-				filePath: Path.Combine(solution.FilePath!, FuncNetConfig.FILE_NAME));
+				filePath: Path.Combine(Path.GetDirectoryName(configProject.FilePath!)!, FuncNetConfig.FILE_NAME));
 		}
 
 		configDocument = solution.GetProject(configProject.Id)!.GetAdditionalDocument(configFileId)!;
@@ -35,23 +35,26 @@ internal static class FuncNetConfigExtensions
 	}
 
 	private static async Task<Project?> GetFuncNetReferencingProject(this Solution solution, CancellationToken cancellationToken) =>
-		(await solution.AllProjectsWithCompilation(cancellationToken)
-			.Where(project => !project.Project.Name.Contains(".Test")) // TODO Pawel: hacky but I'm not sure what the best way is... In general users shouldn't have more than one project referencing FuncNet anyways
-			.FirstOrDefaultAsync(HasReferenceToFuncNet, cancellationToken)
-			.ConfigureAwait(false))?.Project;
+		(await solution.AllProjectsWithCompilation(cancellationToken))
+		.Where(project => !project.Project.Name.Contains(".Test")) // TODO Pawel: hacky but I'm not sure what the best way is... In general users shouldn't have more than one project referencing FuncNet anyways
+		.FirstOrDefault(HasReferenceToFuncNet)
+		?.Project;
 
 	private static bool HasReferenceToFuncNet(this ProjectWithCompilation project) =>
 		project.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == nameof(FuncNet));
 
-	private static async IAsyncEnumerable<ProjectWithCompilation> AllProjectsWithCompilation(
+	private static async Task<ImmutableList<ProjectWithCompilation>> AllProjectsWithCompilation(
 		this Solution solution,
-		[EnumeratorCancellation] CancellationToken cancellationToken)
+		CancellationToken cancellationToken)
 	{
+		var result = new List<ProjectWithCompilation>();
 		foreach (var project in solution.Projects)
 		{
 			var compilation = await project.GetCompilationAsync(cancellationToken);
-			yield return new ProjectWithCompilation(project, compilation!);
+			result.Add(new ProjectWithCompilation(project, compilation!));
 		}
+
+		return result.ToImmutableList();
 	}
 
 	private sealed record class ProjectWithCompilation(Project Project, Compilation Compilation);
