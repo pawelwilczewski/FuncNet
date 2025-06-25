@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 
 namespace FuncNet.Analyzers.Config;
@@ -34,31 +33,25 @@ internal static class FuncNetConfigExtensions
 		return new FuncNetConfig(solution, configDocument, content);
 	}
 
-	private static async Task<Project?> GetFuncNetReferencingProject(this Solution solution, CancellationToken cancellationToken) =>
-		(await solution.AllProjectsWithCompilation(cancellationToken))
-		.Where(project => !project.Project.Name.Contains(".Test")) // TODO Pawel: hacky but I'm not sure what the best way is... In general users shouldn't have more than one project referencing FuncNet anyways
-		.FirstOrDefault(HasReferenceToFuncNet)
-		?.Project;
-
-	private static bool HasReferenceToFuncNet(this ProjectWithCompilation project)
+	private static async Task<Project?> GetFuncNetReferencingProject(this Solution solution, CancellationToken cancellationToken)
 	{
-		return project.Project.Documents.Any(document => document.Name == "Result3.cs");
-		return project.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == nameof(FuncNet));
-	}
+		var projects = solution.Projects
+			.Where(project => !project.Name.Contains(".Test")); // TODO Pawel: hacky but I'm not sure what the best way is... In general users shouldn't have more than one project referencing FuncNet anyways
 
-	private static async Task<ImmutableList<ProjectWithCompilation>> AllProjectsWithCompilation(
-		this Solution solution,
-		CancellationToken cancellationToken)
-	{
-		var result = new List<ProjectWithCompilation>();
-		foreach (var project in solution.Projects)
+		foreach (var project in projects)
 		{
-			var compilation = await project.GetCompilationAsync(cancellationToken);
-			result.Add(new ProjectWithCompilation(project, compilation!));
+			var hasReference = await project.HasReferenceToFuncNet(cancellationToken);
+			if (hasReference) return project;
 		}
 
-		return result.ToImmutableList();
+		return null;
 	}
 
-	private sealed record class ProjectWithCompilation(Project Project, Compilation Compilation);
+	private static async Task<bool> HasReferenceToFuncNet(
+		this Project project,
+		CancellationToken cancellationToken)
+	{
+		var sourceGeneratedDocuments = await project.GetSourceGeneratedDocumentsAsync(cancellationToken).ConfigureAwait(false);
+		return sourceGeneratedDocuments.Any(document => document.Name == "Result3.cs");
+	}
 }
