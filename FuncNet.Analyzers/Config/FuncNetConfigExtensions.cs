@@ -6,26 +6,27 @@ internal static class FuncNetConfigExtensions
 {
 	public static async Task<FuncNetConfig> GetOrCreateFuncNetConfig(this Solution solution, CancellationToken cancellationToken)
 	{
-		var configProject = await solution.GetFuncNetReferencingProject(cancellationToken);
-		if (configProject is null)
-		{
-			throw new InvalidOperationException("No FuncNet-referencing project found. Make sure FuncNet is installed.");
-		}
-
-		var configDocument = configProject.AdditionalDocuments
+		var configDocument = solution.Projects.SelectMany(project => project.AdditionalDocuments)
 			.FirstOrDefault(document => document.Name == FuncNetConfig.FILE_NAME);
-		var configFileId = configDocument?.Id ?? DocumentId.CreateNewId(configProject.Id);
 
 		if (configDocument is null)
 		{
+			var configProject = await solution.GetFuncNetReferencingProject(cancellationToken);
+			if (configProject is null)
+			{
+				throw new InvalidOperationException("No FuncNet-referencing project found. Make sure FuncNet is installed.");
+			}
+
+			var configFileId = DocumentId.CreateNewId(configProject.Id);
 			solution = solution.AddAdditionalDocument(
 				configFileId,
 				FuncNetConfig.FILE_NAME,
 				SimpleJson.SimpleJson.SerializeObject(new FuncNetConfigFileContent()),
 				filePath: Path.Combine(Path.GetDirectoryName(configProject.FilePath!)!, FuncNetConfig.FILE_NAME));
+
+			configDocument = solution.GetProject(configProject.Id)!.GetAdditionalDocument(configFileId)!;
 		}
 
-		configDocument = solution.GetProject(configProject.Id)!.GetAdditionalDocument(configFileId)!;
 		var configText = await configDocument.GetTextAsync(cancellationToken).ConfigureAwait(false);
 		var content = SimpleJson.SimpleJson.DeserializeObject<FuncNetConfigFileContent>(configText!.ToString())
 			?? new FuncNetConfigFileContent();
@@ -40,7 +41,8 @@ internal static class FuncNetConfigExtensions
 
 		foreach (var project in projects)
 		{
-			var hasReference = await project.HasReferenceToFuncNet(cancellationToken);
+			var hasReference = project.AdditionalDocuments.Any(document => document.Name == FuncNetConfig.FILE_NAME)
+				|| await project.HasReferenceToFuncNet(cancellationToken);
 			if (hasReference) return project;
 		}
 
@@ -52,6 +54,14 @@ internal static class FuncNetConfigExtensions
 		CancellationToken cancellationToken)
 	{
 		var sourceGeneratedDocuments = await project.GetSourceGeneratedDocumentsAsync(cancellationToken).ConfigureAwait(false);
-		return sourceGeneratedDocuments.Any(document => document.Name == "Result3.cs");
+		return sourceGeneratedDocuments.Any(document => document.Name == "PipeExtensions.cs");
+	}
+
+	private static async Task<IEnumerable<Document>> GetAllSourceGeneratedDocuments(this Solution solution, CancellationToken cancellationToken)
+	{
+		var allDocuments = await Task.WhenAll(solution.Projects
+				.Select(project => project.GetSourceGeneratedDocumentsAsync(cancellationToken).AsTask()))
+			.ConfigureAwait(false);
+		return allDocuments.SelectMany(documents => documents);
 	}
 }

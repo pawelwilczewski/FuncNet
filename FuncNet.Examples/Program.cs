@@ -1,4 +1,4 @@
-﻿namespace FuncNet.Examples;
+namespace FuncNet.Examples;
 
 internal sealed class Program
 {
