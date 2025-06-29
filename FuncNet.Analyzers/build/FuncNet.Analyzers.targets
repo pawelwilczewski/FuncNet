@@ -1,37 +1,106 @@
 <!-- FuncNet.Analyzers MSBuild targets file -->
 <Project>
-  <!-- Create a default empty configuration file if it doesn't exist -->
-  <Target Name="EnsureFuncNetConfigExists" BeforeTargets="BeforeCompile">
     <PropertyGroup>
-      <DefaultFuncNetConfigContent>{"UnionRegistrations":[]}</DefaultFuncNetConfigContent>
+        <_FuncNetConfigFullPath Condition="'$(MSBuildRuntimeType)' == 'Core'">$(FuncNetConfigFilePath)</_FuncNetConfigFullPath>
+        <_FuncNetConfigFullPath Condition="'$(MSBuildRuntimeType)' != 'Core'">$(MSBuildProjectDirectory)\$(FuncNetConfigFileName)</_FuncNetConfigFullPath>
     </PropertyGroup>
 
-    <!-- Check if the config file exists -->
-    <PropertyGroup>
-      <ConfigFileExists Condition="Exists('$(FuncNetConfigFilePath)')">true</ConfigFileExists>
-      <ConfigFileExists Condition="!Exists('$(FuncNetConfigFilePath)')">false</ConfigFileExists>
-    </PropertyGroup>
+    <!-- Create a default empty configuration file if it doesn't exist -->
+    <Target Name="EnsureFuncNetConfigExists" BeforeTargets="BeforeCompile">
+        <PropertyGroup>
+            <DefaultFuncNetConfigContent>{"UnionRegistrations":[]}</DefaultFuncNetConfigContent>
+        </PropertyGroup>
 
-    <!-- Create the config file if it doesn't exist -->
-    <WriteLinesToFile
-        File="$(FuncNetConfigFilePath)"
-        Lines="$(DefaultFuncNetConfigContent)"
-        Overwrite="false"
-        Condition="'$(ConfigFileExists)' == 'false'" />
+        <!-- Check if the config file exists -->
+        <PropertyGroup>
+            <ConfigFileExists Condition="Exists('$(_FuncNetConfigFullPath)')">true</ConfigFileExists>
+            <ConfigFileExists Condition="!Exists('$(_FuncNetConfigFullPath)')">false</ConfigFileExists>
+        </PropertyGroup>
 
-    <Message 
-        Text="Created default FuncNet configuration file at $(FuncNetConfigFilePath)" 
-        Importance="high" 
-        Condition="'$(ConfigFileExists)' == 'false'" />
+        <!-- Create the config file if it doesn't exist -->
+        <WriteLinesToFile
+            File="$(_FuncNetConfigFullPath)"
+            Lines="$(DefaultFuncNetConfigContent)"
+            Overwrite="false"
+            Condition="'$(ConfigFileExists)' == 'false'"/>
 
-    <Message 
-        Text="Using existing FuncNet configuration file at $(FuncNetConfigFilePath)" 
-        Importance="normal" 
-        Condition="'$(ConfigFileExists)' == 'true'" />
+        <Message
+            Text="Created default FuncNet configuration file at $(_FuncNetConfigFullPath)"
+            Importance="high"
+            Condition="'$(ConfigFileExists)' == 'false'"/>
 
-    <!-- Add the config file as an AdditionalFile -->
-    <ItemGroup>
-      <AdditionalFiles Include="$(FuncNetConfigFilePath)" />
-    </ItemGroup>
-  </Target>
+        <Message
+            Text="Using existing FuncNet configuration file at $(_FuncNetConfigFullPath)"
+            Importance="normal"
+            Condition="'$(ConfigFileExists)' == 'true'"/>
+
+        <!-- Add the config file as an AdditionalFile for this build -->
+        <ItemGroup>
+            <AdditionalFiles Include="$(_FuncNetConfigFullPath)"/>
+        </ItemGroup>
+    </Target>
+
+    <!-- Update the project file to include the config file permanently as an AdditionalFiles item -->
+    <Target Name="UpdateProjectWithFuncNetConfig" AfterTargets="EnsureFuncNetConfigExists" Condition="Exists('$(_FuncNetConfigFullPath)')">
+        <!-- This target will only run once when the target writes to a sentinel file -->
+        <PropertyGroup>
+            <_FuncNetSentinelFile>$(IntermediateOutputPath)FuncNet_ProjectUpdated.sentinel</_FuncNetSentinelFile>
+        </PropertyGroup>
+
+        <!-- Check if we've already updated this project -->
+        <ReadLinesFromFile File="$(_FuncNetSentinelFile)" Condition="Exists('$(_FuncNetSentinelFile)')">
+            <Output TaskParameter="Lines" ItemName="_ExistingFuncNetSentinelContent"/>
+        </ReadLinesFromFile>
+
+        <!-- Only update if we haven't done so already or if the config path changed -->
+        <PropertyGroup>
+            <_FuncNetSentinelContent>$(_FuncNetConfigFullPath)</_FuncNetSentinelContent>
+            <_ShouldUpdateProject>true</_ShouldUpdateProject>
+            <_ShouldUpdateProject Condition="'@(_ExistingFuncNetSentinelContent)' == '$(_FuncNetSentinelContent)'">false</_ShouldUpdateProject>
+        </PropertyGroup>
+
+        <!-- Read project file content -->
+        <ReadLinesFromFile File="$(MSBuildProjectFullPath)" Condition="'$(_ShouldUpdateProject)' == 'true'">
+            <Output TaskParameter="Lines" ItemName="_ProjectFileLines"/>
+        </ReadLinesFromFile>
+
+        <!-- Check if the AdditionalFiles group with our config already exists -->
+        <PropertyGroup>
+            <_ConfigAlreadyAdded>false</_ConfigAlreadyAdded>
+            <_ConfigAlreadyAdded Condition="'@(_ProjectFileLines)' != '' and '@(_ProjectFileLines->AnyHaveMetadataValue('Identity', '$(_FuncNetConfigFullPath)'))' == 'true'">true</_ConfigAlreadyAdded>
+        </PropertyGroup>
+
+        <!-- Update project file content with the AdditionalFiles entry -->
+        <ItemGroup Condition="'$(_ShouldUpdateProject)' == 'true' and '$(_ConfigAlreadyAdded)' == 'false'">
+            <_AdditionalFilesItemGroup Include="  &lt;ItemGroup&gt;"/>
+            <_AdditionalFilesItemGroup Include="    &lt;AdditionalFiles Include=&quot;$(FuncNetConfigFileName)&quot; /&gt;"/>
+            <_AdditionalFilesItemGroup Include="  &lt;/ItemGroup&gt;"/>
+
+            <_NewProjectFileContent Include="@(_ProjectFileLines)"/>
+            <!-- Insert before the closing Project tag -->
+            <_NewProjectFileContent Include="@(_AdditionalFilesItemGroup)"
+                                    Condition="'%(_ProjectFileLines.Identity)'=='&lt;/Project&gt;'"
+                                    InsertBefore="true"/>
+        </ItemGroup>
+
+        <!-- Write the updated content back to the project file -->
+        <WriteLinesToFile File="$(MSBuildProjectFullPath)"
+                          Lines="@(_NewProjectFileContent)"
+                          Overwrite="true"
+                          Condition="'$(_ShouldUpdateProject)' == 'true' and '$(_ConfigAlreadyAdded)' == 'false'"/>
+
+        <!-- Write the sentinel file -->
+        <WriteLinesToFile File="$(_FuncNetSentinelFile)"
+                          Lines="$(_FuncNetSentinelContent)"
+                          Overwrite="true"
+                          Condition="'$(_ShouldUpdateProject)' == 'true'"/>
+
+        <Message Text="Added FuncNetConfig.json as AdditionalFiles to project file"
+                 Importance="high"
+                 Condition="'$(_ShouldUpdateProject)' == 'true' and '$(_ConfigAlreadyAdded)' == 'false'"/>
+
+        <Message Text="FuncNetConfig.json is already included in project file"
+                 Importance="normal"
+                 Condition="'$(_ConfigAlreadyAdded)' == 'true'"/>
+    </Target>
 </Project>
