@@ -55,4 +55,9 @@
         <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="build\**" Pack="true" PackagePath="build"/>
+        <None Include="content\**" Pack="true" PackagePath="content"/>
+    </ItemGroup>
+
 </Project>
