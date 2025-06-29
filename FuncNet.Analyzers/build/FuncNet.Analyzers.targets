@@ -59,48 +59,57 @@
             <_ShouldUpdateProject Condition="'@(_ExistingFuncNetSentinelContent)' == '$(_FuncNetSentinelContent)'">false</_ShouldUpdateProject>
         </PropertyGroup>
 
-        <!-- Read project file content -->
-        <ReadLinesFromFile File="$(MSBuildProjectFullPath)" Condition="'$(_ShouldUpdateProject)' == 'true'">
-            <Output TaskParameter="Lines" ItemName="_ProjectFileLines"/>
-        </ReadLinesFromFile>
-
-        <!-- Check if the AdditionalFiles group with our config already exists -->
+        <!-- Use MSBuild's built-in XML modification capabilities -->
         <PropertyGroup>
-            <_ConfigAlreadyAdded>false</_ConfigAlreadyAdded>
-            <_ConfigAlreadyAdded Condition="'@(_ProjectFileLines)' != '' and '@(_ProjectFileLines->AnyHaveMetadataValue('Identity', '$(_FuncNetConfigFullPath)'))' == 'true'">true</_ConfigAlreadyAdded>
+            <_AdditionalFilesItemGroupXml>
+                <ItemGroup>
+                    <AdditionalFiles Include="$(FuncNetConfigFileName)"/>
+                </ItemGroup>
+            </_AdditionalFilesItemGroupXml>
         </PropertyGroup>
 
-        <!-- Update project file content with the AdditionalFiles entry -->
-        <ItemGroup Condition="'$(_ShouldUpdateProject)' == 'true' and '$(_ConfigAlreadyAdded)' == 'false'">
-            <_AdditionalFilesItemGroup Include="  &lt;ItemGroup&gt;"/>
-            <_AdditionalFilesItemGroup Include="    &lt;AdditionalFiles Include=&quot;$(FuncNetConfigFileName)&quot; /&gt;"/>
-            <_AdditionalFilesItemGroup Include="  &lt;/ItemGroup&gt;"/>
+        <!-- Read project file to check if our config is already included -->
+        <XmlPeek
+            XmlInputPath="$(MSBuildProjectFullPath)"
+            Query="/Project/ItemGroup/AdditionalFiles[@Include='$(FuncNetConfigFileName)']"
+            Condition="'$(_ShouldUpdateProject)' == 'true'">
+            <Output TaskParameter="Result" ItemName="_ExistingAdditionalFiles"/>
+        </XmlPeek>
 
-            <_NewProjectFileContent Include="@(_ProjectFileLines)"/>
-            <!-- Insert before the closing Project tag -->
-            <_NewProjectFileContent Include="@(_AdditionalFilesItemGroup)"
-                                    Condition="'%(_ProjectFileLines.Identity)'=='&lt;/Project&gt;'"
-                                    InsertBefore="true"/>
-        </ItemGroup>
+        <PropertyGroup>
+            <_ConfigAlreadyAdded>@(_ExistingAdditionalFiles->Count())</_ConfigAlreadyAdded>
+        </PropertyGroup>
 
-        <!-- Write the updated content back to the project file -->
-        <WriteLinesToFile File="$(MSBuildProjectFullPath)"
-                          Lines="@(_NewProjectFileContent)"
-                          Overwrite="true"
-                          Condition="'$(_ShouldUpdateProject)' == 'true' and '$(_ConfigAlreadyAdded)' == 'false'"/>
+        <!-- Read project file content to preserve it -->
+        <ReadLinesFromFile File="$(MSBuildProjectFullPath)" Condition="'$(_ShouldUpdateProject)' == 'true' and '$(_ConfigAlreadyAdded)' == '0'">
+            <Output TaskParameter="Lines" ItemName="_ProjectContent"/>
+        </ReadLinesFromFile>
+
+        <!-- Create a new project file with our additional item group properly placed -->
+        <PropertyGroup>
+            <_NewProjectContent>@(_ProjectContent)</_NewProjectContent>
+            <_NewProjectContent>$(_NewProjectContent.Replace('&lt;/Project&gt;', '$(_AdditionalFilesItemGroupXml)&lt;/Project&gt;'))</_NewProjectContent>
+        </PropertyGroup>
+
+        <!-- Write the modified project file -->
+        <WriteLinesToFile
+            File="$(MSBuildProjectFullPath)"
+            Lines="$(_NewProjectContent)"
+            Overwrite="true"
+            Condition="'$(_ShouldUpdateProject)' == 'true' and '$(_ConfigAlreadyAdded)' == '0'"/>
+
+        <Message Text="Added FuncNetConfig.json as AdditionalFiles to project file"
+                 Importance="high"
+                 Condition="'$(_ShouldUpdateProject)' == 'true' and '$(_ConfigAlreadyAdded)' == '0'"/>
+
+        <Message Text="FuncNetConfig.json is already included in project file"
+                 Importance="normal"
+                 Condition="'$(_ConfigAlreadyAdded)' != '0'"/>
 
         <!-- Write the sentinel file -->
         <WriteLinesToFile File="$(_FuncNetSentinelFile)"
                           Lines="$(_FuncNetSentinelContent)"
                           Overwrite="true"
                           Condition="'$(_ShouldUpdateProject)' == 'true'"/>
-
-        <Message Text="Added FuncNetConfig.json as AdditionalFiles to project file"
-                 Importance="high"
-                 Condition="'$(_ShouldUpdateProject)' == 'true' and '$(_ConfigAlreadyAdded)' == 'false'"/>
-
-        <Message Text="FuncNetConfig.json is already included in project file"
-                 Importance="normal"
-                 Condition="'$(_ConfigAlreadyAdded)' == 'true'"/>
     </Target>
 </Project>
