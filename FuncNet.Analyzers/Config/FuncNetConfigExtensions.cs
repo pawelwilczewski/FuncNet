@@ -11,20 +11,12 @@ internal static class FuncNetConfigExtensions
 
 		if (configDocument is null)
 		{
-			var configProject = await solution.GetFuncNetReferencingProject(cancellationToken);
-			if (configProject is null)
-			{
-				throw new InvalidOperationException("No FuncNet-referencing project found. Make sure FuncNet is installed.");
-			}
-
-			var configFileId = DocumentId.CreateNewId(configProject.Id);
-			solution = solution.AddAdditionalDocument(
-				configFileId,
-				FuncNetConfig.FILE_NAME,
-				SimpleJson.SimpleJson.SerializeObject(new FuncNetConfigFileContent()),
-				filePath: Path.Combine(Path.GetDirectoryName(configProject.FilePath!)!, FuncNetConfig.FILE_NAME));
-
-			configDocument = solution.GetProject(configProject.Id)!.GetAdditionalDocument(configFileId)!;
+			// The MSBuild system should ensure the config file exists and is added as an AdditionalFile
+			// But if it's not found, we'll create a default configuration and return it without persisting
+			return new FuncNetConfig(
+				solution,
+				null,
+				new FuncNetConfigFileContent());
 		}
 
 		var configText = await configDocument.GetTextAsync(cancellationToken).ConfigureAwait(false);

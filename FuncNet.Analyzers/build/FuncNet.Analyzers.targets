@@ -1,0 +1,37 @@
+<!-- FuncNet.Analyzers MSBuild targets file -->
+<Project>
+  <!-- Create a default empty configuration file if it doesn't exist -->
+  <Target Name="EnsureFuncNetConfigExists" BeforeTargets="BeforeCompile">
+    <PropertyGroup>
+      <DefaultFuncNetConfigContent>{"UnionRegistrations":[]}</DefaultFuncNetConfigContent>
+    </PropertyGroup>
+
+    <!-- Check if the config file exists -->
+    <PropertyGroup>
+      <ConfigFileExists Condition="Exists('$(FuncNetConfigFilePath)')">true</ConfigFileExists>
+      <ConfigFileExists Condition="!Exists('$(FuncNetConfigFilePath)')">false</ConfigFileExists>
+    </PropertyGroup>
+
+    <!-- Create the config file if it doesn't exist -->
+    <WriteLinesToFile
+        File="$(FuncNetConfigFilePath)"
+        Lines="$(DefaultFuncNetConfigContent)"
+        Overwrite="false"
+        Condition="'$(ConfigFileExists)' == 'false'" />
+
+    <Message 
+        Text="Created default FuncNet configuration file at $(FuncNetConfigFilePath)" 
+        Importance="high" 
+        Condition="'$(ConfigFileExists)' == 'false'" />
+
+    <Message 
+        Text="Using existing FuncNet configuration file at $(FuncNetConfigFilePath)" 
+        Importance="normal" 
+        Condition="'$(ConfigFileExists)' == 'true'" />
+
+    <!-- Add the config file as an AdditionalFile -->
+    <ItemGroup>
+      <AdditionalFiles Include="$(FuncNetConfigFilePath)" />
+    </ItemGroup>
+  </Target>
+</Project>

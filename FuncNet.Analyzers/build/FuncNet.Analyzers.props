@@ -1,0 +1,7 @@
+<!-- FuncNet.Analyzers MSBuild props file -->
+<Project>
+  <PropertyGroup>
+    <FuncNetConfigFileName>FuncNetConfig.json</FuncNetConfigFileName>
+    <FuncNetConfigFilePath Condition="'$(FuncNetConfigFilePath)' == ''">$(MSBuildProjectDirectory)\$(FuncNetConfigFileName)</FuncNetConfigFilePath>
+  </PropertyGroup>
+</Project>
