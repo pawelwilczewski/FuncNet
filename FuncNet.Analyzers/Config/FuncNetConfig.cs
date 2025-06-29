@@ -16,8 +16,6 @@ internal sealed record class FuncNetConfig(
 
 		if (ConfigDocument is null)
 		{
-			// No document exists yet, so we can't update it
-			// The changes will be picked up when the file is created by MSBuild and loaded in the next build
 			return new FuncNetConfig(Solution, null, newContent);
 		}
 
