@@ -8,7 +8,7 @@ internal sealed record class FuncNetConfig(
 	TextDocument ConfigDocument,
 	FuncNetConfigFileContent Content)
 {
-	public const string FILE_NAME = "FuncNetConfig.json";
+	public const string FILE_NAME = "funcnet.json";
 
 	public FuncNetConfig WithUnionRegistration(UnionRegistration registration)
 	{
