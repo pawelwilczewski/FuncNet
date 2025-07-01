@@ -26,6 +26,7 @@ public sealed class RequireConfigFileCodeFixProvider : CodeFixProvider
 				_ => CreateFuncNetConfig(context.Document.Project),
 				nameof(RequireConfigFileCodeFixProvider)),
 			diagnostic);
+
 		return Task.CompletedTask;
 	}
 
