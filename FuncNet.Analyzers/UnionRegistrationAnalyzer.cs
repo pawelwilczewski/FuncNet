@@ -11,7 +11,7 @@ namespace FuncNet.Analyzers;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 {
-	public const string DIAGNOSTIC_ID = "FN0001";
+	public const string DIAGNOSTIC_ID = "FN0002";
 	private const string CATEGORY = nameof(FuncNet);
 
 	public const string UNION_TYPE_PROPERTY_NAME = "UnionTypeString";

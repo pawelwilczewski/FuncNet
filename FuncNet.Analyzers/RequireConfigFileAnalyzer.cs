@@ -9,7 +9,7 @@ namespace FuncNet.Analyzers;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 internal sealed class RequireConfigFileAnalyzer : DiagnosticAnalyzer
 {
-	public const string DIAGNOSTIC_ID = "FN0002";
+	public const string DIAGNOSTIC_ID = "FN0001";
 	private const string CATEGORY = nameof(FuncNet);
 
 	private static readonly DiagnosticDescriptor rule = new(
