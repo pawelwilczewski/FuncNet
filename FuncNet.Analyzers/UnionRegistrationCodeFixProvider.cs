@@ -41,7 +41,7 @@ public sealed class UnionRegistrationCodeFixProvider : CodeFixProvider
 		string unionTypeName,
 		CancellationToken cancellationToken)
 	{
-		var config = await solution.TryGetFuncNetConfig(cancellationToken).ConfigureAwait(false);
+		var config = await solution.GetFuncNetConfig(cancellationToken).ConfigureAwait(false);
 		if (config is null) return solution;
 
 		var newConfig = config.WithUnionRegistration(new UnionRegistration(unionTypeName));

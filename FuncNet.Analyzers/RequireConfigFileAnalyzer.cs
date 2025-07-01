@@ -14,9 +14,10 @@ internal sealed class RequireConfigFileAnalyzer : DiagnosticAnalyzer
 	private static readonly DiagnosticDescriptor rule = new(
 		DIAGNOSTIC_ID,
 		"FuncNet configuration file missing",
-		$"FuncNet configuration file '{FuncNetConfig.FILE_NAME}' is missing. Create this file in your project to enable FuncNet features."
-		+ " You also need to add an AdditionalFiles entry to your .csproj in order for the config to be recognized by the analyzer,"
-		+ $" i.e. `<ItemGroup><AdditionalFiles Include=\"{FuncNetConfig.FILE_NAME}.json\"/></ItemGroup>`.",
+		$"FuncNet configuration file '{FuncNetConfig.FILE_NAME}' is missing. You should:"
+		+ $" 1. Create file named '{FuncNetConfig.FILE_NAME}' in your project."
+		+ " 2. Add the following to your .csproj file in order for the config to be recognized by the analyzer:"
+		+ $" <ItemGroup><AdditionalFiles Include=\"{FuncNetConfig.FILE_NAME}\"/></ItemGroup>.",
 		CATEGORY,
 		DiagnosticSeverity.Error,
 		true,
