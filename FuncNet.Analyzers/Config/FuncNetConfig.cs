@@ -17,4 +17,16 @@ internal sealed record class FuncNetConfig(
 		var solution = Solution.WithAdditionalDocumentText(ConfigDocument.Id, SourceText.From(serializedContent));
 		return new FuncNetConfig(solution, solution.GetAdditionalDocument(ConfigDocument.Id)!, newContent);
 	}
+
+	public static Solution CreateInProject(Project project, FuncNetConfigFileContent content)
+	{
+		var serializedContent = SimpleJson.SimpleJson.SerializeObject(content);
+		var documentId = DocumentId.CreateNewId(project.Id);
+
+		return project.Solution.AddAdditionalDocument(
+			documentId,
+			FILE_NAME,
+			SourceText.From(serializedContent),
+			filePath: project.FilePath is null ? null : Path.Combine(Path.GetDirectoryName(project.FilePath)!, FILE_NAME));
+	}
 }
