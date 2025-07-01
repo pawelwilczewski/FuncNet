@@ -2,7 +2,6 @@ using System.Collections.Immutable;
 using FuncNet.Analyzers.Config;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Text;
 
 namespace FuncNet.Analyzers;
 
@@ -28,10 +27,11 @@ internal sealed class RequireConfigFileAnalyzer : DiagnosticAnalyzer
 	{
 		context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
 		context.EnableConcurrentExecution();
-		context.RegisterSyntaxTreeAction(AnalyzeSyntaxTree);
+
+		context.RegisterCompilationAction(AnalyzeCompilation);
 	}
 
-	private static void AnalyzeSyntaxTree(SyntaxTreeAnalysisContext context)
+	private static void AnalyzeCompilation(CompilationAnalysisContext context)
 	{
 		var configExists = context.Options.AdditionalFiles
 			.Any(file => file.Path.EndsWith(FuncNetConfig.FILE_NAME));
@@ -39,8 +39,7 @@ internal sealed class RequireConfigFileAnalyzer : DiagnosticAnalyzer
 
 		var diagnostic = Diagnostic.Create(
 			rule,
-			Location.Create(context.Tree, new TextSpan(0, 0)));
-
+			Location.None);
 		context.ReportDiagnostic(diagnostic);
 	}
 }

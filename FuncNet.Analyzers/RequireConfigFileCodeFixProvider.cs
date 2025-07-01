@@ -23,12 +23,12 @@ public sealed class RequireConfigFileCodeFixProvider : CodeFixProvider
 		context.RegisterCodeFix(
 			CodeAction.Create(
 				$"Create {FuncNetConfig.FILE_NAME}",
-				_ => CreateFuncNetConfigAsync(context.Document.Project),
+				_ => CreateFuncNetConfig(context.Document.Project),
 				nameof(RequireConfigFileCodeFixProvider)),
 			diagnostic);
 		return Task.CompletedTask;
 	}
 
-	private static Task<Solution> CreateFuncNetConfigAsync(Project project) =>
+	private static Task<Solution> CreateFuncNetConfig(Project project) =>
 		Task.FromResult(FuncNetConfig.CreateInProject(project, new FuncNetConfigFileContent()));
 }
