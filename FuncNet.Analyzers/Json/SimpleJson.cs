@@ -556,7 +556,7 @@ namespace SimpleJson
         /// The object.
         /// </param>
         /// <returns>
-        /// Returns true if successfull otherwise false.
+        /// Returns true if successful otherwise false.
         /// </returns>
         [SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification="Need to support .NET 2")]
         public static bool TryDeserializeObject(string json, out object obj)
@@ -573,6 +573,34 @@ namespace SimpleJson
 
             return success;
         }
+
+		/// <summary>
+		/// Try parsing the json string into a value.
+		/// </summary>
+		/// <param name="json">
+		/// A JSON string.
+		/// </param>
+		/// <param name="obj">
+		/// The object.
+		/// </param>
+		/// <param name="defaultObj">
+		/// The default value to use if deserialization fails.
+		/// </param>
+		/// <returns>
+		/// Returns true if successful otherwise false.
+		/// </returns>
+		public static TObject DeserializeObjectOrDefault<TObject>(string json, TObject defaultObj) where TObject: class
+		{
+			try
+			{
+				var obj = DeserializeObject<TObject>(json);
+				return obj ?? defaultObj;
+			}
+			catch (SerializationException)
+			{
+				return defaultObj;
+			}
+		}
 
         public static object DeserializeObject(string json, Type type, IJsonSerializerStrategy jsonSerializerStrategy)
         {

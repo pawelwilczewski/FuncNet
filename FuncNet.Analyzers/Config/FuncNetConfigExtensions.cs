@@ -22,9 +22,7 @@ internal static class FuncNetConfigExtensions
 		if (configDocument is null) return null;
 
 		var configText = await configDocument.GetTextAsync(cancellationToken).ConfigureAwait(false);
-		var contentDto = SimpleJson.SimpleJson.DeserializeObject<FuncNetConfigFileContentDto>(configText!.ToString())
-			?? new FuncNetConfigFileContentDto();
-
+		var contentDto = SimpleJson.SimpleJson.DeserializeObjectOrDefault(configText?.ToString(), new FuncNetConfigFileContentDto());
 		return new FuncNetConfig(solution, configDocument, FuncNetConfigFileContent.FromDto(contentDto));
 	}
 
@@ -43,9 +41,7 @@ internal static class FuncNetConfigExtensions
 		if (configDocument is null) return null;
 
 		var configText = configDocument.GetText();
-		var contentDto = SimpleJson.SimpleJson.DeserializeObject<FuncNetConfigFileContentDto>(configText?.ToString())
-			?? new FuncNetConfigFileContentDto();
-
+		var contentDto = SimpleJson.SimpleJson.DeserializeObjectOrDefault(configText?.ToString(), new FuncNetConfigFileContentDto());
 		return FuncNetConfigFileContent.FromDto(contentDto);
 	}
 }
