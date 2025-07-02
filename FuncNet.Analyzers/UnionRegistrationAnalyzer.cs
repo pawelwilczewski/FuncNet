@@ -38,16 +38,17 @@ internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 
 	private static void CompilationStart(CompilationStartAnalysisContext compilationStartContext)
 	{
-		var registeredUnionStrings = new HashSet<string>();
+		var funcNetConfig = compilationStartContext.Options.GetFuncNetConfig();
+		if (funcNetConfig is null) return;
 
 		compilationStartContext.RegisterSyntaxNodeAction(
-			context => AnalyzeGenericNameSyntax(context, registeredUnionStrings),
+			context => AnalyzeGenericNameSyntax(context, funcNetConfig.UnionRegistrations),
 			SyntaxKind.GenericName);
 	}
 
 	private static void AnalyzeGenericNameSyntax(
 		SyntaxNodeAnalysisContext context,
-		HashSet<string> registeredUnions)
+		IReadOnlyCollection<TypeEntry> registeredUnions)
 	{
 		var genericNameNode = (GenericNameSyntax)context.Node;
 		var semanticModel = context.SemanticModel;
@@ -61,17 +62,17 @@ internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 			return;
 		}
 
-		var unionTypeDisplayString = namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
-		if (registeredUnions.Contains(unionTypeDisplayString)) return;
+		var unionTypeEntry = new TypeEntry(namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
+		if (registeredUnions.Contains(unionTypeEntry)) return;
 
 		var properties = ImmutableDictionary<string, string?>.Empty
-			.Add(UNION_TYPE_PROPERTY_NAME, unionTypeDisplayString);
+			.Add(UNION_TYPE_PROPERTY_NAME, unionTypeEntry.TypeName);
 
 		var diagnostic = Diagnostic.Create(
 			rule,
 			genericNameNode.Identifier.GetLocation(),
 			properties,
-			unionTypeDisplayString,
+			unionTypeEntry,
 			FuncNetConfig.FILE_NAME);
 
 		context.ReportDiagnostic(diagnostic);
