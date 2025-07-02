@@ -21,9 +21,9 @@ internal static class FuncNetConfigExtensions
 		if (configDocument is null) return null;
 
 		var configText = await configDocument.GetTextAsync(cancellationToken).ConfigureAwait(false);
-		var content = SimpleJson.SimpleJson.DeserializeObject<FuncNetConfigFileContent>(configText!.ToString())
-			?? new FuncNetConfigFileContent();
+		var contentDto = SimpleJson.SimpleJson.DeserializeObject<FuncNetConfigFileContentDto>(configText!.ToString())
+			?? new FuncNetConfigFileContentDto();
 
-		return new FuncNetConfig(solution, configDocument, content);
+		return new FuncNetConfig(solution, configDocument, FuncNetConfigFileContent.FromDto(contentDto));
 	}
 }

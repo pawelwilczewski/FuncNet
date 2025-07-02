@@ -73,6 +73,7 @@ internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 			properties,
 			unionTypeDisplayString,
 			FuncNetConfig.FILE_NAME);
+
 		context.ReportDiagnostic(diagnostic);
 	}
 }

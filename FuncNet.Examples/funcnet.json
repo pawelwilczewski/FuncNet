@@ -1,0 +1,6 @@
+{
+  "UnionRegistrations": [
+    "Union<int,string,bool>",
+    "Union<int,string,bool,DateTime>"
+  ]
+}

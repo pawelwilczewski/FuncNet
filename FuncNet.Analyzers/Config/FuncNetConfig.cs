@@ -10,23 +10,11 @@ internal sealed record class FuncNetConfig(
 {
 	public const string FILE_NAME = "funcnet.json";
 
-	public FuncNetConfig WithUnionRegistration(UnionRegistration registration)
+	public FuncNetConfig WithUnionRegistration(TypeEntry unionType)
 	{
-		var newContent = Content.WithUnionRegistration(registration);
-		var serializedContent = SimpleJson.SimpleJson.SerializeObject(newContent);
+		var newContent = Content.WithUnionRegistration(unionType);
+		var serializedContent = SimpleJson.SimpleJson.SerializeObject(newContent.ToDto());
 		var solution = Solution.WithAdditionalDocumentText(ConfigDocument.Id, SourceText.From(serializedContent));
 		return new FuncNetConfig(solution, solution.GetAdditionalDocument(ConfigDocument.Id)!, newContent);
-	}
-
-	public static Solution CreateInProject(Project project, FuncNetConfigFileContent content)
-	{
-		var serializedContent = SimpleJson.SimpleJson.SerializeObject(content);
-		var documentId = DocumentId.CreateNewId(project.Id);
-
-		return project.Solution.AddAdditionalDocument(
-			documentId,
-			FILE_NAME,
-			SourceText.From(serializedContent),
-			filePath: project.FilePath is null ? null : Path.Combine(Path.GetDirectoryName(project.FilePath)!, FILE_NAME));
 	}
 }
