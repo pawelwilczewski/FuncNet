@@ -21,7 +21,8 @@ internal sealed class RequireConfigFileAnalyzer : DiagnosticAnalyzer
 		CATEGORY,
 		DiagnosticSeverity.Error,
 		true,
-		$"FuncNet requires a {FuncNetConfig.FILE_NAME} file to function properly.");
+		$"FuncNet requires a {FuncNetConfig.FILE_NAME} file to function properly.",
+		customTags: "CompilationEnd");
 
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(rule);
 
