@@ -1,10 +1,8 @@
 namespace FuncNet.Analyzers.Config;
 
-public readonly record struct TypeEntry
+public readonly record struct TypeEntry(string TypeName)
 {
-	public string TypeName { get; }
-
-	public TypeEntry(string typeName) => TypeName = NormalizeTypeName(typeName);
+	public string TypeName { get; } = NormalizeTypeName(TypeName);
 
 	private static string NormalizeTypeName(string typeName) =>
 		string.IsNullOrWhiteSpace(typeName)
