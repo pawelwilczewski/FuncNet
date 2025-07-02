@@ -1,3 +1,4 @@
+using FuncNet.Analyzers.Json;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
@@ -13,7 +14,7 @@ internal sealed record class FuncNetConfig(
 	public FuncNetConfig WithUnionRegistration(TypeEntry unionType)
 	{
 		var newContent = Content.WithUnionRegistration(unionType);
-		var serializedContent = SimpleJson.SimpleJson.SerializeObject(newContent.ToDto());
+		var serializedContent = JsonFormatter.Format(SimpleJson.SimpleJson.SerializeObject(newContent.ToDto()));
 		var solution = Solution.WithAdditionalDocumentText(ConfigDocument.Id, SourceText.From(serializedContent));
 		return new FuncNetConfig(solution, solution.GetAdditionalDocument(ConfigDocument.Id)!, newContent);
 	}
