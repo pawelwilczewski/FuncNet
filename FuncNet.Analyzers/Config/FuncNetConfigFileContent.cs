@@ -4,16 +4,16 @@ namespace FuncNet.Analyzers.Config;
 
 internal sealed record class FuncNetConfigFileContent
 {
-	public ImmutableList<TypeEntry> UnionRegistrations { get; }
+	public ImmutableHashSet<TypeEntry> UnionRegistrations { get; }
 
-	private FuncNetConfigFileContent(ImmutableList<TypeEntry> unionRegistrations) =>
+	private FuncNetConfigFileContent(ImmutableHashSet<TypeEntry> unionRegistrations) =>
 		UnionRegistrations = unionRegistrations;
 
 	public static FuncNetConfigFileContent Empty() =>
-		new(ImmutableList<TypeEntry>.Empty);
+		new(ImmutableHashSet<TypeEntry>.Empty);
 
 	public static FuncNetConfigFileContent FromDto(FuncNetConfigFileContentDto configDto) =>
-		new(configDto.UnionRegistrations.Select(entry => new TypeEntry(entry)).ToImmutableList());
+		new(configDto.UnionRegistrations.Select(entry => new TypeEntry(entry)).ToImmutableHashSet());
 
 	public FuncNetConfigFileContentDto ToDto() =>
 		new(UnionRegistrations.Select(typeEntry => typeEntry.TypeName).ToList());

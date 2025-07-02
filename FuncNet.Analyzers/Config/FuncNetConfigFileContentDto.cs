@@ -1,7 +1,7 @@
 namespace FuncNet.Analyzers.Config;
 
 internal sealed record class FuncNetConfigFileContentDto(
-	IReadOnlyList<string> UnionRegistrations)
+	IReadOnlyCollection<string> UnionRegistrations)
 {
 	public FuncNetConfigFileContentDto() : this([]) { }
 }
