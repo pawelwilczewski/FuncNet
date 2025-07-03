@@ -9,23 +9,24 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace FuncNet.Analyzers;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
+internal sealed class TypeRegistrationAnalyzer : DiagnosticAnalyzer
 {
 	public const string DIAGNOSTIC_ID = "FN0002";
 	private const string CATEGORY = nameof(FuncNet);
 
-	public const string UNION_TYPE_PROPERTY_NAME = "UnionTypeString";
+	public const string TYPE_PROPERTY_NAME = "TypeName";
 
-	private static readonly Regex unionTypeRegex = new(".*FuncNet.Union<(.*)>", RegexOptions.Compiled);
+	private static readonly Regex typeRegex = new(".*FuncNet\\.(Union|Result)<(.*)>", RegexOptions.Compiled);
 
 	private static readonly DiagnosticDescriptor rule = new(
 		DIAGNOSTIC_ID,
-		"Union type not registered",
-		"The Union type '{0}' is used but not registered in {1}. Consider registering it.",
+		"Union or Result type not registered",
+		"The type '{0}' is used but not registered in {1}. Consider registering it.",
 		CATEGORY,
 		DiagnosticSeverity.Warning,
 		true,
-		$"Union types should be registered in {FuncNetConfig.FILE_NAME} file to enable source generation of necessary conversions/helpers.");
+		$"Union and Result types should be registered in {FuncNetConfig.FILE_NAME} file to enable source"
+		+ " generation of necessary implicit conversions.");
 
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(rule);
 
@@ -42,37 +43,37 @@ internal sealed class UnionRegistrationAnalyzer : DiagnosticAnalyzer
 		if (funcNetConfig is null) return;
 
 		compilationStartContext.RegisterSyntaxNodeAction(
-			context => AnalyzeGenericNameSyntax(context, funcNetConfig.UnionRegistrations),
+			context => AnalyzeGenericNameSyntax(context, funcNetConfig.TypeRegistrations),
 			SyntaxKind.GenericName);
 	}
 
 	private static void AnalyzeGenericNameSyntax(
 		SyntaxNodeAnalysisContext context,
-		IReadOnlyCollection<TypeEntry> registeredUnions)
+		IReadOnlyCollection<TypeEntry> registeredTypes)
 	{
 		var genericNameNode = (GenericNameSyntax)context.Node;
 		var semanticModel = context.SemanticModel;
 
 		var symbol = semanticModel.GetSymbolInfo(genericNameNode, context.CancellationToken).Symbol;
 		if (symbol is not INamedTypeSymbol namedTypeSymbol
-			|| !unionTypeRegex.IsMatch(
+			|| !typeRegex.IsMatch(
 				namedTypeSymbol.ConstructedFrom.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat))
 			|| !namedTypeSymbol.IsGenericType)
 		{
 			return;
 		}
 
-		var unionTypeEntry = new TypeEntry(namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
-		if (registeredUnions.Contains(unionTypeEntry)) return;
+		var typeEntry = new TypeEntry(namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
+		if (registeredTypes.Contains(typeEntry)) return;
 
 		var properties = ImmutableDictionary<string, string?>.Empty
-			.Add(UNION_TYPE_PROPERTY_NAME, unionTypeEntry.TypeName);
+			.Add(TYPE_PROPERTY_NAME, typeEntry.TypeName);
 
 		var diagnostic = Diagnostic.Create(
 			rule,
 			genericNameNode.Identifier.GetLocation(),
 			properties,
-			unionTypeEntry,
+			typeEntry,
 			FuncNetConfig.FILE_NAME);
 
 		context.ReportDiagnostic(diagnostic);

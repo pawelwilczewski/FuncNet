@@ -1,6 +1,9 @@
 {
-  "UnionRegistrations": [
+  "TypeRegistrations": [
+    "Result<User,ValidationError,DatabaseError>",
+    "Union<int,string,bool,DateTime>",
+    "Result<string,ValidationError>",
     "Union<int,string,bool>",
-    "Union<int,string,bool,DateTime>"
+    "Result<User,DatabaseError>"
   ]
 }

@@ -7,20 +7,20 @@ using Microsoft.CodeAnalysis.CodeFixes;
 
 namespace FuncNet.Analyzers;
 
-[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(UnionRegistrationCodeFixProvider))]
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(TypeRegistrationCodeFixProvider))]
 [Shared]
-public sealed class UnionRegistrationCodeFixProvider : CodeFixProvider
+public sealed class TypeRegistrationCodeFixProvider : CodeFixProvider
 {
 	public override ImmutableArray<string> FixableDiagnosticIds =>
-		ImmutableArray.Create(UnionRegistrationAnalyzer.DIAGNOSTIC_ID);
+		ImmutableArray.Create(TypeRegistrationAnalyzer.DIAGNOSTIC_ID);
 
 	public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
 	public override async Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
 		var diagnostic = context.Diagnostics.First();
-		if (!diagnostic.Properties.TryGetValue(UnionRegistrationAnalyzer.UNION_TYPE_PROPERTY_NAME, out var unionTypeString)
-			|| string.IsNullOrEmpty(unionTypeString))
+		if (!diagnostic.Properties.TryGetValue(TypeRegistrationAnalyzer.TYPE_PROPERTY_NAME, out var typeName)
+			|| string.IsNullOrEmpty(typeName))
 		{
 			return;
 		}
@@ -28,27 +28,27 @@ public sealed class UnionRegistrationCodeFixProvider : CodeFixProvider
 		var funcNetConfig = await context.Document.Project.Solution.GetFuncNetConfig(CancellationToken.None);
 		if (funcNetConfig is null) throw new InvalidOperationException("FuncNet config should exist, because the diagnostic mustn't be thrown without it.");
 
-		var unionTypeEntry = new TypeEntry(unionTypeString!);
-		if (funcNetConfig.Content.UnionRegistrations.Contains(unionTypeEntry)) return;
+		var typeEntry = new TypeEntry(typeName!);
+		if (funcNetConfig.Content.TypeRegistrations.Contains(typeEntry)) return;
 
 		context.RegisterCodeFix(
 			CodeAction.Create(
-				$"Register '{unionTypeString}' in {FuncNetConfig.FILE_NAME}",
-				cancellationToken => AddOrUpdateUnionRegistrationFileAsync(
-					context.Document.Project.Solution, unionTypeEntry, cancellationToken),
-				$"{nameof(UnionRegistrationCodeFixProvider)}_{unionTypeEntry}"),
+				$"Register '{typeName}' in {FuncNetConfig.FILE_NAME}",
+				cancellationToken => AddOrUpdateConfigFileAsync(
+					context.Document.Project.Solution, typeEntry, cancellationToken),
+				$"{nameof(TypeRegistrationCodeFixProvider)}_{typeEntry}"),
 			diagnostic);
 	}
 
-	private static async Task<Solution> AddOrUpdateUnionRegistrationFileAsync(
+	private static async Task<Solution> AddOrUpdateConfigFileAsync(
 		Solution solution,
-		TypeEntry unionType,
+		TypeEntry typeEntry,
 		CancellationToken cancellationToken)
 	{
 		var config = await solution.GetFuncNetConfig(cancellationToken).ConfigureAwait(false);
 		if (config is null) return solution;
 
-		var newConfig = config.WithUnionRegistration(unionType);
+		var newConfig = config.WithTypeRegistration(typeEntry);
 		return newConfig.Solution;
 	}
 }

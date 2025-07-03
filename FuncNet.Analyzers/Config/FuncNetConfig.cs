@@ -11,9 +11,9 @@ internal sealed record class FuncNetConfig(
 {
 	public const string FILE_NAME = "funcnet.json";
 
-	public FuncNetConfig WithUnionRegistration(TypeEntry unionType)
+	public FuncNetConfig WithTypeRegistration(TypeEntry typeEntry)
 	{
-		var newContent = Content.WithUnionRegistration(unionType);
+		var newContent = Content.WithUnionRegistration(typeEntry);
 		var serializedContent = JsonFormatter.Format(SimpleJson.SimpleJson.SerializeObject(newContent.ToDto()));
 		var solution = Solution.WithAdditionalDocumentText(ConfigDocument.Id, SourceText.From(serializedContent));
 		return new FuncNetConfig(solution, solution.GetAdditionalDocument(ConfigDocument.Id)!, newContent);
