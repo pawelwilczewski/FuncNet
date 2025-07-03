@@ -55,7 +55,17 @@
         <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false"/>
     </ItemGroup>
 
+    <PropertyGroup>
+        <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
+    </PropertyGroup>
+
     <ItemGroup>
-        <ProjectReference Include="..\FuncNet.Shared\FuncNet.Shared.csproj"/>
+        <ProjectReference Include="..\FuncNet.Shared\FuncNet.Shared.csproj" PrivateAssets="all" GeneratePathProperty="true"/>
     </ItemGroup>
+
+    <Target Name="GetDependencyTargetPaths">
+        <ItemGroup>
+            <TargetPathWithTargetPlatformMoniker Include="..\FuncNet.Shared\$(OutputPath)\FuncNet.Shared.dll" IncludeRuntimeDependency="false"/>
+        </ItemGroup>
+    </Target>
 </Project>

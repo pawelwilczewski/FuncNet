@@ -16,7 +16,7 @@ internal sealed class TypeRegistrationAnalyzer : DiagnosticAnalyzer
 
 	public const string TYPE_PROPERTY_NAME = "TypeName";
 
-	private static readonly Regex typeRegex = new(".*FuncNet\\.(Union|Result)<(.*)>", RegexOptions.Compiled);
+	private static readonly Regex typeRegex = new(".*FuncNet\\.(?:Union|Result)<(.*)>", RegexOptions.Compiled);
 
 	private static readonly DiagnosticDescriptor rule = new(
 		DIAGNOSTIC_ID,
