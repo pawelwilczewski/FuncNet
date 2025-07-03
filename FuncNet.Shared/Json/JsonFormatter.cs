@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace FuncNet.Analyzers.Json;
+namespace FuncNet.Shared.Json;
 
 // Source: https://stackoverflow.com/a/6237866/8890805
 internal static class JsonFormatter

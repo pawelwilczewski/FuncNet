@@ -1,8 +1,8 @@
 using System.Collections.Immutable;
 
-namespace FuncNet.Analyzers.Config;
+namespace FuncNet.Shared.Config;
 
-internal sealed record class FuncNetConfigFileContent
+public sealed record class FuncNetConfigFileContent
 {
 	public ImmutableHashSet<TypeEntry> TypeRegistrations { get; }
 

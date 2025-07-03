@@ -1,5 +1,5 @@
 using System.Collections.Immutable;
-using FuncNet.Analyzers.Config;
+using FuncNet.Shared.Config;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 

@@ -2,9 +2,9 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace FuncNet.Analyzers.Config;
+namespace FuncNet.Shared.Config;
 
-internal static class FuncNetConfigExtensions
+public static class FuncNetConfigExtensions
 {
 	public static async Task<FuncNetConfig?> GetFuncNetConfig(this Solution solution, CancellationToken cancellationToken)
 	{

@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 using System.Composition;
-using FuncNet.Analyzers.Config;
+using FuncNet.Shared.Config;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;

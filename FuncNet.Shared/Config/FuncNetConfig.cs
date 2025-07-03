@@ -1,10 +1,10 @@
-using FuncNet.Analyzers.Json;
+using FuncNet.Shared.Json;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
-namespace FuncNet.Analyzers.Config;
+namespace FuncNet.Shared.Config;
 
-internal sealed record class FuncNetConfig(
+public sealed record class FuncNetConfig(
 	Solution Solution,
 	TextDocument ConfigDocument,
 	FuncNetConfigFileContent Content)

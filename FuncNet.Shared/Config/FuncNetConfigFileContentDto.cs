@@ -1,6 +1,6 @@
-namespace FuncNet.Analyzers.Config;
+namespace FuncNet.Shared.Config;
 
-internal sealed record class FuncNetConfigFileContentDto(
+public sealed record class FuncNetConfigFileContentDto(
 	IReadOnlyCollection<string> TypeRegistrations)
 {
 	public FuncNetConfigFileContentDto() : this([]) { }

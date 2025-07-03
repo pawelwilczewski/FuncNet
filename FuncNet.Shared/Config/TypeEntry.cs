@@ -1,4 +1,4 @@
-namespace FuncNet.Analyzers.Config;
+namespace FuncNet.Shared.Config;
 
 public readonly record struct TypeEntry(string TypeName)
 {

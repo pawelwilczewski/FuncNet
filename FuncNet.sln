@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet.Examples", "FuncNet
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet.Analyzers", "FuncNet.Analyzers\FuncNet.Analyzers.csproj", "{9318A0A2-EB2B-4746-BDED-6E1AB5255E0C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncNet.Shared", "FuncNet.Shared\FuncNet.Shared.csproj", "{2995467C-7298-4437-96C3-F1FCAFC8214E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{9318A0A2-EB2B-4746-BDED-6E1AB5255E0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9318A0A2-EB2B-4746-BDED-6E1AB5255E0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9318A0A2-EB2B-4746-BDED-6E1AB5255E0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2995467C-7298-4437-96C3-F1FCAFC8214E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2995467C-7298-4437-96C3-F1FCAFC8214E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2995467C-7298-4437-96C3-F1FCAFC8214E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2995467C-7298-4437-96C3-F1FCAFC8214E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
