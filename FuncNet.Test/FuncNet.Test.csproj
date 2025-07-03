@@ -21,12 +21,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\FuncNet\FuncNet.csproj" OutputItemType="Analyzer"/>
+        <ProjectReference Include="..\FuncNet\FuncNet.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
         <ProjectReference Include="..\FuncNet.Analyzers\FuncNet.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
     </ItemGroup>
 
     <ItemGroup>
-        <AdditionalFiles Include="../funcnet.json"/>
+        <AdditionalFiles Include="..\funcnet.json"/>
     </ItemGroup>
 
 </Project>
