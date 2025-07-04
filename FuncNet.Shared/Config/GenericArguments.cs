@@ -1,8 +1,8 @@
 namespace FuncNet.Shared.Config;
 
-public readonly record struct TypeEntry(string TypeName)
+public readonly record struct GenericArguments(string CommaSeparatedArguments)
 {
-	public string TypeName { get; } = NormalizeTypeName(TypeName);
+	public string CommaSeparatedArguments { get; } = NormalizeTypeName(CommaSeparatedArguments);
 
 	public static string NormalizeTypeName(string typeName) =>
 		string.IsNullOrWhiteSpace(typeName)
@@ -12,5 +12,5 @@ public readonly record struct TypeEntry(string TypeName)
 				.Replace("\r", "")
 				.Replace("\n", "");
 
-	public override string ToString() => TypeName;
+	public override string ToString() => CommaSeparatedArguments;
 }

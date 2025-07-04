@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Composition;
+using FuncNet.Shared.Common;
 using FuncNet.Shared.Config;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -19,36 +20,39 @@ public sealed class TypeRegistrationCodeFixProvider : CodeFixProvider
 	public override async Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
 		var diagnostic = context.Diagnostics.First();
-		if (!diagnostic.Properties.TryGetValue(TypeRegistrationAnalyzer.TYPE_PROPERTY_NAME, out var typeName)
-			|| string.IsNullOrEmpty(typeName))
-		{
-			return;
-		}
+		if (!diagnostic.Properties.Values.Any()) return;
 
 		var funcNetConfig = await context.Document.Project.Solution.GetFuncNetConfig(CancellationToken.None);
-		if (funcNetConfig is null) throw new InvalidOperationException("FuncNet config should exist, because the diagnostic mustn't be thrown without it.");
+		if (funcNetConfig is null)
+		{
+			throw new InvalidOperationException(
+				"FuncNet config should exist, because the diagnostic mustn't be thrown without it.");
+		}
 
-		var typeEntry = new TypeEntry(typeName!);
-		if (funcNetConfig.Content.TypeRegistrations.Contains(typeEntry)) return;
+		var genericEntries = diagnostic.Properties.Values
+			.Select(generics => new GenericArguments(generics!))
+			.ToImmutableHashSet();
+
+		var genericEntriesString = genericEntries.FormatGenericsToDisplayString();
 
 		context.RegisterCodeFix(
 			CodeAction.Create(
-				$"Register '{typeName}' in {FuncNetConfig.FILE_NAME}",
+				$"Register {genericEntriesString} in {FuncNetConfig.FILE_NAME}",
 				cancellationToken => AddOrUpdateConfigFileAsync(
-					context.Document.Project.Solution, typeEntry, cancellationToken),
-				$"{nameof(TypeRegistrationCodeFixProvider)}_{typeEntry}"),
+					context.Document.Project.Solution, genericEntries, cancellationToken),
+				$"{nameof(TypeRegistrationCodeFixProvider)}_{genericEntriesString}"),
 			diagnostic);
 	}
 
 	private static async Task<Solution> AddOrUpdateConfigFileAsync(
 		Solution solution,
-		TypeEntry typeEntry,
+		IEnumerable<GenericArguments> genericEntries,
 		CancellationToken cancellationToken)
 	{
 		var config = await solution.GetFuncNetConfig(cancellationToken).ConfigureAwait(false);
 		if (config is null) return solution;
 
-		var newConfig = config.WithTypeRegistration(typeEntry);
+		var newConfig = config.WithGenericsRegistration(genericEntries);
 		return newConfig.Solution;
 	}
 }

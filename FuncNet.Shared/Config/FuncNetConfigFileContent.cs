@@ -4,19 +4,19 @@ namespace FuncNet.Shared.Config;
 
 public sealed record class FuncNetConfigFileContent
 {
-	public ImmutableHashSet<TypeEntry> TypeRegistrations { get; }
+	public ImmutableHashSet<GenericArguments> TypeRegistrations { get; }
 
-	private FuncNetConfigFileContent(ImmutableHashSet<TypeEntry> typeRegistrations) =>
+	private FuncNetConfigFileContent(ImmutableHashSet<GenericArguments> typeRegistrations) =>
 		TypeRegistrations = typeRegistrations;
 
 	public static FuncNetConfigFileContent Empty() =>
-		new(ImmutableHashSet<TypeEntry>.Empty);
+		new(ImmutableHashSet<GenericArguments>.Empty);
 
 	public static FuncNetConfigFileContent FromDto(FuncNetConfigFileContentDto configDto) =>
-		new(configDto.TypeRegistrations.Select(entry => new TypeEntry(entry)).ToImmutableHashSet());
+		new(configDto.TypeRegistrations.Select(entry => new GenericArguments(entry)).ToImmutableHashSet());
 
 	public FuncNetConfigFileContentDto ToDto() =>
-		new(TypeRegistrations.Select(typeEntry => typeEntry.TypeName).ToList());
+		new(TypeRegistrations.Select(typeEntry => typeEntry.CommaSeparatedArguments).ToList());
 
 	public static FuncNetConfigFileContent? Combine(params IEnumerable<FuncNetConfigFileContent> configs)
 	{
@@ -29,11 +29,11 @@ public sealed record class FuncNetConfigFileContent
 		return finalConfig;
 	}
 
-	public FuncNetConfigFileContent WithTypeRegistration(TypeEntry registration) =>
+	public FuncNetConfigFileContent WithTypeRegistration(GenericArguments registration) =>
 		TypeRegistrations.Contains(registration)
 			? this
 			: new FuncNetConfigFileContent(TypeRegistrations.Add(registration));
 
-	public FuncNetConfigFileContent WithTypeRegistrations(params IEnumerable<TypeEntry> registrations) =>
+	public FuncNetConfigFileContent WithTypeRegistrations(params IEnumerable<GenericArguments> registrations) =>
 		registrations.Aggregate(this, (config, registration) => config.WithTypeRegistration(registration));
 }

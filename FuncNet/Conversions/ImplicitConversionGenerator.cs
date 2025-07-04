@@ -45,7 +45,7 @@ internal sealed class ImplicitConversionGenerator : IIncrementalGenerator
 
 		var typeDeclarations = initializationContext.SyntaxProvider
 			.CreateSyntaxProvider(
-				(syntaxNode, _) => syntaxNode.ToString().Contains($"{typeName}<"),
+				(syntaxNode, _) => syntaxNode.ToString().Contains($"{typeName}<") || syntaxNode.ToString().Contains("Extend<"),
 				(context, _) => context.Node)
 			.Collect()
 			.Combine(configProvider.Collect());
@@ -57,12 +57,12 @@ internal sealed class ImplicitConversionGenerator : IIncrementalGenerator
 				var (typeNodes, configs) = typesAndConfigs;
 				var config = configs.FirstOrDefault();
 
-				var registeredTypes = (config?.TypeRegistrations ?? ImmutableHashSet<TypeEntry>.Empty)
-					.Where(type => type.TypeName.StartsWith(typeName))
+				var registeredTypes = (config?.TypeRegistrations ?? ImmutableHashSet<GenericArguments>.Empty)
+					.Where(type => type.CommaSeparatedArguments.StartsWith(typeName) || type.CommaSeparatedArguments.StartsWith("Extend"))
 					.Select(type =>
 					{
-						var startIndex = type.TypeName.IndexOf("<", StringComparison.Ordinal) + 1;
-						return type.TypeName.Substring(startIndex, type.TypeName.Length - startIndex - 1);
+						var startIndex = type.CommaSeparatedArguments.IndexOf("<", StringComparison.Ordinal) + 1;
+						return type.CommaSeparatedArguments.Substring(startIndex, type.CommaSeparatedArguments.Length - startIndex - 1);
 					});
 				var allTypes = ExtractTypes(typeNodes).Union(registeredTypes);
 
@@ -81,7 +81,7 @@ internal sealed class ImplicitConversionGenerator : IIncrementalGenerator
 			.SelectMany(matches => matches.Cast<Match>()
 				.Where(match => match.Success && match.Groups.Count > 1)
 				.Select(match => match.Groups[1].Value.Trim()))
-			.Select(TypeEntry.NormalizeTypeName)
+			.Select(GenericArguments.NormalizeTypeName)
 			.ToImmutableHashSet();
 
 	private IEnumerable<ImplicitUnionConversion> GenerateCompatibleConversions(IImmutableSet<string> typeGenerics)

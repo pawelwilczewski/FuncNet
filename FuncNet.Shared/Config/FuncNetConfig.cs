@@ -12,11 +12,14 @@ public sealed record class FuncNetConfig(
 {
 	public const string FILE_NAME = "funcnet.json";
 
-	public FuncNetConfig WithTypeRegistration(TypeEntry typeEntry)
+	public FuncNetConfig WithGenericsRegistration(GenericArguments genericArguments)
 	{
-		var newContent = Content.WithTypeRegistration(typeEntry);
+		var newContent = Content.WithTypeRegistration(genericArguments);
 		var serializedContent = JsonFormatter.Format(SimpleJson.SimpleJson.SerializeObject(newContent.ToDto()));
 		var solution = Solution.WithAdditionalDocumentText(ConfigDocuments.First().Id, SourceText.From(serializedContent));
 		return new FuncNetConfig(solution, ConfigDocuments.Select(configDocument => solution.GetAdditionalDocument(configDocument.Id)!).ToImmutableHashSet(), newContent);
 	}
+
+	public FuncNetConfig WithGenericsRegistration(params IEnumerable<GenericArguments> genericArguments) =>
+		genericArguments.Aggregate(this, (config, arguments) => config.WithGenericsRegistration(arguments));
 }
