@@ -53,6 +53,7 @@
 
     <ItemGroup>
         <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false"/>
+        <None Include="..\FuncNet.Shared\bin\$(Configuration)\netstandard2.0\FuncNet.Shared.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false"/>
     </ItemGroup>
 
     <PropertyGroup>
@@ -68,4 +69,5 @@
             <TargetPathWithTargetPlatformMoniker Include="..\FuncNet.Shared\$(OutputPath)\FuncNet.Shared.dll" IncludeRuntimeDependency="false"/>
         </ItemGroup>
     </Target>
+
 </Project>
