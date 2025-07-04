@@ -18,8 +18,22 @@ public sealed record class FuncNetConfigFileContent
 	public FuncNetConfigFileContentDto ToDto() =>
 		new(TypeRegistrations.Select(typeEntry => typeEntry.TypeName).ToList());
 
-	public FuncNetConfigFileContent WithUnionRegistration(TypeEntry registration) =>
+	public static FuncNetConfigFileContent? Combine(params IEnumerable<FuncNetConfigFileContent> configs)
+	{
+		FuncNetConfigFileContent? finalConfig = null;
+		foreach (var config in configs)
+		{
+			finalConfig = finalConfig == null ? config : finalConfig.WithTypeRegistrations(config.TypeRegistrations);
+		}
+
+		return finalConfig;
+	}
+
+	public FuncNetConfigFileContent WithTypeRegistration(TypeEntry registration) =>
 		TypeRegistrations.Contains(registration)
 			? this
 			: new FuncNetConfigFileContent(TypeRegistrations.Add(registration));
+
+	public FuncNetConfigFileContent WithTypeRegistrations(params IEnumerable<TypeEntry> registrations) =>
+		registrations.Aggregate(this, (config, registration) => config.WithTypeRegistration(registration));
 }

@@ -1,9 +1,21 @@
 {
   "TypeRegistrations": [
-    "Result<User,ValidationError,DatabaseError>",
+    "Union<string,bool,int>",
+    "Result<User,ValidationError,DatabaseError,EmailSendingError>",
+    "Result<User,DatabaseError>",
+    "Result<string,int>",
+    "Result<User,string>",
+    "Result<double,float,decimal,string,int,DatabaseError,DateTime>",
+    "Result<double,string,float>",
     "Union<int,string,bool,DateTime>",
-    "Result<string,ValidationError>",
     "Union<int,string,bool>",
-    "Result<User,DatabaseError>"
+    "Result<string,SomeError,double>",
+    "Result<int,SomeError,double>",
+    "Result<bool,string,int>",
+    "Result<string,ValidationError>",
+    "Result<int,string,float>",
+    "Result<int,ValidationError>",
+    "Result<User,ValidationError,DatabaseError>",
+    "Result<double,float,decimal,string,int,DateTime,DatabaseError>"
   ]
 }

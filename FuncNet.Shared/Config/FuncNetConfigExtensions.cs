@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using FuncNet.Shared.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -10,38 +11,28 @@ public static class FuncNetConfigExtensions
 	{
 		var configDocuments = solution.Projects
 			.SelectMany(project => project.AdditionalDocuments)
+			.DistinctBy(document => document.Id)
 			.Where(document => document.Name == FuncNetConfig.FILE_NAME)
-			.ToImmutableArray();
+			.ToImmutableHashSet();
 
-		var configDocument = configDocuments.Length switch
-		{
-			0 => null,
-			1 => configDocuments.First(),
-			_ => throw new NotSupportedException("Multiple config files in single solution are not yet supported")
-		};
-		if (configDocument is null) return null;
+		var configDocumentsText = await Task.WhenAll(configDocuments
+				.Select(document => document.GetTextAsync(cancellationToken)))
+			.ConfigureAwait(false);
 
-		var configText = await configDocument.GetTextAsync(cancellationToken).ConfigureAwait(false);
-		var contentDto = SimpleJson.SimpleJson.DeserializeObjectOrDefault(configText?.ToString(), new FuncNetConfigFileContentDto());
-		return new FuncNetConfig(solution, configDocument, FuncNetConfigFileContent.FromDto(contentDto));
+		var configFileContent = FuncNetConfigFileContent.Combine(configDocumentsText
+				.Select(text => text.ToString())
+				.Select(configText => SimpleJson.SimpleJson.DeserializeObjectOrDefault(configText?.ToString(), new FuncNetConfigFileContentDto()))
+				.Select(FuncNetConfigFileContent.FromDto))
+			?? FuncNetConfigFileContent.Empty();
+
+		return new FuncNetConfig(solution, configDocuments, configFileContent);
 	}
 
-	public static FuncNetConfigFileContent? GetFuncNetConfig(this AnalyzerOptions options)
-	{
-		var configDocuments = options.AdditionalFiles
+	public static FuncNetConfigFileContent? GetFuncNetConfig(this AnalyzerOptions options) =>
+		FuncNetConfigFileContent.Combine(options.AdditionalFiles
+			.DistinctBy(text => text.Path)
 			.Where(text => Path.GetFileName(text.Path) == FuncNetConfig.FILE_NAME)
-			.ToImmutableArray();
-
-		var configDocument = configDocuments.Length switch
-		{
-			0 => null,
-			1 => configDocuments.First(),
-			_ => throw new NotSupportedException("Multiple config files in single solution are not yet supported")
-		};
-		if (configDocument is null) return null;
-
-		var configText = configDocument.GetText();
-		var contentDto = SimpleJson.SimpleJson.DeserializeObjectOrDefault(configText?.ToString(), new FuncNetConfigFileContentDto());
-		return FuncNetConfigFileContent.FromDto(contentDto);
-	}
+			.Select(configDocument => configDocument.GetText())
+			.Select(configText => SimpleJson.SimpleJson.DeserializeObjectOrDefault(configText?.ToString(), new FuncNetConfigFileContentDto()))
+			.Select(FuncNetConfigFileContent.FromDto));
 }
