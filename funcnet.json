@@ -1,38 +1,6 @@
 {
-  "TypeRegistrations": [
-    "Result<int,ValidationError>",
-    "int,string,bool",
-    "Result<User,DatabaseError>",
-    "int,string,double",
-    "bool,string,double",
-    "Task<Result<string,int,bool>>Task<Result<string,int>>.Extend<string,int,bool>()",
-    "Union<string,bool,int>",
-    "string,int",
-    "int,string,float",
-    "Union<int,string,bool>",
-    "string,int,bool",
-    "bool,int,string",
-    "int,bool,string",
-    "Result<User,ValidationError,DatabaseError>",
-    "User,string",
-    "int,bool,float,double",
-    "string,SomeError,double",
-    "int,string,bool,DateTime,int,double,float",
-    "Result<string,int>",
-    "Result<int,string,float>",
-    "Result<User,string>",
-    "Union<int,string,bool,DateTime>",
-    "Result<int,SomeError,double>",
-    "int,SomeError,double",
-    "Result<double,float,decimal,string,int,DateTime,DatabaseError>",
-    "bool,SomeError,double",
-    "Result<User,ValidationError,DatabaseError,EmailSendingError>",
-    "Result<string,ValidationError>",
-    "DateTime,string,double",
-    "string,int,double",
-    "Result<double,string,float>",
-    "Result<string,SomeError,double>",
-    "Result<double,float,decimal,string,int,DatabaseError,DateTime>",
-    "Result<bool,string,int>"
+  "GenericsRegistrations": [
+    "double,bool,int,string",
+    "string,int,double,bool,float,char"
   ]
 }

@@ -57,7 +57,7 @@ internal sealed class ImplicitConversionGenerator : IIncrementalGenerator
 				var (typeNodes, configs) = typesAndConfigs;
 				var config = configs.FirstOrDefault();
 
-				var registeredTypes = (config?.TypeRegistrations ?? ImmutableHashSet<GenericArguments>.Empty)
+				var registeredTypes = (config?.GenericsRegistrations ?? ImmutableHashSet<GenericArguments>.Empty)
 					.Where(type => type.CommaSeparatedArguments.StartsWith(typeName) || type.CommaSeparatedArguments.StartsWith("Extend"))
 					.Select(type =>
 					{

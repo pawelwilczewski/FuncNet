@@ -4,35 +4,35 @@ namespace FuncNet.Shared.Config;
 
 public sealed record class FuncNetConfigFileContent
 {
-	public ImmutableHashSet<GenericArguments> TypeRegistrations { get; }
+	public ImmutableHashSet<GenericArguments> GenericsRegistrations { get; }
 
-	private FuncNetConfigFileContent(ImmutableHashSet<GenericArguments> typeRegistrations) =>
-		TypeRegistrations = typeRegistrations;
+	private FuncNetConfigFileContent(ImmutableHashSet<GenericArguments> genericsRegistrations) =>
+		GenericsRegistrations = genericsRegistrations;
 
 	public static FuncNetConfigFileContent Empty() =>
 		new(ImmutableHashSet<GenericArguments>.Empty);
 
 	public static FuncNetConfigFileContent FromDto(FuncNetConfigFileContentDto configDto) =>
-		new(configDto.TypeRegistrations.Select(entry => new GenericArguments(entry)).ToImmutableHashSet());
+		new(configDto.GenericsRegistrations.Select(entry => new GenericArguments(entry)).ToImmutableHashSet());
 
 	public FuncNetConfigFileContentDto ToDto() =>
-		new(TypeRegistrations.Select(typeEntry => typeEntry.CommaSeparatedArguments).ToList());
+		new(GenericsRegistrations.Select(generics => generics.CommaSeparatedArguments).ToList());
 
 	public static FuncNetConfigFileContent? Combine(params IEnumerable<FuncNetConfigFileContent> configs)
 	{
 		FuncNetConfigFileContent? finalConfig = null;
 		foreach (var config in configs)
 		{
-			finalConfig = finalConfig == null ? config : finalConfig.WithTypeRegistrations(config.TypeRegistrations);
+			finalConfig = finalConfig == null ? config : finalConfig.WithTypeRegistrations(config.GenericsRegistrations);
 		}
 
 		return finalConfig;
 	}
 
 	public FuncNetConfigFileContent WithTypeRegistration(GenericArguments registration) =>
-		TypeRegistrations.Contains(registration)
+		GenericsRegistrations.Contains(registration)
 			? this
-			: new FuncNetConfigFileContent(TypeRegistrations.Add(registration));
+			: new FuncNetConfigFileContent(GenericsRegistrations.Add(registration));
 
 	public FuncNetConfigFileContent WithTypeRegistrations(params IEnumerable<GenericArguments> registrations) =>
 		registrations.Aggregate(this, (config, registration) => config.WithTypeRegistration(registration));

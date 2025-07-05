@@ -42,7 +42,7 @@ internal sealed class TypeRegistrationAnalyzer : DiagnosticAnalyzer
 		if (funcNetConfig is null) return;
 
 		compilationStartContext.RegisterSyntaxNodeAction(
-			context => AnalyzeGenericNameSyntax(context, funcNetConfig.TypeRegistrations),
+			context => AnalyzeGenericNameSyntax(context, funcNetConfig.GenericsRegistrations),
 			SyntaxKind.GenericName);
 	}
 
