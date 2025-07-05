@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Text.RegularExpressions;
 using FuncNet.CodeGeneration;
 using FuncNet.CodeGeneration.Models;
 using FuncNet.Shared.Config;
@@ -18,7 +17,6 @@ internal sealed class ImplicitConversionGenerator : IIncrementalGenerator
 
 	private readonly string typeName;
 	private readonly GenerateGenericTypeNameForTIndex typeNameGenerator;
-	private readonly Regex unionTypeRegex;
 	private readonly Func<ImplicitUnionConversionParams, bool> filterConversionParams;
 
 	public ImplicitConversionGenerator(
@@ -28,7 +26,6 @@ internal sealed class ImplicitConversionGenerator : IIncrementalGenerator
 	{
 		this.typeName = typeName;
 		this.typeNameGenerator = typeNameGenerator;
-		unionTypeRegex = new Regex($"{typeName}<([^<>]+)>", RegexOptions.Compiled);
 		this.filterConversionParams = filterConversionParams;
 	}
 
@@ -43,30 +40,14 @@ internal sealed class ImplicitConversionGenerator : IIncrementalGenerator
 				return FuncNetConfigFileContent.FromDto(contentDto);
 			});
 
-		var typeDeclarations = initializationContext.SyntaxProvider
-			.CreateSyntaxProvider(
-				(syntaxNode, _) => syntaxNode.ToString().Contains($"{typeName}<") || syntaxNode.ToString().Contains("Extend<"),
-				(context, _) => context.Node)
-			.Collect()
-			.Combine(configProvider.Collect());
-
 		initializationContext.RegisterSourceOutput(
-			typeDeclarations,
-			(context, typesAndConfigs) =>
+			configProvider,
+			(context, config) =>
 			{
-				var (typeNodes, configs) = typesAndConfigs;
-				var config = configs.FirstOrDefault();
-
-				var registeredTypes = (config?.GenericsRegistrations ?? ImmutableHashSet<GenericArguments>.Empty)
-					.Where(type => type.CommaSeparatedArguments.StartsWith(typeName) || type.CommaSeparatedArguments.StartsWith("Extend"))
-					.Select(type =>
-					{
-						var startIndex = type.CommaSeparatedArguments.IndexOf("<", StringComparison.Ordinal) + 1;
-						return type.CommaSeparatedArguments.Substring(startIndex, type.CommaSeparatedArguments.Length - startIndex - 1);
-					});
-				var allTypes = ExtractTypes(typeNodes).Union(registeredTypes);
-
-				var conversions = GenerateCompatibleConversions(allTypes);
+				var conversions = GenerateCompatibleConversions(
+					config.GenericsRegistrations
+						.Select(registration => registration.CommaSeparatedArguments)
+						.ToImmutableHashSet());
 
 				foreach (var conversion in conversions)
 				{
@@ -74,15 +55,6 @@ internal sealed class ImplicitConversionGenerator : IIncrementalGenerator
 				}
 			});
 	}
-
-	private ImmutableHashSet<string> ExtractTypes(ImmutableArray<SyntaxNode> typeNodes) =>
-		typeNodes
-			.Select(node => unionTypeRegex.Matches(node.ToString()))
-			.SelectMany(matches => matches.Cast<Match>()
-				.Where(match => match.Success && match.Groups.Count > 1)
-				.Select(match => match.Groups[1].Value.Trim()))
-			.Select(GenericArguments.NormalizeTypeName)
-			.ToImmutableHashSet();
 
 	private IEnumerable<ImplicitUnionConversion> GenerateCompatibleConversions(IImmutableSet<string> typeGenerics)
 	{
