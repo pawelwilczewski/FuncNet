@@ -12,10 +12,9 @@ internal static class OptionToResultExtensionsGenerator
 		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
 
 	private static IEnumerable<MethodGenerationParamsWithNewElementsCount> CreateAllMethodsGenerationParams(UnionExtensionsFileGenerationParams p) =>
-		from asyncConfig in NoneOrAllMethodAsyncConfigs
 		from newElementsCount in Enumerable.Range(1, MAX_UNION_SIZE - p.UnionSize)
 		select new MethodGenerationParamsWithNewElementsCount(
-			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName,
+			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, UnionMethodAsyncConfig.All, p.ThisArgumentName,
 			p.ElementTypeNamesGenerator, p.GetUnionOnArgument, p.FactoryMethodName, p.OtherSwitchCaseReturnValue,
 			newElementsCount);
 
@@ -29,7 +28,7 @@ internal static class OptionToResultExtensionsGenerator
 		return new MethodBuilder($"public static {newType.WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}<{newGenericArgs}>")
 			.AddArgument($"this {p.ExtendedTypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} {p.ThisArgumentName}")
 			.AddArgument($"Func<{errorIfNoneReturnType.WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> errorIfNone")
-			.AddBodyStatement($"var extended = ({p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}).Match<{newType}, TSome>("
+			.AddBodyStatement($"var extended = ({p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}).Match<{newType}>("
 				+ $"some => {$"{newType}.FromSuccess(some)".WrapInTaskFromResultIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}, {(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType) ? "async " : "")} () => {GenerateValueForErrorCase()})")
 			.AddBodyStatement($"return {"extended".WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))};");
 
