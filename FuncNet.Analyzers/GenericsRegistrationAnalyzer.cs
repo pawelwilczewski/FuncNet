@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace FuncNet.Analyzers;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-internal sealed class TypeRegistrationAnalyzer : DiagnosticAnalyzer
+internal sealed class GenericsRegistrationAnalyzer : DiagnosticAnalyzer
 {
 	public const string DIAGNOSTIC_ID = "FN0002";
 	private const string CATEGORY = nameof(FuncNet);

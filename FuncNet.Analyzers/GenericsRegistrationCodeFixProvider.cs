@@ -8,12 +8,12 @@ using Microsoft.CodeAnalysis.CodeFixes;
 
 namespace FuncNet.Analyzers;
 
-[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(TypeRegistrationCodeFixProvider))]
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(GenericsRegistrationCodeFixProvider))]
 [Shared]
-public sealed class TypeRegistrationCodeFixProvider : CodeFixProvider
+public sealed class GenericsRegistrationCodeFixProvider : CodeFixProvider
 {
 	public override ImmutableArray<string> FixableDiagnosticIds =>
-		ImmutableArray.Create(TypeRegistrationAnalyzer.DIAGNOSTIC_ID);
+		ImmutableArray.Create(GenericsRegistrationAnalyzer.DIAGNOSTIC_ID);
 
 	public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -40,7 +40,7 @@ public sealed class TypeRegistrationCodeFixProvider : CodeFixProvider
 				$"Register {genericEntriesString} in {FuncNetConfig.FILE_NAME}",
 				cancellationToken => AddOrUpdateConfigFileAsync(
 					context.Document.Project.Solution, genericEntries, cancellationToken),
-				$"{nameof(TypeRegistrationCodeFixProvider)}_{genericEntriesString}"),
+				$"{nameof(GenericsRegistrationCodeFixProvider)}_{genericEntriesString}"),
 			diagnostic);
 	}
 
