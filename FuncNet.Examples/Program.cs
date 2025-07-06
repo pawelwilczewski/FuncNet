@@ -1,9 +1,20 @@
-﻿namespace FuncNet.Examples;
+using FuncNet.Examples.Domain;
+
+namespace FuncNet.Examples;
 
 internal sealed class Program
 {
 	public static void Main(string[] args)
 	{
+		Union<int, string, bool> test = 213;
+		var test2 = test.Extend<int, string, bool, DateTime, decimal>();
+		var test3 = Union<int, string, bool, DateTime>.FromT0(232);
+
+		var test4 = new Class1
+		{
+			Value = Union<int, bool>.FromT0(123)
+		};
+
 		var result = CreateUser(
 			"John Doe",
 			name => string.IsNullOrEmpty(name)

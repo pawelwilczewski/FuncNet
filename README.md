@@ -10,3 +10,11 @@ adhoc Union, Result and Option types with async support.
 
 This library is well-suited for working with railway-oriented programming approaches via Result,
 Union and Option types with full monad implementations and async support.
+
+# FuncNet
+
+Nuget package containing the core functionality.
+
+# FuncNet.Analyzers
+
+Nuget package containing analyzers and code fixes dedicated for use with FuncNet.

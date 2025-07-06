@@ -10,13 +10,13 @@
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <IsRoslynComponent>true</IsRoslynComponent>
         <IncludeBuildOutput>true</IncludeBuildOutput>
-        <DevelopmentDependency>true</DevelopmentDependency>
+        <DevelopmentDependency>false</DevelopmentDependency>
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageId>FuncNet</PackageId>
+        <PackageId>FuncNet.Analyzers</PackageId>
         <Authors>Pawel Wilczewski</Authors>
-        <Description>Library of functional utilities to use in C# with notably rich and easy-to-use adhoc unions</Description>
+        <Description>Library of analyzers and code fixes to use with FuncNet</Description>
 
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/pawelwilczewski/FuncNet</RepositoryUrl>

@@ -30,11 +30,14 @@ jobs:
     - name: Build
       run: dotnet build FuncNet/FuncNet.csproj --configuration Release --no-restore
 
-    - name: Pack
-      run: dotnet pack FuncNet/FuncNet.csproj --configuration Release --no-build --output nupkgs
+    - name: Pack FuncNet
+      run: dotnet pack FuncNet/FuncNet.csproj --configuration Release --no-build -o ./artifacts
+    
+    - name: Pack FuncNet.Analyzers
+      run: dotnet pack FuncNet.Analyzers/FuncNet.Analyzers.csproj --configuration Release --no-build -o ./artifacts
     
     - name: Push to NuGet
-      run: dotnet nuget push nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push "./artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
