@@ -25,10 +25,10 @@ jobs:
         dotnet-version: '9.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore FuncNet/FuncNet.csproj
+      run: dotnet restore
 
     - name: Build
-      run: dotnet build FuncNet/FuncNet.csproj --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore
 
     - name: Pack FuncNet
       run: dotnet pack FuncNet/FuncNet.csproj --configuration Release --no-build -o ./artifacts
