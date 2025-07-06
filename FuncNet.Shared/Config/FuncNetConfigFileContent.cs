@@ -4,16 +4,16 @@ namespace FuncNet.Shared.Config;
 
 public sealed record class FuncNetConfigFileContent
 {
-	public ImmutableHashSet<GenericArguments> GenericsRegistrations { get; }
+	public ImmutableSortedSet<GenericArguments> GenericsRegistrations { get; }
 
-	private FuncNetConfigFileContent(ImmutableHashSet<GenericArguments> genericsRegistrations) =>
+	private FuncNetConfigFileContent(ImmutableSortedSet<GenericArguments> genericsRegistrations) =>
 		GenericsRegistrations = genericsRegistrations;
 
 	public static FuncNetConfigFileContent Empty() =>
-		new(ImmutableHashSet<GenericArguments>.Empty);
+		new(ImmutableSortedSet<GenericArguments>.Empty);
 
 	public static FuncNetConfigFileContent FromDto(FuncNetConfigFileContentDto configDto) =>
-		new(configDto.GenericsRegistrations.Select(entry => new GenericArguments(entry)).ToImmutableHashSet());
+		new(configDto.GenericsRegistrations.Select(entry => new GenericArguments(entry)).ToImmutableSortedSet());
 
 	public FuncNetConfigFileContentDto ToDto() =>
 		new(GenericsRegistrations.Select(generics => generics.CommaSeparatedArguments).ToList());

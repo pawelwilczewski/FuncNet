@@ -1,6 +1,6 @@
 namespace FuncNet.Shared.Config;
 
-public readonly record struct GenericArguments(string CommaSeparatedArguments)
+public readonly record struct GenericArguments(string CommaSeparatedArguments) : IComparable<GenericArguments>
 {
 	public string CommaSeparatedArguments { get; } = NormalizeTypeName(CommaSeparatedArguments);
 
@@ -13,4 +13,7 @@ public readonly record struct GenericArguments(string CommaSeparatedArguments)
 				.Replace("\n", "");
 
 	public override string ToString() => CommaSeparatedArguments;
+
+	public int CompareTo(GenericArguments other) =>
+		string.Compare(CommaSeparatedArguments, other.CommaSeparatedArguments, StringComparison.OrdinalIgnoreCase);
 }
