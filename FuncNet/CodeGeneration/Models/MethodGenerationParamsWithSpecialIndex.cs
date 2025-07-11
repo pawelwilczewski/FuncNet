@@ -1,7 +1,7 @@
 namespace FuncNet.CodeGeneration.Models;
 
 internal record class MethodGenerationParamsWithSpecialIndex(
-	string ExtendedTypeName,
+	string TypeName,
 	string MethodNameOnly,
 	int UnionSize,
 	UnionMethodAsyncConfig AsyncConfig,
@@ -11,5 +11,5 @@ internal record class MethodGenerationParamsWithSpecialIndex(
 	FactoryMethodNameForTIndex FactoryMethodName,
 	OtherSwitchCaseReturnValue OtherSwitchCaseReturnValue,
 	int SpecialIndex) : MethodGenerationParams(
-	ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, MethodType, ElementTypeNamesGenerator,
+	TypeName, MethodNameOnly, UnionSize, AsyncConfig, MethodType, ElementTypeNamesGenerator,
 	GetUnionOnArgument, FactoryMethodName, OtherSwitchCaseReturnValue);

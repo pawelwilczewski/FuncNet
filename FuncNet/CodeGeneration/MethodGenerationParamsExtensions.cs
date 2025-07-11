@@ -14,15 +14,15 @@ internal static class MethodGenerationParamsExtensions
 	public static IEnumerable<string> TsNew(this MethodGenerationParamsWithSpecialIndex p) =>
 		p.TsWithSpecialReplacement(t => $"{t}New");
 
-	public static string ExtendedTypeOfTs(this MethodGenerationParams p) =>
-		$"{p.ExtendedTypeName}<{p.Ts().CommaSeparated()}>";
+	public static string TypeOfTs(this MethodGenerationParams p) =>
+		$"{p.TypeName}<{p.Ts().CommaSeparated()}>";
 
-	public static string ExtendedTypeOfTsNew(this MethodGenerationParamsWithSpecialIndex p) =>
-		$"{p.ExtendedTypeName}<{p.TsNew().CommaSeparated()}>";
+	public static string TypeOfTsNew(this MethodGenerationParamsWithSpecialIndex p) =>
+		$"{p.TypeName}<{p.TsNew().CommaSeparated()}>";
 
-	public static string WrapInNewExtendedTypeFromT(this string value, SwitchCase @case, MethodGenerationParamsWithSpecialIndex p) =>
-		$"{p.ExtendedTypeOfTsNew()}.{p.FactoryMethodName(@case.Index)}({value})";
+	public static string WrapInNewTypeFromT(this string value, SwitchCase @case, MethodGenerationParamsWithSpecialIndex p) =>
+		$"{p.TypeOfTsNew()}.{p.FactoryMethodName(@case.Index)}({value})";
 
-	public static string WrapInNewExtendedTypeFromTIfNotSpecial(this string value, SwitchCase @case, MethodGenerationParamsWithSpecialIndex p) =>
-		p.SpecialIndex == @case.Index ? value : value.WrapInNewExtendedTypeFromT(@case, p);
+	public static string WrapInNewTypeFromTIfNotSpecial(this string value, SwitchCase @case, MethodGenerationParamsWithSpecialIndex p) =>
+		p.SpecialIndex == @case.Index ? value : value.WrapInNewTypeFromT(@case, p);
 }

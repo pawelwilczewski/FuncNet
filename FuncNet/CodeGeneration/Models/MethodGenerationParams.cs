@@ -1,7 +1,7 @@
 namespace FuncNet.CodeGeneration.Models;
 
 internal record class MethodGenerationParams(
-	string ExtendedTypeName,
+	string TypeName,
 	string MethodNameOnly,
 	int UnionSize,
 	UnionMethodAsyncConfig AsyncConfig,

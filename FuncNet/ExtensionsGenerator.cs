@@ -15,10 +15,10 @@ internal sealed class ExtensionsGenerator : ISourceGenerator
 
 	public void Execute(GeneratorExecutionContext context)
 	{
-		(string extendedTypeName, string thisArgumentName, Func<IEnumerable<string>> elementNamesGenerator, UnionGetter unionGetter, FactoryMethodNameForTIndex factoryMethodName, OtherSwitchCaseReturnValue defaultSwitchCaseReturnValue)[] GenerateBaseParams(int unionSize) =>
+		(string typeName, string thisArgumentName, Func<IEnumerable<string>> elementNamesGenerator, UnionGetter unionGetter, FactoryMethodNameForTIndex factoryMethodName, OtherSwitchCaseReturnValue defaultSwitchCaseReturnValue)[] GenerateBaseParams(int unionSize) =>
 		[
-			("Union", "union", UnionElementNamesGenerator(unionSize), UnionGetterForUnion, UnionFactoryMethodName, ThrowOtherSwitchCaseReturnValue),
-			("Result", "result", ResultElementNamesGenerator(unionSize), UnionGetterForResult, ResultFactoryMethodName, ThrowOtherSwitchCaseReturnValue)
+			("Union", "union", UnionElementNamesGenerator(unionSize), unionGetter: UnionGetterForUnion, factoryMethodName: UnionFactoryMethodName, defaultSwitchCaseReturnValue: ThrowOtherSwitchCaseReturnValue),
+			("Result", "result", ResultElementNamesGenerator(unionSize), unionGetter: UnionGetterForResult, factoryMethodName: ResultFactoryMethodName, defaultSwitchCaseReturnValue: ThrowOtherSwitchCaseReturnValue)
 		];
 
 		(string methodNameOnly, GenerateAllMethods generateMethods, Func<UnionExtensionsFileGenerationParams, string> classDeclaration, string additionalUsings)[] methodGenerators =
@@ -39,9 +39,9 @@ internal sealed class ExtensionsGenerator : ISourceGenerator
 			from m in methodGenerators
 			from unionSize in Enumerable.Range(2, MAX_UNION_SIZE - 1)
 			from p in GenerateBaseParams(unionSize)
-			where !(p.extendedTypeName == "Union" && m.methodNameOnly is "Combine" or "ToUnion" or "ToOption") // hacky
+			where !(p.typeName == "Union" && m.methodNameOnly is "Combine" or "ToUnion" or "ToOption") // hacky
 			select new UnionExtensionsFileGenerationParams(
-				NAMESPACE, m.additionalUsings, m.classDeclaration, p.extendedTypeName, m.methodNameOnly, unionSize,
+				NAMESPACE, m.additionalUsings, m.classDeclaration, p.typeName, m.methodNameOnly, unionSize,
 				m.generateMethods, p.thisArgumentName, p.elementNamesGenerator, p.unionGetter, p.factoryMethodName, p.defaultSwitchCaseReturnValue);
 
 		generationParams =
@@ -275,16 +275,16 @@ public static class OptionMatchAsync
 	}
 
 	private static string OptionStaticClassDeclaration(UnionExtensionsFileGenerationParams p) =>
-		$"public static class {p.ExtendedTypeName}{p.MethodNameOnly}";
+		$"public static class {p.TypeName}{p.MethodNameOnly}";
 
 	private static string StaticClassDeclaration(UnionExtensionsFileGenerationParams p) =>
-		$"public static class {p.ExtendedTypeName}{p.UnionSize}{p.MethodNameOnly}";
+		$"public static class {p.TypeName}{p.UnionSize}{p.MethodNameOnly}";
 
 	private static string PartialRecordStructDeclaration(UnionExtensionsFileGenerationParams p) =>
-		$"public readonly partial record struct {p.ExtendedTypeName}";
+		$"public readonly partial record struct {p.TypeName}";
 
 	private static string GenericPartialRecordStructDeclaration(UnionExtensionsFileGenerationParams p) =>
-		$"public readonly partial record struct {p.ExtendedTypeName}<{p.ElementTypeNamesGenerator().Select(name => $"T{name}").CommaSeparated()}>";
+		$"public readonly partial record struct {p.TypeName}<{p.ElementTypeNamesGenerator().Select(name => $"T{name}").CommaSeparated()}>";
 
 	private static Func<IEnumerable<string>> UnionElementNamesGenerator(int unionSize) =>
 		() => Enumerable.Range(0, unionSize).Select(i => i.ToString());

@@ -16,15 +16,15 @@ internal static class TapExtensionsGenerator
 		from asyncConfig in config.asyncConfig
 		from specialIndex in Enumerable.Range(0, p.UnionSize)
 		select new MethodGenerationParamsWithSpecialIndex(
-			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, config.methodType,
+			p.TypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, config.methodType,
 			p.ElementTypeNamesGenerator, p.GetUnionOnArgument, p.FactoryMethodName, p.OtherSwitchCaseReturnValue, specialIndex);
 
 	private static MethodBuilder GenerateMethod(MethodGenerationParamsWithSpecialIndex p) =>
 		new MethodBuilder($"public {(p.MethodType is MethodType.Extension ? "static" : "")}"
-				+ $" {p.ExtendedTypeOfTs().WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))}"
+				+ $" {p.TypeOfTs().WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))}"
 				+ $" {p.MethodNameOnly}{p.ElementTypeNamesGenerator().ElementAt(p.SpecialIndex)}"
 				+ $"{(p.MethodType is MethodType.Extension ? $"<{p.Ts().CommaSeparated()}>" : "")}")
-			.AddArgumentIf($"this {p.ExtendedTypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}"
+			.AddArgumentIf($"this {p.TypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}"
 				+ $" {p.ThisArgumentName}", () => p.MethodType is MethodType.Extension)
 			.AddArgument(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType)
 				? $"Func<{p.Ts().ElementAt(p.SpecialIndex)}, Task> action"

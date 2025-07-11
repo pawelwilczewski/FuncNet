@@ -16,7 +16,7 @@ internal static class ExtendExtensionsGenerator
 		from asyncConfig in config.asyncConfig
 		from newElementsCount in Enumerable.Range(1, MAX_UNION_SIZE - p.UnionSize)
 		select new MethodGenerationParamsWithNewElementsCount(
-			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, config.methodType,
+			p.TypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, config.methodType,
 			p.ElementTypeNamesGenerator, p.GetUnionOnArgument, p.FactoryMethodName, p.OtherSwitchCaseReturnValue,
 			newElementsCount);
 
@@ -24,11 +24,11 @@ internal static class ExtendExtensionsGenerator
 	{
 		var addedGenerics = $"{Enumerable.Range(p.UnionSize, p.NewElementsCount).Select(i => $"T{i}").CommaSeparated()}";
 		var newGenericArgs = $"{p.Ts().CommaSeparated()}, {addedGenerics}";
-		var newType = $"{p.ExtendedTypeName}<{newGenericArgs}>";
+		var newType = $"{p.TypeName}<{newGenericArgs}>";
 		return new MethodBuilder($"public {(p.MethodType is MethodType.Extension ? "static" : "")}"
 				+ $" {newType.WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))}"
 				+ $" {p.MethodNameOnly}<{(p.MethodType is MethodType.Extension ? newGenericArgs : addedGenerics)}>")
-			.AddArgumentIf($"this {p.ExtendedTypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} {p.ThisArgumentName}", () => p.MethodType is MethodType.Extension)
+			.AddArgumentIf($"this {p.TypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} {p.ThisArgumentName}", () => p.MethodType is MethodType.Extension)
 			.AddBodyStatement($"{newType} extended = {p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}")
 			.AddBodyStatement("return extended");
 	}

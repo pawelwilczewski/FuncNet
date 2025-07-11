@@ -15,7 +15,7 @@ internal static class ResultCombineExtensionsGenerator
 		from asyncConfig in AllPossibleMethodAsyncConfigs
 		from optionsCount in Enumerable.Range(2, 5)
 		select new MethodGenerationParamsWithOptionsCount(
-			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, new MethodType.Extension(p.ThisArgumentName),
+			p.TypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, new MethodType.Extension(p.ThisArgumentName),
 			p.ElementTypeNamesGenerator, p.GetUnionOnArgument, p.FactoryMethodName, p.OtherSwitchCaseReturnValue, optionsCount);
 
 	private static MethodBuilder GenerateMethod(MethodGenerationParamsWithOptionsCount p)

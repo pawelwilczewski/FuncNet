@@ -1,7 +1,7 @@
 namespace FuncNet.CodeGeneration.Models;
 
 internal record class MethodGenerationParamsWithNewElementsCount(
-	string ExtendedTypeName,
+	string TypeName,
 	string MethodNameOnly,
 	int UnionSize,
 	UnionMethodAsyncConfig AsyncConfig,
@@ -10,4 +10,4 @@ internal record class MethodGenerationParamsWithNewElementsCount(
 	UnionGetter GetUnionOnArgument,
 	FactoryMethodNameForTIndex FactoryMethodName,
 	OtherSwitchCaseReturnValue OtherSwitchCaseReturnValue,
-	int NewElementsCount) : MethodGenerationParams(ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, MethodType, ElementTypeNamesGenerator, GetUnionOnArgument, FactoryMethodName, OtherSwitchCaseReturnValue);
+	int NewElementsCount) : MethodGenerationParams(TypeName, MethodNameOnly, UnionSize, AsyncConfig, MethodType, ElementTypeNamesGenerator, GetUnionOnArgument, FactoryMethodName, OtherSwitchCaseReturnValue);
