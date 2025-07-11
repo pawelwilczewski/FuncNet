@@ -14,11 +14,11 @@ internal static class ZipExtensionsGenerator
 	private static IEnumerable<MethodGenerationParams> CreateAllMethodsGenerationParams(UnionExtensionsFileGenerationParams p) =>
 		from asyncConfig in AllPossibleMethodAsyncConfigs
 		select new MethodGenerationParams(
-			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName,
+			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, new MethodType.Extension(p.ThisArgumentName),
 			p.ElementTypeNamesGenerator, p.GetUnionOnArgument, p.FactoryMethodName, p.OtherSwitchCaseReturnValue);
 
 	private static MethodBuilder GenerateMethod(MethodGenerationParams p) =>
-		new MethodBuilder($"public static {"TResult".WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}<TResult, {p.TsCommaSeparated()}>")
+		new MethodBuilder($"public {(p.MethodType is MethodType.Extension ? "static" : "")} {"TResult".WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}<TResult, {p.Ts().CommaSeparated()}>")
 			.AddArgument($"this IEnumerable<{p.ExtendedTypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}> values")
 			.AddArgument($"Func<{string.Join(", ", p.Ts().Select(t => $"IEnumerable<{t}>"))}, {"TResult".WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> zip")
 			.AddCancellationTokenIfAsync(p)

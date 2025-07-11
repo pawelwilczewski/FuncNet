@@ -12,16 +12,23 @@ internal static class TapExtensionsGenerator
 		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
 
 	private static IEnumerable<MethodGenerationParamsWithSpecialIndex> CreateAllMethodsGenerationParams(UnionExtensionsFileGenerationParams p) =>
-		from asyncConfig in AllPossibleMethodAsyncConfigs
+		from config in MemberAndExtensionMethodConfigs(p.ThisArgumentName)
+		from asyncConfig in config.asyncConfig
 		from specialIndex in Enumerable.Range(0, p.UnionSize)
 		select new MethodGenerationParamsWithSpecialIndex(
-			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName,
+			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, config.methodType,
 			p.ElementTypeNamesGenerator, p.GetUnionOnArgument, p.FactoryMethodName, p.OtherSwitchCaseReturnValue, specialIndex);
 
 	private static MethodBuilder GenerateMethod(MethodGenerationParamsWithSpecialIndex p) =>
-		new MethodBuilder($"public static {p.ExtendedTypeOfTs().WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}{p.ElementTypeNamesGenerator().ElementAt(p.SpecialIndex)}<{p.TsCommaSeparated()}>")
-			.AddArgument($"this {p.ExtendedTypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} {p.ThisArgumentName}")
-			.AddArgument(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType) ? $"Func<{p.Ts().ElementAt(p.SpecialIndex)}, Task> action" : $"Action<{p.Ts().ElementAt(p.SpecialIndex)}> action")
+		new MethodBuilder($"public {(p.MethodType is MethodType.Extension ? "static" : "")}"
+				+ $" {p.ExtendedTypeOfTs().WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))}"
+				+ $" {p.MethodNameOnly}{p.ElementTypeNamesGenerator().ElementAt(p.SpecialIndex)}"
+				+ $"{(p.MethodType is MethodType.Extension ? $"<{p.Ts().CommaSeparated()}>" : "")}")
+			.AddArgumentIf($"this {p.ExtendedTypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}"
+				+ $" {p.ThisArgumentName}", () => p.MethodType is MethodType.Extension)
+			.AddArgument(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType)
+				? $"Func<{p.Ts().ElementAt(p.SpecialIndex)}, Task> action"
+				: $"Action<{p.Ts().ElementAt(p.SpecialIndex)}> action")
 			.AddCancellationTokenIfAsync(p)
 			.AddBodyStatement($"var u = {p.GetUnionOnArgument(p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion)))}")
 			.AddThrowIfCanceledIfAsync(p)

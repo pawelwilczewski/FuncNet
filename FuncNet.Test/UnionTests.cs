@@ -128,7 +128,7 @@ public class UnionTests
 		Assert.Equal(21.0, result2);
 
 		Union<string, int, double> u0 = "hello";
-		var passThru = await u0.Map2<DateTime, string, int, double>(async d => new DateTime());
+		var passThru = await u0.Map2<DateTime>(async d => new DateTime());
 		var passThruResult = passThru.Match(
 			s => s,
 			_ => throw new InvalidOperationException("Should not be here"),
@@ -177,7 +177,7 @@ public class UnionTests
 
 		Union<string, int, double> u2 = "hello";
 		var passThroughResult = await u2
-			.Bind2<DateTime, string, int, double>(async d =>
+			.Bind2<DateTime>(async d =>
 			{
 				await Task.Yield();
 				return new DateTime(2000, 1, 1);

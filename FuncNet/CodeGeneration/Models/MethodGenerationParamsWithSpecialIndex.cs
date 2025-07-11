@@ -5,11 +5,11 @@ internal record class MethodGenerationParamsWithSpecialIndex(
 	string MethodNameOnly,
 	int UnionSize,
 	UnionMethodAsyncConfig AsyncConfig,
-	string ThisArgumentName,
+	MethodType MethodType,
 	Func<IEnumerable<string>> ElementTypeNamesGenerator,
 	UnionGetter GetUnionOnArgument,
 	FactoryMethodNameForTIndex FactoryMethodName,
 	OtherSwitchCaseReturnValue OtherSwitchCaseReturnValue,
 	int SpecialIndex) : MethodGenerationParams(
-	ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, ThisArgumentName, ElementTypeNamesGenerator,
+	ExtendedTypeName, MethodNameOnly, UnionSize, AsyncConfig, MethodType, ElementTypeNamesGenerator,
 	GetUnionOnArgument, FactoryMethodName, OtherSwitchCaseReturnValue);

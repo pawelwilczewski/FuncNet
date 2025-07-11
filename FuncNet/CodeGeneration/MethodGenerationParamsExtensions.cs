@@ -8,26 +8,17 @@ internal static class MethodGenerationParamsExtensions
 	public static IEnumerable<string> Ts(this MethodGenerationParams p) =>
 		p.ElementTypeNamesGenerator().Select(t => $"T{t}");
 
-	public static string TsCommaSeparated(this MethodGenerationParams p) =>
-		string.Join(", ", p.Ts());
+	public static IEnumerable<string> TsWithSpecialReplacement(this MethodGenerationParamsWithSpecialIndex p, Func<string, string> replaceSpecial) =>
+		p.Ts().Select((t, index) => index == p.SpecialIndex ? replaceSpecial(t) : t);
 
-	public static string TsCommaSeparatedWithSpecialReplacement(this MethodGenerationParamsWithSpecialIndex p, Func<string, string> replaceSpecial) =>
-		string.Join(", ", p.Ts().Select((t, index) => index == p.SpecialIndex ? replaceSpecial(t) : t));
-
-	public static string TsCommaSeparatedNew(this MethodGenerationParamsWithSpecialIndex p) =>
-		p.TsCommaSeparatedWithSpecialReplacement(t => $"{t}New");
-
-	public static string TsCommaSeparatedOld(this MethodGenerationParamsWithSpecialIndex p) =>
-		p.TsCommaSeparatedWithSpecialReplacement(t => $"{t}Old");
+	public static IEnumerable<string> TsNew(this MethodGenerationParamsWithSpecialIndex p) =>
+		p.TsWithSpecialReplacement(t => $"{t}New");
 
 	public static string ExtendedTypeOfTs(this MethodGenerationParams p) =>
-		$"{p.ExtendedTypeName}<{p.TsCommaSeparated()}>";
+		$"{p.ExtendedTypeName}<{p.Ts().CommaSeparated()}>";
 
 	public static string ExtendedTypeOfTsNew(this MethodGenerationParamsWithSpecialIndex p) =>
-		$"{p.ExtendedTypeName}<{p.TsCommaSeparatedNew()}>";
-
-	public static string ExtendedTypeOfTsOld(this MethodGenerationParamsWithSpecialIndex p) =>
-		$"{p.ExtendedTypeName}<{p.TsCommaSeparatedOld()}>";
+		$"{p.ExtendedTypeName}<{p.TsNew().CommaSeparated()}>";
 
 	public static string WrapInNewExtendedTypeFromT(this string value, SwitchCase @case, MethodGenerationParamsWithSpecialIndex p) =>
 		$"{p.ExtendedTypeOfTsNew()}.{p.FactoryMethodName(@case.Index)}({value})";
