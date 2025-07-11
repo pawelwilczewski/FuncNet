@@ -49,7 +49,7 @@ internal sealed class Program
 		Result<string, ValidationError>.FromSuccess(name)
 			.BindSuccess(validateName)
 			.MapSuccess(validatedName => new User(validatedName))
-			.Extend<User, ValidationError, DatabaseError>()
+			.Extend<DatabaseError>()
 			.BindSuccess(user => saveToDb(user)
 				.Match(
 					Result<User, ValidationError, DatabaseError>.FromSuccess,

@@ -47,8 +47,7 @@ public class ResultTests
 	{
 		var result = Result<int, string, float>.FromError("Original error");
 
-		var bound = result.BindSuccess(
-			value => Result<double, string, float>.FromSuccess(23.43));
+		var bound = result.BindSuccess(value => Result<double, string, float>.FromSuccess(23.43));
 
 		var finalValue = bound.Match(
 			success => throw new UnreachableException(),
@@ -90,8 +89,7 @@ public class ResultTests
 		Assert.Equal("Processed: 21", asyncValue);
 
 		var errorTaskResult = Task.FromResult(Result<int, bool, float>.FromError(3.14f));
-		var boundTask = await errorTaskResult.BindSuccess(
-			value => Result<string, bool, float>.FromSuccess(value.ToString()));
+		var boundTask = await errorTaskResult.BindSuccess(value => Result<string, bool, float>.FromSuccess(value.ToString()));
 
 		var errorPassThrough = boundTask.Match(
 			success => throw new UnreachableException(),
@@ -129,8 +127,7 @@ public class ResultTests
 	{
 		var result = Result<int, string, float>.FromError("Error message");
 
-		var bound = result.BindError0(
-			errorMsg => Result<int, DateTime, float>.FromError(DateTime.Parse("2020-01-01")));
+		var bound = result.BindError0(errorMsg => Result<int, DateTime, float>.FromError(DateTime.Parse("2020-01-01")));
 
 		var finalValue = bound.Match(
 			success => throw new UnreachableException(),
@@ -177,8 +174,7 @@ public class ResultTests
 	{
 		var result = Result<int, string, float>.FromSuccess(42);
 
-		var mapped = result.MapSuccess(
-			value => value.ToString());
+		var mapped = result.MapSuccess(value => value.ToString());
 
 		var finalValue = mapped.Match(
 			success => success,
@@ -193,8 +189,7 @@ public class ResultTests
 	{
 		var result = Result<int, string, float>.FromError("Original error");
 
-		var mapped = result.MapSuccess(
-			value => value * 2);
+		var mapped = result.MapSuccess(value => value * 2);
 
 		var finalValue = mapped.Match(
 			success => throw new UnreachableException(),
@@ -222,7 +217,7 @@ public class ResultTests
 		Assert.Equal(25.0, taskAsyncValue);
 
 		var result = Result<int, string, float>.FromSuccess(7);
-		var mappedAsync = await result.MapSuccess<int, int, string, float>(async value =>
+		var mappedAsync = await result.MapSuccess<int>(async value =>
 		{
 			await Task.Yield();
 			return value * 3;
@@ -236,8 +231,7 @@ public class ResultTests
 		Assert.Equal(21, asyncValue);
 
 		var errorTaskResult = Task.FromResult(Result<int, string, float>.FromError(3.14f));
-		var mappedTask = await errorTaskResult.MapSuccess(
-			value => value.ToString());
+		var mappedTask = await errorTaskResult.MapSuccess(value => value.ToString());
 
 		var errorPassThrough = mappedTask.Match(
 			success => throw new UnreachableException(),
@@ -252,8 +246,7 @@ public class ResultTests
 	{
 		var result = Result<int, string, float>.FromError("Error message");
 
-		var mapped = result.MapError0(
-			errorMsg => DateTime.Parse("2020-01-01"));
+		var mapped = result.MapError0(errorMsg => DateTime.Parse("2020-01-01"));
 
 		var finalValue = mapped.Match(
 			success => throw new UnreachableException(),
@@ -267,7 +260,7 @@ public class ResultTests
 	public async Task MapErrorAsync_Works()
 	{
 		var result = Result<int, string, double>.FromError(132.43);
-		var transformed = await result.MapError1<double, int, string, double>(async errorValue =>
+		var transformed = await result.MapError1<double>(async errorValue =>
 		{
 			await Task.Yield();
 			return errorValue / 2;
@@ -282,7 +275,7 @@ public class ResultTests
 
 		var successResult = Result<string, int, float>.FromSuccess("Success value");
 		var unchanged = await successResult
-			.MapError0<double, string, int, float>(async errorCode =>
+			.MapError0<double>(async errorCode =>
 			{
 				await Task.Yield();
 				return errorCode * 0.5;

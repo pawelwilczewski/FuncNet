@@ -23,9 +23,33 @@ internal static class UnionMethodConfigConsts
 		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.InputUnion
 	];
 
-	public static UnionMethodAsyncConfig[] NoneOrAllMethodAsyncConfigs { get; } =
+	public static UnionMethodAsyncConfig[] AllOrNoneNoneMethodAsyncConfigs { get; } =
 	[
 		UnionMethodAsyncConfig.None,
 		UnionMethodAsyncConfig.All
+	];
+
+	public static UnionMethodAsyncConfig[] NoInputUnionTaskMethodAsyncConfigs { get; } =
+	[
+		UnionMethodAsyncConfig.None,
+		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.AppliedMethodReturnType
+	];
+
+	public static UnionMethodAsyncConfig[] InputUnionTaskMethodAsyncConfigs { get; } =
+	[
+		UnionMethodAsyncConfig.All,
+		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.InputUnion
+	];
+
+	public static IEnumerable<(MethodType methodType, UnionMethodAsyncConfig[] asyncConfig)> MemberAndExtensionMethodConfigs(string thisArgumentName) =>
+	[
+		(new MethodType.Member(), NoInputUnionTaskMethodAsyncConfigs),
+		(new MethodType.Extension(thisArgumentName), InputUnionTaskMethodAsyncConfigs)
+	];
+
+	public static IEnumerable<(MethodType methodType, UnionMethodAsyncConfig[] asyncConfig)> AllOrNoneMemberAndExtensionMethodConfigs(string thisArgumentName) =>
+	[
+		(new MethodType.Member(), [UnionMethodAsyncConfig.None]),
+		(new MethodType.Extension(thisArgumentName), [UnionMethodAsyncConfig.All])
 	];
 }

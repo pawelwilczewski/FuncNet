@@ -12,16 +12,24 @@ internal static class MatchExtensionsGenerator
 		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
 
 	private static IEnumerable<MethodGenerationParamsWithOtherCaseSize> CreateAllMethodsGenerationParams(UnionExtensionsFileGenerationParams p) =>
-		from asyncConfig in AllPossibleMethodAsyncConfigs
+		from config in MemberAndExtensionMethodConfigs(p.ThisArgumentName)
+		from asyncConfig in config.asyncConfig
 		from otherCaseSize in Enumerable.Range(1, p.UnionSize - 1)
 		select new MethodGenerationParamsWithOtherCaseSize(
-			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName, p.ElementTypeNamesGenerator,
+			p.TypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, config.methodType, p.ElementTypeNamesGenerator,
 			p.GetUnionOnArgument, p.FactoryMethodName, p.OtherSwitchCaseReturnValue, otherCaseSize);
 
 	private static MethodBuilder GenerateMethod(MethodGenerationParamsWithOtherCaseSize p) =>
-		new MethodBuilder($"public static {"TResult".WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}<TResult, {p.TsCommaSeparated()}>")
-			.AddArgument($"this {p.ExtendedTypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} {p.ThisArgumentName}")
-			.AddArguments(Enumerable.Range(0, p.UnionSize - p.OtherCaseSize).Select(i => $"Func<{p.Ts().ElementAt(i)}, {"TResult".WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> {p.ElementTypeNamesLowerCamelCase().ElementAt(i)}"))
+		new MethodBuilder($"public {(p.MethodType is MethodType.Extension ? "static" : "")}"
+				+ $" {"TResult".WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))}"
+				+ $" {p.MethodNameOnly}"
+				+ $"{(p.MethodType is MethodType.Extension ? $"<TResult, {p.Ts().CommaSeparated()}>" : "<TResult>")}")
+			.AddArgumentIf($"this {p.TypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}"
+				+ $" {p.ThisArgumentName}", () => p.MethodType is MethodType.Extension)
+			.AddArguments(Enumerable.Range(0, p.UnionSize - p.OtherCaseSize)
+				.Select(i =>
+					$"Func<{p.Ts().ElementAt(i)}, {"TResult".WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}>"
+					+ $" {p.ElementTypeNamesLowerCamelCase().ElementAt(i)}"))
 			.AddArgument(GenerateLastArgument(p))
 			.AddCancellationTokenIfAsync(p)
 			.AddBodyStatement($"var u = {p.GetUnionOnArgument(p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion)))}")

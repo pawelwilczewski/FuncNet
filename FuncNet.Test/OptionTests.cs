@@ -147,11 +147,6 @@ public class OptionTests
 
 		var mappedTaskSome = await taskSomeOption.Map(x => x.ToString());
 
-		// var asyncMappedSome = await someOption.MapValue(async x =>
-		// {
-		// 	await Task.Delay(1);
-		// 	return x.ToString();
-		// });
 		var asyncMappedTaskSome = await taskSomeOption.Map(async x =>
 		{
 			await Task.Delay(1);
@@ -160,7 +155,6 @@ public class OptionTests
 
 		Assert.Equal(expected, mappedTaskSome.Match(value => value, () => NOT_FOUND_MESSAGE));
 
-		// Assert.Equal(expected, asyncMappedSome.Match(value => value, () => NotFoundMessage));
 		Assert.Equal(expected, asyncMappedTaskSome.Match(value => value, () => NOT_FOUND_MESSAGE));
 	}
 
@@ -226,12 +220,11 @@ public class OptionTests
 
 		var filteredTaskSome = await taskSomeOption.Filter(x => x > 10);
 
-		var asyncFilteredSome = await someOption.Filter(
-			async x =>
-			{
-				await Task.Delay(1);
-				return x > 10;
-			});
+		var asyncFilteredSome = await someOption.Filter(async x =>
+		{
+			await Task.Delay(1);
+			return x > 10;
+		});
 
 		Assert.Equal(DEFAULT_VALUE, filteredTaskSome.Match(value => value, () => -1));
 		Assert.Equal(DEFAULT_VALUE, asyncFilteredSome.Match(value => value, () => -1));

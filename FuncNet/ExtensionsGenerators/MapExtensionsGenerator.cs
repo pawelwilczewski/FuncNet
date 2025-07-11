@@ -12,16 +12,22 @@ internal static class MapExtensionsGenerator
 		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
 
 	private static IEnumerable<MethodGenerationParamsWithSpecialIndex> CreateAllMethodsGenerationParams(UnionExtensionsFileGenerationParams p) =>
-		from asyncConfig in AllPossibleMethodAsyncConfigs
+		from config in MemberAndExtensionMethodConfigs(p.ThisArgumentName)
+		from asyncConfig in config.asyncConfig
 		from specialIndex in Enumerable.Range(0, p.UnionSize)
 		select new MethodGenerationParamsWithSpecialIndex(
-			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName,
+			p.TypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, config.methodType,
 			p.ElementTypeNamesGenerator, p.GetUnionOnArgument, p.FactoryMethodName, p.OtherSwitchCaseReturnValue, specialIndex);
 
 	private static MethodBuilder GenerateMethod(MethodGenerationParamsWithSpecialIndex p) =>
-		new MethodBuilder($"public static {p.ExtendedTypeOfTsNew().WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}{p.ElementTypeNamesGenerator().ElementAt(p.SpecialIndex)}<{p.Ts().ElementAt(p.SpecialIndex)}New, {p.TsCommaSeparatedOld()}>")
-			.AddArgument($"this {p.ExtendedTypeOfTsOld().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} {p.ThisArgumentName}")
-			.AddArgument($"Func<{p.Ts().ElementAt(p.SpecialIndex)}Old, {$"{p.Ts().ElementAt(p.SpecialIndex)}New".WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> mapping")
+		new MethodBuilder($"public {(p.MethodType is MethodType.Extension ? "static" : "")}"
+				+ $" {p.TypeOfTsNew().WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))}"
+				+ $" {p.MethodNameOnly}{p.ElementTypeNamesGenerator().ElementAt(p.SpecialIndex)}"
+				+ $"<{(p.MethodType is MethodType.Extension ? $"{p.Ts().ElementAt(p.SpecialIndex)}New, {p.Ts().CommaSeparated()}" : $"{p.Ts().ElementAt(p.SpecialIndex)}New")}>")
+			.AddArgumentIf($"this {p.TypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}"
+				+ $" {p.ThisArgumentName}", () => p.MethodType is MethodType.Extension)
+			.AddArgument($"Func<{p.Ts().ElementAt(p.SpecialIndex)},"
+				+ $" {$"{p.Ts().ElementAt(p.SpecialIndex)}New".WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> mapping")
 			.AddCancellationTokenIfAsync(p)
 			.AddBodyStatement($"var u = {p.GetUnionOnArgument(p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion)))}")
 			.AddThrowIfCanceledIfAsync(p)
@@ -44,5 +50,5 @@ internal static class MapExtensionsGenerator
 	private static string GenerateSwitchCaseReturnValue(SwitchCase @case, MethodGenerationParamsWithSpecialIndex p) =>
 		(@case.Index == p.SpecialIndex ? $"mapping(u.Value{@case.Index})" : $"u.Value{@case.Index}")
 		.WrapInTaskFromResultIf(@case.Index != p.SpecialIndex && p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))
-		.WrapInNewExtendedTypeFromT(@case, p);
+		.WrapInNewTypeFromT(@case, p);
 }

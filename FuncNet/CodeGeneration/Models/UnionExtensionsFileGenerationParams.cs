@@ -6,7 +6,7 @@ internal sealed record class UnionExtensionsFileGenerationParams(
 	string Namespace,
 	string AdditionalUsings,
 	Func<UnionExtensionsFileGenerationParams, string> ClassDeclaration,
-	string ExtendedTypeName,
+	string TypeName,
 	string MethodNameOnly,
 	int UnionSize,
 	GenerateAllMethods GenerateAllMethods,
@@ -17,7 +17,7 @@ internal sealed record class UnionExtensionsFileGenerationParams(
 	OtherSwitchCaseReturnValue OtherSwitchCaseReturnValue)
 {
 	// hacky don't state union size for Option this can be easily fixed \/\/\/\/ via strategy but not worth it for now
-	public string FileName => $"{ExtendedTypeName}{(ExtendedTypeName == "Option" ? "" : UnionSize)}.{MethodNameOnly}";
+	public string FileName => $"{TypeName}{(TypeName == "Option" ? "" : UnionSize)}.{MethodNameOnly}";
 }
 
 internal delegate IEnumerable<MethodBuilder> GenerateAllMethods(UnionExtensionsFileGenerationParams p);

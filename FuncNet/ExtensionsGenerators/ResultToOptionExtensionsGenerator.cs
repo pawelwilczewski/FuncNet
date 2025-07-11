@@ -12,14 +12,19 @@ internal static class ResultToOptionExtensionsGenerator
 		CreateAllMethodsGenerationParams(p).Select(GenerateMethod);
 
 	private static IEnumerable<MethodGenerationParams> CreateAllMethodsGenerationParams(UnionExtensionsFileGenerationParams p) =>
-		from asyncConfig in NoneOrAllMethodAsyncConfigs
+		from config in AllOrNoneMemberAndExtensionMethodConfigs(p.ThisArgumentName)
+		from asyncConfig in config.asyncConfig
 		select new MethodGenerationParams(
-			p.ExtendedTypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, p.ThisArgumentName,
+			p.TypeName, p.MethodNameOnly, p.UnionSize, asyncConfig, config.methodType,
 			p.ElementTypeNamesGenerator, p.GetUnionOnArgument, p.FactoryMethodName, p.OtherSwitchCaseReturnValue);
 
 	private static MethodBuilder GenerateMethod(MethodGenerationParams p) =>
-		new MethodBuilder($"public static {"Option<TSuccess>".WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}<{p.TsCommaSeparated()}>")
-			.AddArgument($"this {p.ExtendedTypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} {p.ThisArgumentName}")
+		new MethodBuilder($"public {(p.MethodType is MethodType.Extension ? "static" : "")}"
+				+ $" {"Option<TSuccess>".WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))}"
+				+ $" {p.MethodNameOnly}"
+				+ $"{(p.MethodType is MethodType.Extension ? $"<{p.Ts().CommaSeparated()}>" : "")}")
+			.AddArgumentIf($"this {p.TypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}"
+				+ $" {p.ThisArgumentName}", () => p.MethodType is MethodType.Extension)
 			.AddBodyStatement($"var r = {p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}")
 			.AddBodyStatement("return r.IsSuccess ? Option<TSuccess>.Some(r.Value.Value0) : Option<TSuccess>.None;");
 }

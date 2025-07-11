@@ -10,4 +10,7 @@ internal static class StringJoinUtils
 
 	public static string JoinRangeToString(string separator, int count, Func<int, string> toString) =>
 		JoinRangeToString(separator, 0, count, toString);
+
+	public static string CommaSeparated<T>(this IEnumerable<T> values) =>
+		string.Join(", ", values);
 }

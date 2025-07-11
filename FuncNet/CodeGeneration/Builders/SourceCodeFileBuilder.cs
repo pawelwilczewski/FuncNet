@@ -19,5 +19,15 @@ internal sealed class SourceCodeFileBuilder
 		return this;
 	}
 
+	public SourceCodeFileBuilder AddClassIf(ClassBuilder classBuilder, Func<bool> shouldAdd)
+	{
+		if (shouldAdd())
+		{
+			AddClass(classBuilder);
+		}
+
+		return this;
+	}
+
 	public override string ToString() => builder.ToString();
 }
