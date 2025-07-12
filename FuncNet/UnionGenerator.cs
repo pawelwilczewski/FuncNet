@@ -51,7 +51,7 @@ public readonly partial record struct {UnionOfTs(unionSize)}
 		$"public static {UnionOfTs(unionSize)} FromT{i}(T{i} value) => value;")}
 
 	{JoinRangeToString("\n\t", unionSize, i =>
-		$"public static async Task<{UnionOfTs(unionSize)}> FromT{i}(Task<T{i}> value) => await value;")}
+		$"public static async Task<{UnionOfTs(unionSize)}> FromT{i}Async(Task<T{i}> value) => await value;")}
 
 	{JoinRangeToString("\n\t", unionSize, i =>
 		$@"public static implicit operator {UnionOfTs(unionSize)}(T{i} value) =>

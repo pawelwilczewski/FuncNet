@@ -13,6 +13,9 @@ internal record class MethodGenerationParams(
 {
 	public string ThisArgumentName => MethodType is MethodType.Extension extension ? extension.ThisArgumentName : "this";
 
+	public string MethodName => $"{MethodNameOnly}{AsyncSuffixOrEmpty}";
+	public string AsyncSuffixOrEmpty => $"{(IsAsync(UnionMethodAsyncConfig.ReturnType) ? "Async" : "")}";
+
 	public bool IsAsync(UnionMethodAsyncConfig typeToCheck) => (typeToCheck & AsyncConfig) != 0;
 }
 

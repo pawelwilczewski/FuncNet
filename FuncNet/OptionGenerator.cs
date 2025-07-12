@@ -42,13 +42,13 @@ public readonly partial record struct Option<TSome>
 	}
 
 	public static Option<TSome> Some(TSome value) => new(value, true);
-	public static async Task<Option<TSome>> Some(Task<TSome> value) => new(await value.ConfigureAwait(false), true);
+	public static async Task<Option<TSome>> SomeAsync(Task<TSome> value) => new(await value.ConfigureAwait(false), true);
 
 
 	public static Option<TSome> FromNullable(TSome? value) => new(value, value is not null);
 
 
-	public static async Task<Option<TSome>> FromNullable(Task<TSome?> value)
+	public static async Task<Option<TSome>> FromNullableAsync(Task<TSome?> value)
 	{
 		var v = await value.ConfigureAwait(false);
 		return new Option<TSome>(v, v is not null);
@@ -67,7 +67,7 @@ public readonly partial record struct Option<TSome>
 		};
 	}
 
-	public async Task<Option<TSomeNew>> Bind<TSomeNew>(
+	public async Task<Option<TSomeNew>> BindAsync<TSomeNew>(
 		Func<TSome, Task<Option<TSomeNew>>> binding,
 		CancellationToken cancellationToken = default)
 	{
@@ -91,7 +91,7 @@ public readonly partial record struct Option<TSome>
 		};
 	}
 
-	public async Task<Option<TSomeNew>> Map<TSomeNew>(
+	public async Task<Option<TSomeNew>> MapAsync<TSomeNew>(
 		Func<TSome, Task<TSomeNew>> mapping,
 		CancellationToken cancellationToken = default)
 	{
@@ -113,7 +113,7 @@ public readonly partial record struct Option<TSome>
 		return this;
 	}
 
-	public async Task<Option<TSome>> Filter(
+	public async Task<Option<TSome>> FilterAsync(
 		Func<TSome, Task<bool>> predicate,
 		CancellationToken cancellationToken = default)
 	{
@@ -132,7 +132,7 @@ public readonly partial record struct Option<TSome>
 		return this;
 	}
 
-	public async Task<Option<TSome>> Tap(
+	public async Task<Option<TSome>> TapAsync(
 		Func<TSome, Task> action,
 		CancellationToken cancellationToken = default)
 	{
@@ -154,7 +154,7 @@ public readonly partial record struct Option<TSome>
 		};
 	}
 
-	public async Task<TResult> Match<TResult>(
+	public async Task<TResult> MatchAsync<TResult>(
 		Func<TSome, Task<TResult>> some,
 		Func<Task<TResult>> none,
 		CancellationToken cancellationToken = default)

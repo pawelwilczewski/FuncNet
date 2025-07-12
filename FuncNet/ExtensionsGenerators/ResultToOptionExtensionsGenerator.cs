@@ -21,8 +21,7 @@ internal static class ResultToOptionExtensionsGenerator
 	private static MethodBuilder GenerateMethod(MethodGenerationParams p) =>
 		new MethodBuilder($"public {(p.MethodType is MethodType.Extension ? "static" : "")}"
 				+ $" {"Option<TSuccess>".WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))}"
-				+ $" {p.MethodNameOnly}"
-				+ $"{(p.MethodType is MethodType.Extension ? $"<{p.Ts().CommaSeparated()}>" : "")}")
+				+ $" {p.MethodName}{(p.MethodType is MethodType.Extension ? $"<{p.Ts().CommaSeparated()}>" : "")}")
 			.AddArgumentIf($"this {p.TypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}"
 				+ $" {p.ThisArgumentName}", () => p.MethodType is MethodType.Extension)
 			.AddBodyStatement($"var r = {p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}")

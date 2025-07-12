@@ -27,7 +27,7 @@ internal static class ExtendExtensionsGenerator
 		var newType = $"{p.TypeName}<{newGenericArgs}>";
 		return new MethodBuilder($"public {(p.MethodType is MethodType.Extension ? "static" : "")}"
 				+ $" {newType.WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))}"
-				+ $" {p.MethodNameOnly}<{(p.MethodType is MethodType.Extension ? newGenericArgs : addedGenerics)}>")
+				+ $" {p.MethodName}<{(p.MethodType is MethodType.Extension ? newGenericArgs : addedGenerics)}>")
 			.AddArgumentIf($"this {p.TypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} {p.ThisArgumentName}", () => p.MethodType is MethodType.Extension)
 			.AddBodyStatement($"{newType} extended = {p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}")
 			.AddBodyStatement("return extended");

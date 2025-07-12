@@ -22,7 +22,7 @@ internal static class MatchExtensionsGenerator
 	private static MethodBuilder GenerateMethod(MethodGenerationParamsWithOtherCaseSize p) =>
 		new MethodBuilder($"public {(p.MethodType is MethodType.Extension ? "static" : "")}"
 				+ $" {"TResult".WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))}"
-				+ $" {p.MethodNameOnly}"
+				+ $" {p.MethodName}"
 				+ $"{(p.MethodType is MethodType.Extension ? $"<TResult, {p.Ts().CommaSeparated()}>" : "<TResult>")}")
 			.AddArgumentIf($"this {p.TypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}"
 				+ $" {p.ThisArgumentName}", () => p.MethodType is MethodType.Extension)

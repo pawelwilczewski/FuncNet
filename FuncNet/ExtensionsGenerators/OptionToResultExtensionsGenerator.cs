@@ -27,11 +27,13 @@ internal static class OptionToResultExtensionsGenerator
 		var newType = $"Result<{newGenericArgs}>";
 		var errorIfNoneReturnType = p.NewElementsCount == 1 ? "TError0" : $"Union<{errorTs}>";
 		var errorIfNoneValue = $"({"errorIfNone()".WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))})";
-		return new MethodBuilder($"public {(p.MethodType is MethodType.Extension ? "static" : "")} {newType.WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))} {p.MethodNameOnly}<{(p.MethodType is MethodType.Extension ? newGenericArgs : errorTs)}>")
+		return new MethodBuilder($"public {(p.MethodType is MethodType.Extension ? "static" : "")} {newType.WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))}"
+				+ $" {p.MethodName}<{(p.MethodType is MethodType.Extension ? newGenericArgs : errorTs)}>")
 			.AddArgumentIf($"this {p.TypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} {p.ThisArgumentName}", () => p.MethodType is MethodType.Extension)
 			.AddArgument($"Func<{errorIfNoneReturnType.WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}> errorIfNone")
 			.AddBodyStatement($"var extended = ({p.ThisArgumentName.WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}).Match<{newType}>("
-				+ $"some => {$"{newType}.FromSuccess(some)".WrapInTaskFromResultIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))}, {(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType) ? "async " : "")} () => {GenerateValueForErrorCase()})")
+				+ $"some => {$"{newType}.FromSuccess(some)".WrapInTaskFromResultIf(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType))},"
+				+ $" {(p.IsAsync(UnionMethodAsyncConfig.AppliedMethodReturnType) ? "async " : "")} () => {GenerateValueForErrorCase()})")
 			.AddBodyStatement($"return {"extended".WrapInAwaitConfiguredIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))};");
 
 		string GenerateValueForErrorCase() => p.NewElementsCount == 1

@@ -22,7 +22,7 @@ internal static class BindExtensionsGenerator
 	private static MethodBuilder GenerateMethod(MethodGenerationParamsWithSpecialIndex p) =>
 		new MethodBuilder($"public {(p.MethodType is MethodType.Extension ? "static" : "")}"
 				+ $" {p.TypeOfTsNew().WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))}"
-				+ $" {p.MethodNameOnly}{p.ElementTypeNamesGenerator().ElementAt(p.SpecialIndex)}"
+				+ $" {p.MethodNameOnly}{p.ElementTypeNamesGenerator().ElementAt(p.SpecialIndex)}{p.AsyncSuffixOrEmpty}"
 				+ $"<{(p.MethodType is MethodType.Extension ? $"{p.Ts().ElementAt(p.SpecialIndex)}New, {p.Ts().CommaSeparated()}" : $"{p.Ts().ElementAt(p.SpecialIndex)}New")}>")
 			.AddArgumentIf($"this {p.TypeOfTs().WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))}"
 				+ $" {p.ThisArgumentName}", () => p.MethodType is MethodType.Extension)

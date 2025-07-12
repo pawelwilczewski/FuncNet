@@ -29,13 +29,13 @@ internal static class UnionMethodConfigConsts
 		UnionMethodAsyncConfig.All
 	];
 
-	public static UnionMethodAsyncConfig[] NoInputUnionTaskMethodAsyncConfigs { get; } =
+	private static UnionMethodAsyncConfig[] NoInputUnionTaskMethodAsyncConfigs { get; } =
 	[
 		UnionMethodAsyncConfig.None,
 		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.AppliedMethodReturnType
 	];
 
-	public static UnionMethodAsyncConfig[] InputUnionTaskMethodAsyncConfigs { get; } =
+	private static UnionMethodAsyncConfig[] InputUnionTaskMethodAsyncConfigs { get; } =
 	[
 		UnionMethodAsyncConfig.All,
 		UnionMethodAsyncConfig.ReturnType | UnionMethodAsyncConfig.InputUnion

@@ -38,8 +38,8 @@ public readonly partial record struct {ResultOfTs(unionSize)}
     {JoinRangeToString("\n    ", unionSize - 1, errorIndex =>
 		$"public static {ResultOfTs(unionSize)} FromError(TError{errorIndex} value) => value;")}
 
-	public static async Task<{ResultOfTs(unionSize)}> FromSuccess(Task<TSuccess> value) => await value.ConfigureAwait(false);
+	public static async Task<{ResultOfTs(unionSize)}> FromSuccessAsync(Task<TSuccess> value) => await value.ConfigureAwait(false);
     {JoinRangeToString("\n    ", unionSize - 1, errorIndex =>
-		$"public static async Task<{ResultOfTs(unionSize)}> FromError(Task<TError{errorIndex}> value) => await value.ConfigureAwait(false);")}
+		$"public static async Task<{ResultOfTs(unionSize)}> FromErrorAsync(Task<TError{errorIndex}> value) => await value.ConfigureAwait(false);")}
 }}";
 }

@@ -26,7 +26,7 @@ internal static class ResultCombineExtensionsGenerator
 
 		return new MethodBuilder($"public {(p.MethodType is MethodType.Extension ? "static" : "")}"
 				+ $" {"TResult".WrapInAsyncTaskIf(p.IsAsync(UnionMethodAsyncConfig.ReturnType))}"
-				+ $" {p.MethodNameOnly}<TResult, {successTs}{(p.MethodType is MethodType.Extension ? $", {errorTs}" : "")}>")
+				+ $" {p.MethodName}<TResult, {successTs}{(p.MethodType is MethodType.Extension ? $", {errorTs}" : "")}>")
 			.AddArguments(Enumerable.Range(0, p.OptionsCount).Select(i => $"{$"Result<TSuccess{i}, {errorTs}>".WrapInTaskIf(p.IsAsync(UnionMethodAsyncConfig.InputUnion))} result{i}"))
 			.AddArgument($"Func<{successTs}, {joinReturnType}> combineSuccess")
 			.AddArgument($"Func<{p.Ts().Skip(1).Select(t => $"IReadOnlyList<{t}>").CommaSeparated()}, {joinReturnType}> combineErrors")

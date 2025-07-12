@@ -69,7 +69,7 @@ namespace FuncNet;
 
 public static class OptionBindAsync
 {
-	public static async Task<Option<TValueNew>> Bind<TValueNew, TValueOld>(
+	public static async Task<Option<TValueNew>> BindAsync<TValueNew, TValueOld>(
 		this Task<Option<TValueOld>> option,
 		Func<TValueOld, Task<Option<TValueNew>>> binding,
 		CancellationToken cancellationToken = default)
@@ -83,7 +83,7 @@ public static class OptionBindAsync
 		}).ConfigureAwait(false);
 	}
 
-	public static async Task<Option<TValueNew>> Bind<TValueNew, TValueOld>(
+	public static async Task<Option<TValueNew>> BindAsync<TValueNew, TValueOld>(
 		this Task<Option<TValueOld>> option,
 		Func<TValueOld, Option<TValueNew>> binding,
 		CancellationToken cancellationToken = default)
@@ -109,7 +109,7 @@ namespace FuncNet;
 
 public static class OptionMapAsync
 {
-	public static async Task<Option<TValueNew>> Map<TValueNew, TValueOld>(
+	public static async Task<Option<TValueNew>> MapAsync<TValueNew, TValueOld>(
 		this Task<Option<TValueOld>> option,
 		Func<TValueOld, Task<TValueNew>> mapping,
 		CancellationToken cancellationToken = default)
@@ -123,7 +123,7 @@ public static class OptionMapAsync
 		}).ConfigureAwait(false);
 	}
 
-	public static async Task<Option<TValueNew>> Map<TValueNew, TValueOld>(
+	public static async Task<Option<TValueNew>> MapAsync<TValueNew, TValueOld>(
 		this Task<Option<TValueOld>> option,
 		Func<TValueOld, TValueNew> mapping,
 		CancellationToken cancellationToken = default)
@@ -149,7 +149,7 @@ namespace FuncNet;
 
 public static class OptionFilterAsync
 {
-	public static async Task<Option<TValue>> Filter<TValue>(
+	public static async Task<Option<TValue>> FilterAsync<TValue>(
 		this Task<Option<TValue>> option,
 		Func<TValue, Task<bool>> predicate,
 		CancellationToken cancellationToken = default)
@@ -161,7 +161,7 @@ public static class OptionFilterAsync
 		return await option.ConfigureAwait(false);
 	}
 
-	public static async Task<Option<TValue>> Filter<TValue>(
+	public static async Task<Option<TValue>> FilterAsync<TValue>(
 		this Task<Option<TValue>> option,
 		Func<TValue, bool> predicate,
 		CancellationToken cancellationToken = default)
@@ -185,7 +185,7 @@ namespace FuncNet;
 
 public static class OptionTapAsync
 {
-	public static async Task<Option<TValue>> Tap<TValue>(
+	public static async Task<Option<TValue>> TapAsync<TValue>(
 		this Task<Option<TValue>> option,
 		Func<TValue, Task> action,
 		CancellationToken cancellationToken = default)
@@ -196,7 +196,7 @@ public static class OptionTapAsync
 		return await option.ConfigureAwait(false);
 	}
 
-	public static async Task<Option<TValue>> Tap<TValue>(
+	public static async Task<Option<TValue>> TapAsync<TValue>(
 		this Task<Option<TValue>> option,
 		Action<TValue> action,
 		CancellationToken cancellationToken = default)
@@ -219,7 +219,7 @@ namespace FuncNet;
 
 public static class OptionMatchAsync
 {
-	public static async Task<TResult> Match<TResult, TValue>(
+	public static async Task<TResult> MatchAsync<TResult, TValue>(
 		this Task<Option<TValue>> option,
 		Func<TValue, Task<TResult>> some,
 		Func<Task<TResult>> none,
@@ -234,7 +234,7 @@ public static class OptionMatchAsync
 		}).ConfigureAwait(false);
 	}
 
-	public static async Task<TResult> Match<TResult, TValue>(
+	public static async Task<TResult> MatchAsync<TResult, TValue>(
 		this Task<Option<TValue>> option,
 		Func<TValue, TResult> some,
 		Func<TResult> none,
